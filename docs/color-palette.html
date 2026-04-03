@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소곤 Color Palette</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Pretendard', sans-serif;
+    background: #FAFAFA;
+    color: #333;
+    padding: 48px;
+  }
+  h1 { font-size: 32px; margin-bottom: 8px; color: #222; }
+  .subtitle { font-size: 16px; color: #999; margin-bottom: 48px; }
+  h2 { font-size: 20px; margin-bottom: 16px; color: #333; }
+  .section { margin-bottom: 48px; }
+  .palette {
+    display: flex;
+    gap: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    margin-bottom: 12px;
+  }
+  .swatch {
+    flex: 1;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 4px;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 80px;
+  }
+  .swatch .token { opacity: 0.7; margin-bottom: 2px; font-size: 10px; }
+  .swatch .hex { font-weight: 700; font-size: 12px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background: white;
+  }
+  .card-color { height: 80px; }
+  .card-info { padding: 10px 12px; }
+  .card-info .name { font-size: 13px; font-weight: 600; color: #333; }
+  .card-info .hex { font-size: 12px; color: #888; margin-top: 2px; }
+  .card-info .usage { font-size: 11px; color: #aaa; margin-top: 4px; }
+  .dark-section {
+    background: #141716;
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 48px;
+  }
+  .dark-section h2 { color: #F0F2F1; }
+  .dark-section .card { background: #1E2422; }
+  .dark-section .card-info .name { color: #F0F2F1; }
+  .dark-section .card-info .hex { color: #9CA3A0; }
+  .dark-section .card-info .usage { color: #6B7370; }
+  .bubble-demo {
+    max-width: 500px;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .bubble {
+    padding: 14px 18px;
+    max-width: 75%;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .bubble-user {
+    background: #FFFFFF;
+    border: 1px solid #E5E7E6;
+    border-radius: 20px 20px 6px 20px;
+    align-self: flex-end;
+    color: #333;
+  }
+  .bubble-friend {
+    background: #F3F5F4;
+    border-radius: 20px 20px 20px 6px;
+    align-self: flex-start;
+    color: #333;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 20px;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<h1>소곤 Color Palette v3</h1>
+<p class="subtitle">Sage Green — 자연스럽고 깔끔한 톤</p>
+
+<!-- Primary -->
+<div class="section">
+  <h2>Primary — Fresh Green</h2>
+  <div class="palette">
+    <div class="swatch" style="background:#F6FBF4; color:#1E3A1E;"><span class="token">50</span><span class="hex">#F6FBF4</span></div>
+    <div class="swatch" style="background:#EAF6E5; color:#1E3A1E;"><span class="token">100</span><span class="hex">#EAF6E5</span></div>
+    <div class="swatch" style="background:#D5EECC; color:#1E3A1E;"><span class="token">200</span><span class="hex">#D5EECC</span></div>
+    <div class="swatch" style="background:#B8E2A8; color:#1E3A1E;"><span class="token">300</span><span class="hex">#B8E2A8</span></div>
+    <div class="swatch" style="background:#93D17E; color:#1E3A1E;"><span class="token">400</span><span class="hex">#93D17E</span></div>
+    <div class="swatch" style="background:#6EBD5A; color:#fff;"><span class="token">500</span><span class="hex">#6EBD5A</span></div>
+    <div class="swatch" style="background:#57A347; color:#fff;"><span class="token">600</span><span class="hex">#57A347</span></div>
+    <div class="swatch" style="background:#45873A; color:#fff;"><span class="token">700</span><span class="hex">#45873A</span></div>
+    <div class="swatch" style="background:#366B2E; color:#fff;"><span class="token">800</span><span class="hex">#366B2E</span></div>
+    <div class="swatch" style="background:#1E3A1E; color:#fff;"><span class="token">900</span><span class="hex">#1E3A1E</span></div>
+  </div>
+</div>
+
+<!-- Neutral -->
+<div class="section">
+  <h2>Neutral — Clean Gray</h2>
+  <div class="palette">
+    <div class="swatch" style="background:#FAFBFA; color:#1A1C1B;"><span class="token">50</span><span class="hex">#FAFBFA</span></div>
+    <div class="swatch" style="background:#F3F5F4; color:#1A1C1B;"><span class="token">100</span><span class="hex">#F3F5F4</span></div>
+    <div class="swatch" style="background:#E5E7E6; color:#1A1C1B;"><span class="token">200</span><span class="hex">#E5E7E6</span></div>
+    <div class="swatch" style="background:#D0D3D1; color:#1A1C1B;"><span class="token">300</span><span class="hex">#D0D3D1</span></div>
+    <div class="swatch" style="background:#A8ADAA; color:#fff;"><span class="token">400</span><span class="hex">#A8ADAA</span></div>
+    <div class="swatch" style="background:#7D8381; color:#fff;"><span class="token">500</span><span class="hex">#7D8381</span></div>
+    <div class="swatch" style="background:#5C6260; color:#fff;"><span class="token">600</span><span class="hex">#5C6260</span></div>
+    <div class="swatch" style="background:#434846; color:#fff;"><span class="token">700</span><span class="hex">#434846</span></div>
+    <div class="swatch" style="background:#2D302F; color:#fff;"><span class="token">800</span><span class="hex">#2D302F</span></div>
+    <div class="swatch" style="background:#1A1C1B; color:#fff;"><span class="token">900</span><span class="hex">#1A1C1B</span></div>
+  </div>
+</div>
+
+<!-- Semantic -->
+<div class="section">
+  <h2>Semantic — 상태 컬러</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-color" style="background:#4ADE80;"></div>
+      <div class="card-info">
+        <div class="name">Success</div>
+        <div class="hex">#4ADE80</div>
+        <div class="usage">성공</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#FBBF24;"></div>
+      <div class="card-info">
+        <div class="name">Warning</div>
+        <div class="hex">#FBBF24</div>
+        <div class="usage">경고</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#F87171;"></div>
+      <div class="card-info">
+        <div class="name">Error</div>
+        <div class="hex">#F87171</div>
+        <div class="usage">에러</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#60A5FA;"></div>
+      <div class="card-info">
+        <div class="name">Info</div>
+        <div class="hex">#60A5FA</div>
+        <div class="usage">정보</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Bubble -->
+<div class="section">
+  <h2>Chat Bubble — 대화 버블 미리보기</h2>
+  <div class="grid" style="margin-bottom: 24px;">
+    <div class="card">
+      <div class="card-color" style="background:#FFFFFF; border-bottom: 1px solid #E5E7E6;"></div>
+      <div class="card-info">
+        <div class="name">User Bubble</div>
+        <div class="hex">#FFFFFF</div>
+        <div class="usage">유저 기록 버블</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#F3F5F4;"></div>
+      <div class="card-info">
+        <div class="name">Friend Bubble</div>
+        <div class="hex">#F3F5F4</div>
+        <div class="usage">비밀친구 리액션 버블</div>
+      </div>
+    </div>
+  </div>
+  <div class="bubble-demo" style="background:#FAFBFA; padding:24px; border-radius:20px; border: 1px solid #E5E7E6;">
+    <div class="bubble bubble-user">오늘 퇴근길에 하늘이 진짜 예뻤어</div>
+    <div class="bubble bubble-friend">우와 진짜? 요즘 하늘 맑아서 좋더라~ 사진 찍었어?</div>
+  </div>
+</div>
+
+<!-- Dark Mode -->
+<div class="dark-section">
+  <h2>Dark Mode</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-color" style="background:#141716;"></div>
+      <div class="card-info">
+        <div class="name">Background</div>
+        <div class="hex">#141716</div>
+        <div class="usage">페이지 배경</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#1E2422;"></div>
+      <div class="card-info">
+        <div class="name">Surface</div>
+        <div class="hex">#1E2422</div>
+        <div class="usage">카드/서피스</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#2A3230;"></div>
+      <div class="card-info">
+        <div class="name">Surface Raised</div>
+        <div class="hex">#2A3230</div>
+        <div class="usage">부양 서피스</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#3D4745;"></div>
+      <div class="card-info">
+        <div class="name">Border</div>
+        <div class="hex">#3D4745</div>
+        <div class="usage">보더</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#F0F2F1;"></div>
+      <div class="card-info">
+        <div class="name">Text Primary</div>
+        <div class="hex">#F0F2F1</div>
+        <div class="usage">본문</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#9CA3A0;"></div>
+      <div class="card-info">
+        <div class="name">Text Secondary</div>
+        <div class="hex">#9CA3A0</div>
+        <div class="usage">보조 텍스트</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-color" style="background:#6EBD5A;"></div>
+      <div class="card-info">
+        <div class="name">Primary Accent</div>
+        <div class="hex">#6EBD5A</div>
+        <div class="usage">메인 액센트</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
