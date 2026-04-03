@@ -1,18 +1,18 @@
 # 기술 스택
 
 ## Frontend
-- **Framework**: Next.js 14
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Framework**: Next.js 16
+- **Language**: TypeScript 6
+- **Styling**: Tailwind CSS v4
 
 ## Backend
 - **API**: Next.js API Routes (동일 레포 모노레포 구조)
 
 ## Database
-- **Provider**: Supabase (PostgreSQL + Auth)
+- **Provider**: Supabase (PostgreSQL + Auth) — `@supabase/supabase-js` v2
 
 ## AI
-- **SDK**: Anthropic SDK (`@anthropic-ai/sdk`)
+- **SDK**: Anthropic SDK (`@anthropic-ai/sdk`) v0.x
 - **분석 & 리액션**: `claude-haiku-4-5`
 - **주간 요약**: `claude-sonnet-4-6`
 
