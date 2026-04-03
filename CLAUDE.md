@@ -1,9 +1,10 @@
 # 기술 스택
 
 ## Frontend
-- **Framework**: Next.js 16
-- **Language**: TypeScript 6
+- **Framework**: Next.js 16.2.2
+- **Language**: TypeScript 6.0.2
 - **Styling**: Tailwind CSS v4
+- **React**: 19.2.4
 
 ## Backend
 - **API**: Next.js API Routes (동일 레포 모노레포 구조)
