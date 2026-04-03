@@ -35,88 +35,74 @@
 
 ## 2. Color System
 
-### Primary — Peach-Coral 계열
+### Primary — Fresh Green
 
-페이지 전반의 따뜻함을 담당하는 메인 컬러 스케일.
-
-| Token | Hex | 용도 |
-|-------|-----|------|
-| `primary-50` | `#FFF8F0` | 페이지 배경 |
-| `primary-100` | `#FFF1E6` | 카드 배경, 서피스 |
-| `primary-200` | `#FFE4CC` | 호버, 보조 서피스 |
-| `primary-300` | `#FFD4B0` | 보더, 구분선 |
-| `primary-400` | `#FFBC8A` | 보조 버튼, 태그 |
-| `primary-500` | `#F4A574` | 주요 인터랙티브 요소 |
-| `primary-600` | `#E8895A` | 메인 버튼, 링크 |
-| `primary-700` | `#D47048` | 버튼 호버, 액티브 |
-| `primary-800` | `#B85A38` | 강조 텍스트 |
-| `primary-900` | `#8C3E24` | 헤딩 (라이트 모드) |
-
-### Neutral — Warm Gray
-
-순수한 회색이 아닌 따뜻한 회색 계열. 텍스트와 보더 등 중립적 요소에 사용.
+자연스럽고 편안한 연두빛 그린. 깔끔하면서도 포근한 느낌.
 
 | Token | Hex | 용도 |
 |-------|-----|------|
-| `neutral-50` | `#FAF8F5` | 최밝은 배경 |
-| `neutral-100` | `#F0EDE8` | 서브 배경 |
-| `neutral-200` | `#E4DFD8` | 보더, 구분선 |
-| `neutral-300` | `#C9C2B8` | 플레이스홀더 |
-| `neutral-400` | `#A69E93` | 보조 텍스트 |
-| `neutral-500` | `#857C72` | 본문 (보조) |
-| `neutral-600` | `#6B6359` | 본문 |
-| `neutral-700` | `#524B42` | 헤딩 |
-| `neutral-800` | `#3A352E` | 강한 텍스트 |
-| `neutral-900` | `#231F1B` | 가장 어두운 텍스트 |
+| `primary-50` | `#F6FBF4` | 페이지 배경 |
+| `primary-100` | `#EAF6E5` | 카드 배경, 서피스 |
+| `primary-200` | `#D5EECC` | 호버, 보조 서피스 |
+| `primary-300` | `#B8E2A8` | 보더, 구분선 |
+| `primary-400` | `#93D17E` | 보조 버튼, 태그 |
+| `primary-500` | `#6EBD5A` | 주요 인터랙티브 요소 |
+| `primary-600` | `#57A347` | 메인 버튼, 링크 |
+| `primary-700` | `#45873A` | 버튼 호버, 액티브 |
+| `primary-800` | `#366B2E` | 강조 텍스트 |
+| `primary-900` | `#1E3A1E` | 헤딩 (라이트 모드) |
 
-### Accent — 비밀친구 톤 & 기능별
+### Neutral — Clean Gray
 
-비밀친구 성격별 컬러와 기능적 구분 컬러.
+그린 틴트가 살짝 들어간 깔끔한 그레이 계열.
 
 | Token | Hex | 용도 |
 |-------|-----|------|
-| `accent-lavender` | `#C4B1D4` | 따뜻한 친구 |
-| `accent-sky` | `#A8C8E8` | 쿨한 친구 |
-| `accent-yellow` | `#FFD98C` | 텐션 높은 친구 |
-| `accent-sage` | `#B5C9B3` | 캘린더 기록 표시 |
-| `accent-rose` | `#E8A0A0` | 사진 첨부 표시 |
+| `neutral-50` | `#FAFBFA` | 최밝은 배경 |
+| `neutral-100` | `#F3F5F4` | 서브 배경 |
+| `neutral-200` | `#E5E7E6` | 보더, 구분선 |
+| `neutral-300` | `#D0D3D1` | 플레이스홀더 |
+| `neutral-400` | `#A8ADAA` | 보조 텍스트 |
+| `neutral-500` | `#7D8381` | 본문 (보조) |
+| `neutral-600` | `#5C6260` | 본문 |
+| `neutral-700` | `#434846` | 헤딩 |
+| `neutral-800` | `#2D302F` | 강한 텍스트 |
+| `neutral-900` | `#1A1C1B` | 가장 어두운 텍스트 |
 
 ### Semantic — 상태 컬러
 
-시맨틱 컬러도 뮤트된 웜톤으로, 알람/경고가 공격적이지 않게.
+깔끔하고 선명한 시맨틱 컬러. 프라이머리 그린과 톤을 맞춤.
 
 | Token | Hex | 용도 |
 |-------|-----|------|
-| `success` | `#8BBF8B` | 성공 (웜 그린) |
-| `warning` | `#E8C46A` | 경고 (웜 앰버) |
-| `error` | `#D48B8B` | 에러 (뮤트 웜 레드) |
-| `info` | `#8BB0D4` | 정보 (뮤트 웜 블루) |
+| `success` | `#4ADE80` | 성공 |
+| `warning` | `#FBBF24` | 경고 |
+| `error` | `#F87171` | 에러 |
+| `info` | `#60A5FA` | 정보 |
 
 ### Chat Bubble — 대화 버블 컬러
 
-유저 기록과 비밀친구 리액션의 시각적 구분.
+화이트/그레이 기반의 깔끔한 버블. 컬러가 아닌 명도 차이로 구분.
 
 | Token | Hex | 용도 |
 |-------|-----|------|
-| `bubble-user` | `#FFF1E6` | 유저 기록 버블 |
-| `bubble-friend` | `#F5EDE4` | 비밀친구 리액션 버블 |
-| `bubble-friend-border` | `#E8DDD0` | 리액션 버블 보더 |
+| `bubble-user` | `#FFFFFF` | 유저 기록 버블 |
+| `bubble-user-border` | `#E5E7E6` | 유저 버블 보더 |
+| `bubble-friend` | `#F3F5F4` | 비밀친구 리액션 버블 |
 
-### Dark Mode — Warm Dark
+### Dark Mode
 
-다크 모드에서도 따뜻함을 유지. 순수 검정이 아닌 웜 다크 톤.
+그린 톤이 은은하게 깔린 다크 팔레트.
 
 | Token | Hex | 용도 |
 |-------|-----|------|
-| `dark-bg` | `#1C1917` | 페이지 배경 |
-| `dark-surface` | `#292524` | 카드/서피스 |
-| `dark-surface-raised` | `#332E2B` | 부양 서피스 |
-| `dark-border` | `#44403C` | 보더 |
-| `dark-text-primary` | `#F5F0EB` | 본문 |
-| `dark-text-secondary` | `#B8AFA5` | 보조 텍스트 |
-| `dark-primary` | `#F4A574` | 메인 액센트 |
-| `dark-bubble-user` | `#3A3230` | 유저 버블 (다크) |
-| `dark-bubble-friend` | `#2E2926` | 친구 버블 (다크) |
+| `dark-bg` | `#141716` | 페이지 배경 |
+| `dark-surface` | `#1E2422` | 카드/서피스 |
+| `dark-surface-raised` | `#2A3230` | 부양 서피스 |
+| `dark-border` | `#3D4745` | 보더 |
+| `dark-text-primary` | `#F0F2F1` | 본문 |
+| `dark-text-secondary` | `#9CA3A0` | 보조 텍스트 |
+| `dark-primary` | `#6EBD5A` | 메인 액센트 |
 
 ---
 
@@ -173,7 +159,7 @@ Gowun+Dodum&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script
 
 - 너비: **240px** 고정
 - 접힘 가능 (아이콘 전용 모드: 64px)
-- 배경: `primary-100`
+- 배경: `neutral-100`
 
 ### 반응형 브레이크포인트
 
@@ -218,17 +204,16 @@ space-24: 96px
 | `rounded-2xl` | 24px | 채팅 버블, 피처드 카드 |
 | `rounded-full` | 9999px | 아바타, 원형 버튼, 필 |
 
-### Shadows — 웜톤 그림자
+### Shadows
 
-**원칙**: 순수 검정/회색 그림자 사용 금지. 모든 그림자는 웜브라운(`rgba(139, 109, 80, ...)`) 베이스.
+깔끔한 그림자. 과하지 않게 최소한으로 사용.
 
 | Token | 값 | 용도 |
 |-------|-----|------|
-| `shadow-sm` | `0 1px 3px rgba(139, 109, 80, 0.06)` | 태그, 작은 카드 |
-| `shadow-md` | `0 4px 12px rgba(139, 109, 80, 0.08)` | 카드, 기록 항목 |
-| `shadow-lg` | `0 8px 24px rgba(139, 109, 80, 0.10)` | 모달, 플로팅 요소 |
-| `shadow-xl` | `0 12px 40px rgba(139, 109, 80, 0.12)` | 온보딩 패널, 팝업 |
-| `shadow-inner` | `inset 0 2px 4px rgba(139, 109, 80, 0.04)` | 인풋 필드 (포커스) |
+| `shadow-sm` | `0 1px 3px rgba(0, 0, 0, 0.06)` | 태그, 작은 카드 |
+| `shadow-md` | `0 4px 12px rgba(0, 0, 0, 0.08)` | 카드, 기록 항목 |
+| `shadow-lg` | `0 8px 24px rgba(0, 0, 0, 0.10)` | 모달, 플로팅 요소 |
+| `shadow-xl` | `0 12px 40px rgba(0, 0, 0, 0.12)` | 온보딩 패널, 팝업 |
 
 ---
 
@@ -238,42 +223,42 @@ space-24: 96px
 
 #### Primary Button
 ```
-배경: primary-600 (#E8895A)
+배경: primary-600 (#57A347)
 텍스트: white (#FFFFFF)
 Radius: rounded-md (10px)
 Padding: 12px 24px
 폰트: Gowun Dodum, text-base, weight 400
-Hover: primary-700 (#D47048)
-Active: primary-800 (#B85A38)
+Hover: primary-700 (#45873A)
+Active: primary-800 (#366B2E)
 Shadow: shadow-sm
 Transition: 150ms ease-out
 ```
 
 #### Secondary Button
 ```
-배경: primary-100 (#FFF1E6)
-텍스트: primary-700 (#D47048)
-Border: 1px solid primary-300 (#FFD4B0)
-Hover 배경: primary-200 (#FFE4CC)
+배경: primary-100 (#EAF6E5)
+텍스트: primary-700 (#45873A)
+Border: 1px solid primary-300 (#B8E2A8)
+Hover 배경: primary-200 (#D5EECC)
 ```
 
 #### Ghost Button
 ```
 배경: transparent
-텍스트: neutral-600 (#6B6359)
-Hover 배경: neutral-100 (#F0EDE8)
+텍스트: neutral-600 (#5C6260)
+Hover 배경: neutral-100 (#F3F5F4)
 ```
 
 ### 인풋 필드
 
 ```
 배경: #FFFFFF (라이트) / dark-surface (다크)
-Border: 1.5px solid neutral-200 (#E4DFD8)
+Border: 1.5px solid neutral-200 (#E5E7E6)
 Radius: rounded-md (10px)
 Padding: 12px 16px
-Focus Border: primary-500 (#F4A574)
-Focus Shadow: shadow-inner + 0 0 0 3px rgba(244, 165, 116, 0.15)
-Placeholder: neutral-300 (#C9C2B8)
+Focus Border: primary-500 (#6EBD5A)
+Focus Shadow: 0 0 0 3px rgba(110, 189, 90, 0.15)
+Placeholder: neutral-300 (#D0D3D1)
 폰트: Gowun Dodum, text-base
 ```
 
@@ -281,8 +266,8 @@ Placeholder: neutral-300 (#C9C2B8)
 
 ```
 Min Height: 120px
-Border: 없음 (배경 대비로 구분)
-배경: primary-50 (#FFF8F0)
+Border: 1px solid neutral-200 (#E5E7E6)
+배경: #FFFFFF
 Radius: rounded-lg (16px)
 Padding: 20px
 폰트: Gowun Dodum, text-lg (18px)
@@ -293,7 +278,8 @@ Placeholder: "오늘은 어떤 하루였어?" — neutral-300
 
 #### 유저 기록 버블
 ```
-배경: bubble-user (#FFF1E6)
+배경: #FFFFFF
+Border: 1px solid neutral-200 (#E5E7E6)
 Radius: rounded-2xl (24px), 우하단만 rounded-sm (6px)
 Padding: 16px 20px
 Max Width: 85%
@@ -303,8 +289,7 @@ Max Width: 85%
 
 #### 비밀친구 리액션 버블
 ```
-배경: bubble-friend (#F5EDE4)
-Border: 1px solid bubble-friend-border (#E8DDD0)
+배경: neutral-100 (#F3F5F4)
 Radius: rounded-2xl (24px), 좌하단만 rounded-sm (6px)
 Padding: 16px 20px
 Max Width: 85%
@@ -316,18 +301,19 @@ Max Width: 85%
 ### 사이드바 네비게이션
 
 ```
-배경: primary-100 (#FFF1E6)
+배경: neutral-50 (#FAFBFA)
 너비: 240px
+우측 보더: 1px solid neutral-200 (#E5E7E6)
 
 활성 항목:
-  배경: primary-200 (#FFE4CC)
-  텍스트: primary-700 (#D47048)
-  좌측 보더: 3px solid primary-600 (#E8895A)
+  배경: primary-100 (#EAF6E5)
+  텍스트: primary-700 (#45873A)
+  좌측 보더: 3px solid primary-600 (#57A347)
 
 비활성 항목:
-  텍스트: neutral-500 (#857C72)
+  텍스트: neutral-500 (#7D8381)
 
-Hover: primary-200 배경, 150ms 트랜지션
+Hover: neutral-100 배경, 150ms 트랜지션
 
 네비 항목:
   - 기록하기 (pen-line 아이콘)
@@ -339,9 +325,9 @@ Hover: primary-200 배경, 150ms 트랜지션
 
 ```
 날짜 셀: 40x40px, rounded-full
-기록 있는 날: 하단 도트 accent-sage (#B5C9B3)
-선택된 날: 배경 primary-600 (#E8895A), 흰 텍스트
-오늘: ring border primary-400 (#FFBC8A)
+기록 있는 날: 하단 도트 primary-400 (#93D17E)
+선택된 날: 배경 primary-600 (#57A347), 흰 텍스트
+오늘: ring border primary-300 (#B8E2A8)
 헤더: Gowun Batang, text-xl
 ```
 
@@ -349,11 +335,11 @@ Hover: primary-200 배경, 150ms 트랜지션
 
 ```
 배경: #FFFFFF (라이트) / dark-surface (다크)
-Border: 1px solid neutral-200 (#E4DFD8)
+Border: 1px solid neutral-200 (#E5E7E6)
 Radius: rounded-xl (20px)
 Padding: 20px
-Shadow: shadow-md
-Hover Shadow: shadow-lg (살짝 부양 효과)
+Shadow: shadow-sm
+Hover Shadow: shadow-md (살짝 부양 효과)
 
 구성 요소:
   - 타임스탬프 (text-xs, neutral-400)
@@ -442,7 +428,7 @@ Hover Shadow: shadow-lg (살짝 부양 효과)
 
 #### 온보딩 친구 선택 카드
 - Hover: `scale: 1 → 1.02`, 200ms
-- 선택됨: `box-shadow: 0 0 0 3px rgba(244, 165, 116, 0.3)` 글로우
+- 선택됨: `box-shadow: 0 0 0 3px rgba(110, 189, 90, 0.3)` 글로우
 
 #### 페이지 전환
 - Crossfade: `opacity` 전환
@@ -461,8 +447,8 @@ Hover Shadow: shadow-lg (살짝 부양 효과)
 ### 2. 넉넉한 여백
 기록 사이사이에 충분한 공간. 빽빽하거나 답답한 느낌 없이, 기록이 숨 쉬는 공간을 만든다.
 
-### 3. 웜톤 그림자만
-순수 회색/검정 그림자 사용 금지. 모든 그림자는 웜브라운 베이스로 부드럽고 따뜻하게.
+### 3. 최소한의 그림자
+그림자는 과하지 않게, 깔끔하게. 보더와 배경색 차이로 계층을 표현하고 그림자는 보조적으로만 사용.
 
 ### 4. 손글씨체로 친구 구분
 비밀친구의 리액션은 `Nanum Pen Script`로 표시해 시각적으로 "다른 사람이 써준" 느낌을 준다. 유저 텍스트와 확실히 구분.
@@ -473,5 +459,5 @@ Hover Shadow: shadow-lg (살짝 부양 효과)
 ### 6. 느리고 부드러운 애니메이션
 갑작스러운 전환 없음. 모든 것이 부드럽게 나타나고 사라진다. 특히 비밀친구 리액션은 천천히 숨 쉬듯 등장.
 
-### 7. 뮤트된 시맨틱 컬러
-에러나 경고 상태도 공격적이지 않다. 부드럽고 따뜻한 톤의 시맨틱 컬러로 안심하는 느낌.
+### 7. 컬러 미니멀리즘
+Accent 컬러 없이 Primary + Neutral + Semantic만으로 구성. 비밀친구 톤 구분은 텍스트/아이콘으로 해결.
