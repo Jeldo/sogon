@@ -1,0 +1,31 @@
+version: '3'
+
+vars:
+  APP_DIR: sogon
+
+tasks:
+  dev:
+    desc: "개발 서버 실행 (Next.js dev mode)"
+    dir: "{{.APP_DIR}}"
+    cmd: pnpm dev
+
+  build:
+    desc: "프로덕션 빌드"
+    dir: "{{.APP_DIR}}"
+    cmd: pnpm build
+
+  start:
+    desc: "프로덕션 서버 실행 (빌드 후 실행)"
+    dir: "{{.APP_DIR}}"
+    deps: [build]
+    cmd: pnpm start
+
+  lint:
+    desc: "ESLint 실행"
+    dir: "{{.APP_DIR}}"
+    cmd: pnpm lint
+
+  install:
+    desc: "패키지 설치"
+    dir: "{{.APP_DIR}}"
+    cmd: pnpm install
