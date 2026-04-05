@@ -31,117 +31,9 @@
 | 기록 열람 | **모아보기** | 히스토리, 아카이브 |
 | 글 작성 | **기록하기** | 작성, 쓰기 |
 
----
 
-## 2. Color System
 
-### Primary — Fresh Green
-
-자연스럽고 편안한 연두빛 그린. 깔끔하면서도 포근한 느낌.
-
-| Token | Hex | 용도 |
-|-------|-----|------|
-| `primary-50` | `#F6FBF4` | 페이지 배경 |
-| `primary-100` | `#EAF6E5` | 카드 배경, 서피스 |
-| `primary-200` | `#D5EECC` | 호버, 보조 서피스 |
-| `primary-300` | `#B8E2A8` | 보더, 구분선 |
-| `primary-400` | `#93D17E` | 보조 버튼, 태그 |
-| `primary-500` | `#6EBD5A` | 주요 인터랙티브 요소 |
-| `primary-600` | `#57A347` | 메인 버튼, 링크 |
-| `primary-700` | `#45873A` | 버튼 호버, 액티브 |
-| `primary-800` | `#366B2E` | 강조 텍스트 |
-| `primary-900` | `#1E3A1E` | 헤딩 (라이트 모드) |
-
-### Neutral — Clean Gray
-
-그린 틴트가 살짝 들어간 깔끔한 그레이 계열.
-
-| Token | Hex | 용도 |
-|-------|-----|------|
-| `neutral-50` | `#FAFBFA` | 최밝은 배경 |
-| `neutral-100` | `#F3F5F4` | 서브 배경 |
-| `neutral-200` | `#E5E7E6` | 보더, 구분선 |
-| `neutral-300` | `#D0D3D1` | 플레이스홀더 |
-| `neutral-400` | `#A8ADAA` | 보조 텍스트 |
-| `neutral-500` | `#7D8381` | 본문 (보조) |
-| `neutral-600` | `#5C6260` | 본문 |
-| `neutral-700` | `#434846` | 헤딩 |
-| `neutral-800` | `#2D302F` | 강한 텍스트 |
-| `neutral-900` | `#1A1C1B` | 가장 어두운 텍스트 |
-
-### Semantic — 상태 컬러
-
-깔끔하고 선명한 시맨틱 컬러. 프라이머리 그린과 톤을 맞춤.
-
-| Token | Hex | 용도 |
-|-------|-----|------|
-| `success` | `#4ADE80` | 성공 |
-| `warning` | `#FBBF24` | 경고 |
-| `error` | `#F87171` | 에러 |
-| `info` | `#60A5FA` | 정보 |
-
-### Chat Bubble — 대화 버블 컬러
-
-화이트/그레이 기반의 깔끔한 버블. 컬러가 아닌 명도 차이로 구분.
-
-| Token | Hex | 용도 |
-|-------|-----|------|
-| `bubble-user` | `#FFFFFF` | 유저 기록 버블 |
-| `bubble-user-border` | `#E5E7E6` | 유저 버블 보더 |
-| `bubble-friend` | `#F3F5F4` | 비밀친구 리액션 버블 |
-
-### Dark Mode
-
-그린 톤이 은은하게 깔린 다크 팔레트.
-
-| Token | Hex | 용도 |
-|-------|-----|------|
-| `dark-bg` | `#141716` | 페이지 배경 |
-| `dark-surface` | `#1E2422` | 카드/서피스 |
-| `dark-surface-raised` | `#2A3230` | 부양 서피스 |
-| `dark-border` | `#3D4745` | 보더 |
-| `dark-text-primary` | `#F0F2F1` | 본문 |
-| `dark-text-secondary` | `#9CA3A0` | 보조 텍스트 |
-| `dark-primary` | `#6EBD5A` | 메인 액센트 |
-
----
-
-## 3. Typography
-
-### 폰트 패밀리
-
-| 역할 | 폰트 | 설명 | Fallback |
-|------|------|------|----------|
-| **본문/UI** | `Gowun Dodum` | 정갈하면서 따뜻한 한글 산세리프 | `'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif` |
-| **헤딩/디스플레이** | `Gowun Batang` | 연필로 쓴 듯한 세리프. 일기장 느낌 | `'Noto Serif KR', serif` |
-| **비밀친구 리액션** | `Nanum Pen Script` | 손글씨체. "누군가가 써준" 느낌 강화 | `'Gaegu', cursive` |
-
-**Google Fonts import:**
-```
-Gowun+Dodum&family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script
-```
-
-### 타입 스케일
-
-| Token | Size | Line Height | Weight | 용도 |
-|-------|------|-------------|--------|------|
-| `text-xs` | 12px (0.75rem) | 1.5 | 400 | 타임스탬프, 메타데이터 |
-| `text-sm` | 14px (0.875rem) | 1.5 | 400 | 캡션, 도움말 |
-| `text-base` | 16px (1rem) | 1.6 | 400 | 본문, UI 라벨 |
-| `text-lg` | 18px (1.125rem) | 1.6 | 400 | 기록 텍스트, 카드 콘텐츠 |
-| `text-xl` | 20px (1.25rem) | 1.5 | 400 | 섹션 헤딩 |
-| `text-2xl` | 24px (1.5rem) | 1.4 | 700 | 페이지 타이틀 |
-| `text-3xl` | 30px (1.875rem) | 1.3 | 700 | 온보딩 헤딩 |
-
-### 특수 타이포그래피
-
-- **비밀친구 리액션**: `Nanum Pen Script`, `text-xl` (20px) — 유저 텍스트(Gowun Dodum)와 시각적으로 명확히 구분
-- **페이지 타이틀**: `Gowun Batang`, `text-2xl`, weight 700 — 일기장 표지 느낌
-- **타임스탬프**: `text-xs`, `neutral-400` — 존재하지만 시선을 끌지 않는 정도
-
----
-
-## 4. Spacing & Layout
+## 2. Spacing & Layout
 
 ### 데스크톱 우선 레이아웃
 
@@ -189,7 +81,7 @@ space-24: 96px
 
 ---
 
-## 5. Border Radius & Shadows
+## 3. Border Radius & Shadows
 
 ### Border Radius
 
@@ -217,7 +109,7 @@ space-24: 96px
 
 ---
 
-## 6. Component Design Tokens
+## 4. Component Design Tokens
 
 ### 버튼
 
@@ -350,7 +242,7 @@ Hover Shadow: shadow-md (살짝 부양 효과)
 
 ---
 
-## 7. Iconography
+## 5. Iconography
 
 ### 스타일
 

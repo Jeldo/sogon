@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소곤 Component Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Gowun+Batang&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Gowun Dodum', -apple-system, sans-serif;
+    background: #FAFAFA;
+    color: #1A1C1B;
+    padding: 48px;
+    line-height: 1.6;
+  }
+
+  h1 { font-size: 32px; margin-bottom: 8px; color: #1A1C1B; }
+  .subtitle { font-size: 16px; color: #7D8381; margin-bottom: 56px; }
+  h2 {
+    font-size: 22px;
+    margin-bottom: 24px;
+    color: #1A1C1B;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #E5E7E6;
+  }
+  h3 { font-size: 16px; color: #5C6260; margin-bottom: 12px; font-weight: 400; }
+  .section { margin-bottom: 64px; }
+  .label {
+    font-size: 12px;
+    color: #A8ADAA;
+    margin-top: 6px;
+  }
+
+  /* ─── Typography ─── */
+  .type-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid #F3F5F4;
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta {
+    min-width: 180px;
+    font-size: 13px;
+    color: #7D8381;
+  }
+  .type-meta code {
+    background: #F3F5F4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  .font-dodum { font-family: 'Gowun Dodum', sans-serif; }
+  .font-batang { font-family: 'Gowun Batang', serif; }
+  .font-pen { font-family: 'Nanum Pen Script', cursive; }
+
+  /* ─── Spacing ─── */
+  .spacing-list { display: flex; flex-direction: column; gap: 8px; }
+  .spacing-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .spacing-bar {
+    height: 24px;
+    background: #D5EECC;
+    border-radius: 4px;
+    border: 1px solid #B8E2A8;
+    min-width: 2px;
+  }
+  .spacing-label {
+    font-size: 13px;
+    color: #5C6260;
+    min-width: 80px;
+    font-family: monospace;
+  }
+  .spacing-px {
+    font-size: 12px;
+    color: #A8ADAA;
+    font-family: monospace;
+  }
+
+  /* ─── Border Radius ─── */
+  .radius-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-end;
+  }
+  .radius-item { text-align: center; }
+  .radius-box {
+    width: 80px;
+    height: 80px;
+    background: #EAF6E5;
+    border: 2px solid #B8E2A8;
+    margin-bottom: 8px;
+  }
+  .radius-item .label { font-family: monospace; }
+
+  /* ─── Shadows ─── */
+  .shadow-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .shadow-card {
+    width: 180px;
+    height: 120px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .shadow-card .name { font-size: 14px; color: #434846; margin-bottom: 4px; }
+  .shadow-card .value { font-size: 11px; color: #A8ADAA; font-family: monospace; text-align: center; padding: 0 12px; }
+
+  /* ─── Buttons ─── */
+  .btn-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .btn {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 150ms ease-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: #57A347;
+    color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .btn-primary:hover { background: #45873A; }
+  .btn-primary:active { background: #366B2E; }
+
+  .btn-secondary {
+    background: #EAF6E5;
+    color: #45873A;
+    border: 1px solid #B8E2A8;
+  }
+  .btn-secondary:hover { background: #D5EECC; }
+
+  .btn-ghost {
+    background: transparent;
+    color: #5C6260;
+  }
+  .btn-ghost:hover { background: #F3F5F4; }
+
+  /* ─── Inputs ─── */
+  .input-demo { max-width: 480px; display: flex; flex-direction: column; gap: 20px; }
+  .input-field {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 16px;
+    background: #FFFFFF;
+    border: 1.5px solid #E5E7E6;
+    border-radius: 10px;
+    padding: 12px 16px;
+    outline: none;
+    transition: all 150ms ease-out;
+    color: #1A1C1B;
+  }
+  .input-field::placeholder { color: #D0D3D1; }
+  .input-field:focus {
+    border-color: #6EBD5A;
+    box-shadow: 0 0 0 3px rgba(110, 189, 90, 0.15);
+  }
+  .textarea-field {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 18px;
+    background: #FFFFFF;
+    border: 1px solid #E5E7E6;
+    border-radius: 16px;
+    padding: 20px;
+    outline: none;
+    min-height: 120px;
+    resize: vertical;
+    transition: all 150ms ease-out;
+    color: #1A1C1B;
+  }
+  .textarea-field::placeholder { color: #D0D3D1; }
+  .textarea-field:focus {
+    border-color: #6EBD5A;
+    box-shadow: 0 0 0 3px rgba(110, 189, 90, 0.15);
+  }
+
+  /* ─── Chat Bubbles ─── */
+  .chat-demo {
+    max-width: 560px;
+    background: #FAFBFA;
+    border: 1px solid #E5E7E6;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .bubble {
+    padding: 16px 20px;
+    max-width: 85%;
+    line-height: 1.5;
+  }
+  .bubble-user {
+    background: #FFFFFF;
+    border: 1px solid #E5E7E6;
+    border-radius: 24px 24px 6px 24px;
+    align-self: flex-end;
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 18px;
+    color: #1A1C1B;
+  }
+  .bubble-friend {
+    background: #F3F5F4;
+    border-radius: 24px 24px 24px 6px;
+    align-self: flex-start;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 20px;
+    color: #1A1C1B;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .friend-avatar {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #57A347;
+  }
+
+  /* Typing indicator */
+  .typing-indicator {
+    align-self: flex-start;
+    background: #F3F5F4;
+    border-radius: 24px 24px 24px 6px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .typing-dot {
+    width: 8px;
+    height: 8px;
+    background: #A8ADAA;
+    border-radius: 50%;
+    animation: typingPulse 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ─── Record Card ─── */
+  .card-demo { max-width: 560px; display: flex; flex-direction: column; gap: 16px; }
+  .record-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7E6;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: box-shadow 200ms ease-out;
+    cursor: default;
+  }
+  .record-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .record-timestamp {
+    font-size: 12px;
+    color: #A8ADAA;
+    margin-bottom: 8px;
+  }
+  .record-content {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 18px;
+    color: #1A1C1B;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .record-reaction {
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 20px;
+    color: #434846;
+    padding-top: 12px;
+    border-top: 1px solid #F3F5F4;
+  }
+
+  /* ─── Calendar ─── */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    gap: 8px;
+    justify-content: start;
+  }
+  .cal-header {
+    font-family: 'Gowun Batang', serif;
+    font-size: 20px;
+    color: #1A1C1B;
+    margin-bottom: 16px;
+  }
+  .cal-day-label {
+    font-size: 12px;
+    color: #A8ADAA;
+    text-align: center;
+    padding-bottom: 4px;
+  }
+  .cal-cell {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #434846;
+    position: relative;
+    cursor: default;
+  }
+  .cal-cell.has-entry::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: #93D17E;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 4px;
+  }
+  .cal-cell.selected {
+    background: #57A347;
+    color: #FFFFFF;
+  }
+  .cal-cell.today {
+    box-shadow: inset 0 0 0 2px #B8E2A8;
+  }
+  .cal-cell.empty { visibility: hidden; }
+
+  /* ─── Animation Demo ─── */
+  .anim-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .anim-box {
+    background: #FAFBFA;
+    border: 1px solid #E5E7E6;
+    border-radius: 16px;
+    padding: 24px;
+    min-width: 280px;
+    flex: 1;
+  }
+  .anim-box h3 { margin-bottom: 16px; }
+
+  /* Reaction appear animation */
+  .anim-reaction-bubble {
+    background: #F3F5F4;
+    border-radius: 24px 24px 24px 6px;
+    padding: 16px 20px;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 20px;
+    color: #1A1C1B;
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    max-width: 280px;
+  }
+  .anim-reaction-bubble.animate {
+    animation: reactionAppear 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes reactionAppear {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Stagger card animation */
+  .anim-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7E6;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #434846;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .anim-card.animate {
+    animation: cardStagger 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes cardStagger {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .replay-btn {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 13px;
+    background: #EAF6E5;
+    color: #45873A;
+    border: 1px solid #B8E2A8;
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 150ms ease-out;
+  }
+  .replay-btn:hover { background: #D5EECC; }
+
+  /* ─── Sidebar Nav Demo ─── */
+  .sidebar-demo {
+    width: 240px;
+    background: #FAFBFA;
+    border: 1px solid #E5E7E6;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 12px 0;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    color: #7D8381;
+    cursor: default;
+    transition: background 150ms ease-out;
+    border-left: 3px solid transparent;
+  }
+  .nav-item:hover { background: #F3F5F4; }
+  .nav-item.active {
+    background: #EAF6E5;
+    color: #45873A;
+    border-left-color: #57A347;
+  }
+  .nav-item i { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+
+<h1>소곤 Component Guide</h1>
+<p class="subtitle">디자인 토큰 & 컴포넌트 시각 레퍼런스</p>
+
+<!-- ═══════ 1. Typography ═══════ -->
+<div class="section">
+  <h2>1. Typography</h2>
+
+  <div class="type-row">
+    <div class="type-meta">
+      <strong>Gowun Dodum</strong><br>
+      <code>text-base</code> 16px
+    </div>
+    <div class="font-dodum" style="font-size:16px;">오늘은 어떤 하루였어? 따뜻한 봄바람이 불었다.</div>
+  </div>
+
+  <div class="type-row">
+    <div class="type-meta">
+      <strong>Gowun Dodum</strong><br>
+      <code>text-lg</code> 18px
+    </div>
+    <div class="font-dodum" style="font-size:18px;">퇴근길에 벚꽃이 흩날렸어. 좋은 하루였다.</div>
+  </div>
+
+  <div class="type-row">
+    <div class="type-meta">
+      <strong>Gowun Batang</strong><br>
+      <code>text-xl</code> 20px
+    </div>
+    <div class="font-batang" style="font-size:20px;">2026년 4월</div>
+  </div>
+
+  <div class="type-row">
+    <div class="type-meta">
+      <strong>Nanum Pen Script</strong><br>
+      <code>text-xl</code> 20px
+    </div>
+    <div class="font-pen" style="font-size:20px;">우와 진짜? 봄바람 느끼면서 걸으면 기분 좋지~ 내일도 좋은 하루 보내!</div>
+  </div>
+
+  <div class="type-row">
+    <div class="type-meta">
+      <strong>Nanum Pen Script</strong><br>
+      <code>text-2xl</code> 24px
+    </div>
+    <div class="font-pen" style="font-size:24px;">비밀친구가 속삭여요</div>
+  </div>
+</div>
+
+<!-- ═══════ 2. Spacing Scale ═══════ -->
+<div class="section">
+  <h2>2. Spacing Scale (4px 기반)</h2>
+  <div class="spacing-list">
+    <div class="spacing-item"><span class="spacing-label">space-1</span><div class="spacing-bar" style="width:4px;"></div><span class="spacing-px">4px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-2</span><div class="spacing-bar" style="width:8px;"></div><span class="spacing-px">8px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-3</span><div class="spacing-bar" style="width:12px;"></div><span class="spacing-px">12px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-4</span><div class="spacing-bar" style="width:16px;"></div><span class="spacing-px">16px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-5</span><div class="spacing-bar" style="width:20px;"></div><span class="spacing-px">20px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-6</span><div class="spacing-bar" style="width:24px;"></div><span class="spacing-px">24px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-8</span><div class="spacing-bar" style="width:32px;"></div><span class="spacing-px">32px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-10</span><div class="spacing-bar" style="width:40px;"></div><span class="spacing-px">40px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-12</span><div class="spacing-bar" style="width:48px;"></div><span class="spacing-px">48px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-16</span><div class="spacing-bar" style="width:64px;"></div><span class="spacing-px">64px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-20</span><div class="spacing-bar" style="width:80px;"></div><span class="spacing-px">80px</span></div>
+    <div class="spacing-item"><span class="spacing-label">space-24</span><div class="spacing-bar" style="width:96px;"></div><span class="spacing-px">96px</span></div>
+  </div>
+</div>
+
+<!-- ═══════ 3. Border Radius ═══════ -->
+<div class="section">
+  <h2>3. Border Radius</h2>
+  <div class="radius-grid">
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:6px;"></div>
+      <div class="label">rounded-sm<br>6px</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:10px;"></div>
+      <div class="label">rounded-md<br>10px</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:16px;"></div>
+      <div class="label">rounded-lg<br>16px</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:20px;"></div>
+      <div class="label">rounded-xl<br>20px</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:24px;"></div>
+      <div class="label">rounded-2xl<br>24px</div>
+    </div>
+    <div class="radius-item">
+      <div class="radius-box" style="border-radius:9999px;"></div>
+      <div class="label">rounded-full<br>9999px</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 4. Shadows ═══════ -->
+<div class="section">
+  <h2>4. Shadows</h2>
+  <div class="shadow-grid">
+    <div class="shadow-card" style="box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+      <div class="name">shadow-sm</div>
+      <div class="value">0 1px 3px rgba(0,0,0,0.06)</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+      <div class="name">shadow-md</div>
+      <div class="value">0 4px 12px rgba(0,0,0,0.08)</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:0 8px 24px rgba(0,0,0,0.10);">
+      <div class="name">shadow-lg</div>
+      <div class="value">0 8px 24px rgba(0,0,0,0.10)</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:0 12px 40px rgba(0,0,0,0.12);">
+      <div class="name">shadow-xl</div>
+      <div class="value">0 12px 40px rgba(0,0,0,0.12)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 5. Buttons ═══════ -->
+<div class="section">
+  <h2>5. Buttons</h2>
+  <h3>Primary</h3>
+  <div class="btn-row">
+    <button class="btn btn-primary">기록하기</button>
+    <button class="btn btn-primary"><i data-lucide="send" style="width:18px;height:18px;"></i> 전송</button>
+  </div>
+  <h3>Secondary</h3>
+  <div class="btn-row">
+    <button class="btn btn-secondary">모아보기</button>
+    <button class="btn btn-secondary"><i data-lucide="calendar" style="width:18px;height:18px;"></i> 캘린더</button>
+  </div>
+  <h3>Ghost</h3>
+  <div class="btn-row">
+    <button class="btn btn-ghost">취소</button>
+    <button class="btn btn-ghost"><i data-lucide="settings" style="width:18px;height:18px;"></i> 설정</button>
+  </div>
+</div>
+
+<!-- ═══════ 6. Input & Textarea ═══════ -->
+<div class="section">
+  <h2>6. Input & Textarea</h2>
+  <div class="input-demo">
+    <div>
+      <h3>인풋 필드</h3>
+      <input type="text" class="input-field" placeholder="이름을 입력해주세요" style="width:100%;">
+    </div>
+    <div>
+      <h3>기록 입력 Textarea</h3>
+      <textarea class="textarea-field" placeholder="오늘은 어떤 하루였어?" style="width:100%;"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 7. Chat Bubbles ═══════ -->
+<div class="section">
+  <h2>7. Chat Bubbles</h2>
+  <div class="chat-demo">
+    <div class="bubble bubble-user">퇴근길에 벚꽃이 흩날렸어. 진짜 예뻤다.</div>
+    <div class="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+    <div class="bubble bubble-friend">
+      <svg class="friend-avatar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <span>우와 벚꽃! 사진 찍었어? 봄이 진짜 왔구나~</span>
+    </div>
+    <div class="bubble bubble-user">응 찍었지! 내일도 보러 갈 거야.</div>
+    <div class="bubble bubble-friend">
+      <svg class="friend-avatar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <span>좋다~ 내일은 사진도 같이 기록해봐!</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 8. Sidebar Navigation ═══════ -->
+<div class="section">
+  <h2>8. Sidebar Navigation</h2>
+  <div class="sidebar-demo">
+    <div class="nav-item active">
+      <i data-lucide="pen-line" style="width:20px;height:20px;"></i>
+      기록하기
+    </div>
+    <div class="nav-item">
+      <i data-lucide="book-open" style="width:20px;height:20px;"></i>
+      모아보기
+    </div>
+    <div class="nav-item">
+      <i data-lucide="calendar" style="width:20px;height:20px;"></i>
+      캘린더
+    </div>
+    <div class="nav-item">
+      <i data-lucide="settings" style="width:20px;height:20px;"></i>
+      설정
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 9. Record Card ═══════ -->
+<div class="section">
+  <h2>9. Record Card (타임라인)</h2>
+  <div class="card-demo">
+    <div class="record-card">
+      <div class="record-timestamp">2026년 4월 5일 토요일 · 오후 8:23</div>
+      <div class="record-content">퇴근길에 벚꽃이 흩날렸어. 바람이 불 때마다 꽃잎이 눈처럼 내렸다. 진짜 예뻤다.</div>
+      <div class="record-reaction">우와 벚꽃! 사진 찍었어? 봄이 진짜 왔구나~</div>
+    </div>
+    <div class="record-card">
+      <div class="record-timestamp">2026년 4월 4일 금요일 · 오후 11:05</div>
+      <div class="record-content">오늘 점심에 새로 생긴 파스타집 가봤는데 진짜 맛있었어.</div>
+      <div class="record-reaction">오 어디야? 나도 가보고 싶다!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 10. Calendar ═══════ -->
+<div class="section">
+  <h2>10. Calendar</h2>
+  <div class="cal-header">2026년 4월</div>
+  <div class="cal-grid">
+    <div class="cal-day-label">일</div>
+    <div class="cal-day-label">월</div>
+    <div class="cal-day-label">화</div>
+    <div class="cal-day-label">수</div>
+    <div class="cal-day-label">목</div>
+    <div class="cal-day-label">금</div>
+    <div class="cal-day-label">토</div>
+
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell empty"></div>
+    <div class="cal-cell has-entry">1</div>
+    <div class="cal-cell has-entry">2</div>
+    <div class="cal-cell">3</div>
+    <div class="cal-cell has-entry">4</div>
+    <div class="cal-cell today has-entry">5</div>
+    <div class="cal-cell">6</div>
+    <div class="cal-cell">7</div>
+    <div class="cal-cell">8</div>
+    <div class="cal-cell">9</div>
+    <div class="cal-cell">10</div>
+    <div class="cal-cell">11</div>
+    <div class="cal-cell selected">12</div>
+    <div class="cal-cell">13</div>
+    <div class="cal-cell">14</div>
+    <div class="cal-cell">15</div>
+    <div class="cal-cell">16</div>
+    <div class="cal-cell">17</div>
+    <div class="cal-cell">18</div>
+  </div>
+  <div style="margin-top:16px; display:flex; gap:16px; font-size:13px; color:#7D8381;">
+    <span>● 기본</span>
+    <span style="color:#93D17E;">● 기록 있는 날 (하단 도트)</span>
+    <span style="color:#57A347;">● 선택된 날 (초록 배경)</span>
+    <span style="color:#B8E2A8;">● 오늘 (ring border)</span>
+  </div>
+</div>
+
+<!-- ═══════ 11. Motion & Animation ═══════ -->
+<div class="section">
+  <h2>11. Motion & Animation</h2>
+  <div class="anim-section">
+
+    <!-- Reaction appear -->
+    <div class="anim-box">
+      <h3>비밀친구 리액션 등장</h3>
+      <p style="font-size:13px; color:#A8ADAA; margin-bottom:12px;">500ms · ease-spring · translateY + scale</p>
+      <div id="reaction-demo" class="anim-reaction-bubble">
+        우와 진짜 좋은 하루였겠다~!
+      </div>
+      <button class="replay-btn" onclick="replayReaction()">다시 보기</button>
+    </div>
+
+    <!-- Stagger cards -->
+    <div class="anim-box">
+      <h3>타임라인 카드 Stagger</h3>
+      <p style="font-size:13px; color:#A8ADAA; margin-bottom:12px;">350ms · ease-out · stagger 50ms</p>
+      <div id="stagger-demo">
+        <div class="anim-card" style="animation-delay:0ms;">4월 5일 — 벚꽃이 흩날렸어</div>
+        <div class="anim-card" style="animation-delay:50ms;">4월 4일 — 파스타집 갔다</div>
+        <div class="anim-card" style="animation-delay:100ms;">4월 3일 — 비가 왔다</div>
+      </div>
+      <button class="replay-btn" onclick="replayStagger()">다시 보기</button>
+    </div>
+
+    <!-- Button press -->
+    <div class="anim-box">
+      <h3>버튼 Press 효과</h3>
+      <p style="font-size:13px; color:#A8ADAA; margin-bottom:12px;">100ms · scale 0.97 on :active</p>
+      <button class="btn btn-primary" style="margin-top:8px;">눌러보세요</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initialize Lucide icons
+  lucide.createIcons();
+
+  // Replay reaction animation
+  function replayReaction() {
+    const el = document.getElementById('reaction-demo');
+    el.classList.remove('animate');
+    void el.offsetWidth; // trigger reflow
+    el.classList.add('animate');
+  }
+
+  // Replay stagger animation
+  function replayStagger() {
+    const cards = document.querySelectorAll('#stagger-demo .anim-card');
+    cards.forEach((card, i) => {
+      card.classList.remove('animate');
+      card.style.animationDelay = (i * 50) + 'ms';
+    });
+    void cards[0].offsetWidth;
+    cards.forEach(card => card.classList.add('animate'));
+  }
+
+  // Auto-play animations on load
+  window.addEventListener('load', () => {
+    setTimeout(replayReaction, 300);
+    setTimeout(replayStagger, 300);
+  });
+</script>
+
+</body>
+</html>
