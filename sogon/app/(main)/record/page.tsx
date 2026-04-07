@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Send } from "lucide-react";
+import Image from "next/image";
+import { Send, ImagePlus, X } from "lucide-react";
 import { formatKoreanDate } from "@/lib/date-utils";
 import {
   addEntry,
@@ -10,12 +11,15 @@ import {
   getEntriesByDate,
   getReactions,
 } from "@/lib/storage";
+import { compressImage } from "@/lib/image";
 import type { EntryWithReaction } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
 
 export default function RecordPage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState("");
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [todayEntries, setTodayEntries] = useState<EntryWithReaction[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -33,12 +37,21 @@ export default function RecordPage() {
     setTodayEntries(withReactions);
   }
 
+  async function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const dataUrl = await compressImage(file);
+    setImageDataUrl(dataUrl);
+    // Reset input so the same file can be re-selected
+    e.target.value = "";
+  }
+
   async function handleSubmit() {
     const trimmed = content.trim();
     if (!trimmed || submitting) return;
 
     setSubmitting(true);
-    const entry = addEntry(trimmed, null);
+    const entry = addEntry(trimmed, imageDataUrl);
 
     // Call AI reaction API
     const profile = getDeviceProfile();
@@ -81,8 +94,49 @@ export default function RecordPage() {
           className="w-full min-h-[120px] rounded-[16px] border border-neutral-200 p-5 text-lg font-body text-foreground placeholder:text-neutral-300 resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)] transition-all duration-150"
         />
 
+        {/* Image preview */}
+        {imageDataUrl && (
+          <div className="relative inline-block">
+            <div className="rounded-[16px] overflow-hidden border border-neutral-200">
+              <Image
+                src={imageDataUrl}
+                alt="첨부 미리보기"
+                width={0}
+                height={0}
+                sizes="200px"
+                className="w-auto h-auto max-h-[200px]"
+                unoptimized
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setImageDataUrl(null)}
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-neutral-600 text-white flex items-center justify-center hover:bg-neutral-700 transition-colors"
+            >
+              <X size={14} strokeWidth={2} />
+            </button>
+          </div>
+        )}
+
         {/* Action bar */}
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-between">
+          <div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-9 h-9 rounded-[10px] bg-neutral-100 flex items-center justify-center text-neutral-500 hover:bg-neutral-200 active:scale-[0.97] transition-all duration-150"
+            >
+              <ImagePlus size={18} strokeWidth={1.5} />
+            </button>
+          </div>
+
           <button
             onClick={handleSubmit}
             disabled={!content.trim() || submitting}
