@@ -155,7 +155,11 @@ export default function RecordPage() {
             <h3 className="text-sm text-neutral-400 mb-4">오늘의 기록</h3>
             <div className="space-y-4">
               {todayEntries.map((entry) => (
-                <EntryCard key={entry.id} entry={entry} />
+                <EntryCard
+                  key={entry.id}
+                  entry={entry}
+                  onUpdate={loadTodayEntries}
+                />
               ))}
             </div>
           </div>
