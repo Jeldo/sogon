@@ -23,6 +23,9 @@ const nanumPen = Nanum_Pen_Script({
 export const metadata: Metadata = {
   title: "\uC18C\uACE4",
   description: "\uD504\uB77C\uC774\uBE57\uD55C\uB370 \uBC18\uC751\uC774 \uC788\uB294 \uD558\uB8E8 \uAE30\uB85D \uACF5\uAC04",
+  verification: {
+    google: "ggKZ1AlVWDBwCfiFZ0cPmk_dOBSPmU8D4_KwrPz348o",
+  },
 };
 
 export default function RootLayout({
