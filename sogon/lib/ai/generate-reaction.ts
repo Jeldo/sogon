@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 import type { FriendTone } from "@/lib/types";
 
 const TONE_PROMPTS: Record<FriendTone, string> = {
@@ -26,28 +26,24 @@ export async function generateReaction(
   content: string,
   tone: FriendTone,
 ): Promise<string> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return FALLBACK_REACTIONS[tone];
   }
 
   try {
-    const client = new Anthropic({ apiKey });
-    const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 150,
-      system: `${TONE_PROMPTS[tone]}\n\n${COMMON_RULES}`,
-      messages: [
-        {
-          role: "user",
-          content: `친구가 이렇게 기록했어:\n\n"${content}"`,
-        },
-      ],
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-lite-preview",
+      contents: `친구가 이렇게 기록했어:\n\n"${content}"`,
+      config: {
+        systemInstruction: `${TONE_PROMPTS[tone]}\n\n${COMMON_RULES}`,
+        maxOutputTokens: 150,
+      },
     });
 
-    const textBlock = message.content.find((block) => block.type === "text");
-    return textBlock?.text ?? FALLBACK_REACTIONS[tone];
-  } catch {
+    return response.text ?? FALLBACK_REACTIONS[tone];
+  } catch  {
     return FALLBACK_REACTIONS[tone];
   }
 }
