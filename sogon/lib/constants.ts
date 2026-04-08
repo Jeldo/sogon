@@ -32,8 +32,3 @@ export const TONE_OPTIONS = [
   },
 ] as const satisfies readonly ToneOption[];
 
-export const STORAGE_KEYS = {
-  PROFILE: "sogon_profile",
-  ENTRIES: "sogon_entries",
-  REACTIONS: "sogon_reactions",
-} as const;

@@ -1,7 +1,7 @@
 const MAX_DIMENSION = 1200;
 const QUALITY = 0.8;
 
-export async function compressImage(file: File): Promise<string> {
+export async function compressImage(file: File): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -29,7 +29,17 @@ export async function compressImage(file: File): Promise<string> {
         }
 
         ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", QUALITY));
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("Failed to create blob"));
+            }
+          },
+          "image/jpeg",
+          QUALITY,
+        );
       };
       img.onerror = () => reject(new Error("Failed to load image"));
       img.src = reader.result as string;

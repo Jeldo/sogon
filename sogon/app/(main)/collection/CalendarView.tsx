@@ -1,10 +1,16 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { getCalendarGrid, isSameDay, isToday, formatKoreanDate } from "@/lib/date-utils";
-import { getEntriesByMonth, getReactions } from "@/lib/storage";
+import {
+  getCalendarGrid,
+  isSameDay,
+  isToday,
+  formatKoreanDate,
+} from "@/lib/date-utils";
+import { createClient } from "@/lib/supabase/client";
+import { getEntriesByMonth } from "@/lib/supabase/queries";
 import type { EntryWithReaction } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
 
@@ -15,35 +21,30 @@ export function CalendarView() {
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
   const [selectedDate, setSelectedDate] = useState<Date>(now);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [monthEntries, setMonthEntries] = useState<EntryWithReaction[]>([]);
 
-  const grid = useMemo(() => getCalendarGrid(year, month), [year, month]);
+  const grid = getCalendarGrid(year, month);
 
-  const monthEntries = useMemo(
-    () => getEntriesByMonth(year, month),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [year, month, refreshKey],
+  const loadMonth = useCallback(async () => {
+    const supabase = createClient();
+    const entries = await getEntriesByMonth(supabase, year, month);
+    setMonthEntries(entries);
+  }, [year, month]);
+
+  useEffect(() => {
+    loadMonth();
+  }, [loadMonth]);
+
+  const datesWithEntries = new Set<string>(
+    monthEntries.map((e) => {
+      const d = new Date(e.createdAt);
+      return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    }),
   );
 
-  const datesWithEntries = useMemo(() => {
-    const set = new Set<string>();
-    monthEntries.forEach((e) => {
-      const d = new Date(e.createdAt);
-      set.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
-    });
-    return set;
-  }, [monthEntries]);
-
-  const selectedEntries: EntryWithReaction[] = useMemo(() => {
-    const reactions = getReactions();
-    return monthEntries
-      .filter((e) => isSameDay(new Date(e.createdAt), selectedDate))
-      .map((entry) => ({
-        ...entry,
-        reaction: reactions.find((r) => r.entryId === entry.id) ?? null,
-      }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monthEntries, selectedDate, refreshKey]);
+  const selectedEntries = monthEntries.filter((e) =>
+    isSameDay(new Date(e.createdAt), selectedDate),
+  );
 
   function prevMonth() {
     if (month === 0) {
@@ -108,7 +109,7 @@ export function CalendarView() {
         <div className="grid grid-cols-7 gap-y-1">
           {grid.map(({ date, isCurrentMonth }, i) => {
             const selected = isSameDay(date, selectedDate);
-            const today = isToday(date);
+            const todayDate = isToday(date);
             const hasEntryDot = isCurrentMonth && hasEntry(date);
 
             return (
@@ -120,7 +121,7 @@ export function CalendarView() {
                     ? "text-neutral-300"
                     : selected
                       ? "bg-primary-600 text-white"
-                      : today
+                      : todayDate
                         ? "ring-2 ring-primary-300 text-foreground"
                         : "text-foreground hover:bg-neutral-100"
                 }`}
@@ -146,7 +147,7 @@ export function CalendarView() {
               <EntryCard
                 key={entry.id}
                 entry={entry}
-                onUpdate={() => setRefreshKey((k) => k + 1)}
+                onUpdate={loadMonth}
               />
             ))}
           </div>

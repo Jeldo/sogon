@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { PenLine, BookOpen, Settings } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { PenLine, BookOpen, LogOut } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 const NAV_ITEMS = [
   { href: "/record", label: "기록하기", icon: PenLine },
@@ -11,6 +12,13 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.replace("/login");
+  }
 
   return (
     <>
@@ -42,15 +50,15 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Settings (bottom) */}
+        {/* Logout (bottom) */}
         <div className="px-3 pb-4">
           <button
             type="button"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full cursor-default opacity-50"
-            disabled
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full"
           >
-            <Settings size={20} strokeWidth={1.5} />
-            <span>설정</span>
+            <LogOut size={20} strokeWidth={1.5} />
+            <span>로그아웃</span>
           </button>
         </div>
       </aside>
@@ -82,14 +90,14 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Settings */}
+        {/* Logout */}
         <div className="pb-4">
           <button
             type="button"
-            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 opacity-50 cursor-default"
-            disabled
+            onClick={handleLogout}
+            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 hover:bg-neutral-100 transition-colors duration-150"
           >
-            <Settings size={20} strokeWidth={1.5} />
+            <LogOut size={20} strokeWidth={1.5} />
           </button>
         </div>
       </aside>

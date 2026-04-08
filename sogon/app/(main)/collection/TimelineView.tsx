@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { formatKoreanDate } from "@/lib/date-utils";
-import { getAllEntriesWithReactions } from "@/lib/storage";
+import { createClient } from "@/lib/supabase/client";
+import { getAllEntriesWithReactions } from "@/lib/supabase/queries";
 import type { EntryWithReaction } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
 
@@ -13,29 +14,33 @@ type DateGroup = {
 };
 
 export function TimelineView() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [entries, setEntries] = useState<EntryWithReaction[]>([]);
 
-  const entries = useMemo(
-    () => getAllEntriesWithReactions(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [refreshKey],
-  );
+  const load = useCallback(async () => {
+    const supabase = createClient();
+    const data = await getAllEntriesWithReactions(supabase);
+    setEntries(data);
+  }, []);
 
-  const groups: DateGroup[] = useMemo(() => {
-    const map = new Map<string, EntryWithReaction[]>();
-    entries.forEach((entry) => {
-      const date = new Date(entry.createdAt);
-      const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-      const existing = map.get(key) ?? [];
-      existing.push(entry);
-      map.set(key, existing);
-    });
+  useEffect(() => {
+    load();
+  }, [load]);
 
-    return Array.from(map.entries()).map(([, groupEntries]) => ({
+  const groups: DateGroup[] = [];
+  const seen = new Map<string, EntryWithReaction[]>();
+  entries.forEach((entry) => {
+    const date = new Date(entry.createdAt);
+    const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    const existing = seen.get(key) ?? [];
+    existing.push(entry);
+    seen.set(key, existing);
+  });
+  seen.forEach((groupEntries) => {
+    groups.push({
       dateLabel: formatKoreanDate(new Date(groupEntries[0].createdAt)),
       entries: groupEntries,
-    }));
-  }, [entries]);
+    });
+  });
 
   if (entries.length === 0) {
     return (
@@ -59,10 +64,7 @@ export function TimelineView() {
           <div className="space-y-4">
             {group.entries.map((entry, i) => (
               <AnimatedCard key={entry.id} delay={i * 50}>
-                <EntryCard
-                  entry={entry}
-                  onUpdate={() => setRefreshKey((k) => k + 1)}
-                />
+                <EntryCard entry={entry} onUpdate={load} />
               </AnimatedCard>
             ))}
           </div>
