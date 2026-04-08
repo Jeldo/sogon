@@ -38,6 +38,17 @@ export default function LoginPage() {
             Google로 시작하기
           </button>
         </div>
+
+        {/* Legal links */}
+        <p className="text-xs text-neutral-400 font-body">
+          <a href="/privacy" className="hover:text-neutral-600 transition-colors">
+            개인정보처리방침
+          </a>
+          {" · "}
+          <a href="/terms" className="hover:text-neutral-600 transition-colors">
+            이용약관
+          </a>
+        </p>
       </div>
     </div>
   );
