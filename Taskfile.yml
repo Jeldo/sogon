@@ -39,3 +39,7 @@ tasks:
     desc: "모든 패키지를 package.json 범위 내 최신 버전으로 업데이트"
     dir: "{{.APP_DIR}}"
     cmd: pnpm update
+
+  deploy:
+    desc: "프로덕션 배포 (Vercel)"
+    cmd: vercel --prod
