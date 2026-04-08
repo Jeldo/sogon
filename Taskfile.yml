@@ -29,3 +29,13 @@ tasks:
     desc: "패키지 설치"
     dir: "{{.APP_DIR}}"
     cmd: pnpm install
+
+  update-check:
+    desc: "업데이트 가능한 패키지 목록 확인"
+    dir: "{{.APP_DIR}}"
+    cmd: pnpm outdated
+
+  update:
+    desc: "모든 패키지를 package.json 범위 내 최신 버전으로 업데이트"
+    dir: "{{.APP_DIR}}"
+    cmd: pnpm update
