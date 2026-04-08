@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Pencil, Trash2, Check, X } from "lucide-react";
 import { formatTime } from "@/lib/date-utils";
-import { updateEntry, deleteEntry } from "@/lib/storage";
+import { createClient } from "@/lib/supabase/client";
+import {
+  updateEntry,
+  deleteEntry,
+  getImageSignedUrl,
+} from "@/lib/supabase/queries";
 import type { EntryWithReaction } from "@/lib/types";
 
 type EntryCardProps = {
@@ -16,17 +21,28 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState(entry.content);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  function handleSaveEdit() {
+  useEffect(() => {
+    if (!entry.imagePath) return;
+    const supabase = createClient();
+    getImageSignedUrl(supabase, entry.imagePath).then((url) => {
+      if (url) setImageUrl(url);
+    });
+  }, [entry.imagePath]);
+
+  async function handleSaveEdit() {
     const trimmed = editContent.trim();
     if (!trimmed) return;
-    updateEntry(entry.id, { content: trimmed });
+    const supabase = createClient();
+    await updateEntry(supabase, entry.id, { content: trimmed });
     setEditing(false);
     onUpdate?.();
   }
 
-  function handleDelete() {
-    deleteEntry(entry.id);
+  async function handleDelete() {
+    const supabase = createClient();
+    await deleteEntry(supabase, entry.id, entry.imagePath);
     setConfirmDelete(false);
     onUpdate?.();
   }
@@ -34,10 +50,10 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
   return (
     <div className="bg-white border border-neutral-200 rounded-[20px] p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
       {/* Image (above text) */}
-      {entry.imageDataUrl && (
+      {imageUrl && (
         <div className="mb-3 rounded-[16px] overflow-hidden">
           <Image
-            src={entry.imageDataUrl}
+            src={imageUrl}
             alt="첨부 이미지"
             width={0}
             height={0}
