@@ -5,6 +5,8 @@ import Image from "next/image";
 import type { EntryWithReaction, FriendTone } from "@/lib/types";
 import { TONE_OPTIONS } from "@/lib/constants";
 import { TypingIndicator } from "@/components/TypingIndicator";
+import { createClient } from "@/lib/supabase/client";
+import { getImageSignedUrl } from "@/lib/supabase/queries";
 
 type ReactionViewProps = {
   entry: EntryWithReaction;
@@ -14,6 +16,7 @@ type ReactionViewProps = {
 export function ReactionView({ entry, tone }: ReactionViewProps) {
   const [showReaction, setShowReaction] = useState(false);
   const [showTyping, setShowTyping] = useState(true);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const toneOption = TONE_OPTIONS.find((t) => t.tone === tone);
 
@@ -26,16 +29,24 @@ export function ReactionView({ entry, tone }: ReactionViewProps) {
     return () => clearTimeout(typingTimer);
   }, []);
 
+  useEffect(() => {
+    if (!entry.imagePath) return;
+    const supabase = createClient();
+    getImageSignedUrl(supabase, entry.imagePath).then((url) => {
+      if (url) setImageUrl(url);
+    });
+  }, [entry.imagePath]);
+
   return (
     <div className="space-y-6">
       {/* My entry card */}
       <div>
         <p className="text-xs text-neutral-400 mb-2">방금 나의 기록</p>
         <div className="bg-white border border-neutral-200 rounded-[20px] p-5">
-          {entry.imageDataUrl && (
+          {imageUrl && (
             <div className="mb-3 rounded-[16px] overflow-hidden">
               <Image
-                src={entry.imageDataUrl}
+                src={imageUrl}
                 alt="첨부 이미지"
                 width={0}
                 height={0}

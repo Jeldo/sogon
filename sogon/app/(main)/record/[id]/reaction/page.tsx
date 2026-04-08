@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { getEntryWithReaction, getDeviceProfile } from "@/lib/storage";
+import { createClient } from "@/lib/supabase/client";
+import { getEntryWithReaction, getProfile } from "@/lib/supabase/queries";
 import type { EntryWithReaction, FriendTone } from "@/lib/types";
 import { ReactionView } from "./ReactionView";
 
@@ -14,17 +15,22 @@ export default function ReactionPage() {
   const [tone, setTone] = useState<FriendTone>("warm");
 
   useEffect(() => {
-    const profile = getDeviceProfile();
-    if (profile) {
-      setTone(profile.friendTone);
-    }
+    async function load() {
+      const supabase = createClient();
 
-    const data = getEntryWithReaction(params.id);
-    if (!data) {
-      router.replace("/record");
-      return;
+      const profile = await getProfile(supabase);
+      if (profile) {
+        setTone(profile.friendTone);
+      }
+
+      const data = await getEntryWithReaction(supabase, params.id);
+      if (!data) {
+        router.replace("/record");
+        return;
+      }
+      setEntry(data);
     }
-    setEntry(data);
+    load();
   }, [params.id, router]);
 
   if (!entry) return null;
