@@ -22,19 +22,32 @@ const FALLBACK_REACTIONS: Record<FriendTone, string> = {
   energetic: "오늘도 화이팅!!",
 };
 
+const MODEL = "gemini-3.1-flash-lite-preview";
+
 export async function generateReaction(
   content: string,
   tone: FriendTone,
 ): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
+    console.warn("[AI] GEMINI_API_KEY 없음 — fallback 반환", { tone });
     return FALLBACK_REACTIONS[tone];
   }
+
+  const requestPayload = {
+    model: MODEL,
+    tone,
+    contentLength: content.length,
+    contentPreview: content.slice(0, 80),
+  };
+
+  console.log("[AI] 요청 시작", requestPayload);
+  const startedAt = Date.now();
 
   try {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite-preview",
+      model: MODEL,
       contents: `친구가 이렇게 기록했어:\n\n"${content}"`,
       config: {
         systemInstruction: `${TONE_PROMPTS[tone]}\n\n${COMMON_RULES}`,
@@ -42,8 +55,34 @@ export async function generateReaction(
       },
     });
 
-    return response.text ?? FALLBACK_REACTIONS[tone];
-  } catch  {
+    const text = response.text;
+    const elapsedMs = Date.now() - startedAt;
+
+    if (!text) {
+      console.warn("[AI] 응답 텍스트 없음 — fallback 반환", {
+        ...requestPayload,
+        elapsedMs,
+        rawResponse: JSON.stringify(response),
+      });
+      return FALLBACK_REACTIONS[tone];
+    }
+
+    console.log("[AI] 응답 수신", {
+      ...requestPayload,
+      elapsedMs,
+      reaction: text,
+    });
+
+    return text;
+  } catch (error) {
+    const elapsedMs = Date.now() - startedAt;
+    console.error("[AI] 오류 발생 — fallback 반환", {
+      ...requestPayload,
+      elapsedMs,
+      error: error instanceof Error
+        ? { message: error.message, name: error.name, stack: error.stack }
+        : error,
+    });
     return FALLBACK_REACTIONS[tone];
   }
 }
