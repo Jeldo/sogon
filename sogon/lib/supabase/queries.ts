@@ -154,12 +154,18 @@ export async function getEntriesByMonth(
   const start = new Date(year, month, 1).toISOString();
   const end = new Date(year, month + 1, 0, 23, 59, 59, 999).toISOString();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("entries")
     .select("*, reactions(*)")
     .gte("created_at", start)
     .lte("created_at", end)
     .order("created_at", { ascending: false });
+
+  console.log("[getEntriesByMonth] raw", {
+    error,
+    count: data?.length,
+    sample: data?.[0],
+  });
 
   return (data ?? []).map((row) => {
     const r = row as Record<string, unknown>;
@@ -189,10 +195,16 @@ export async function getEntryWithReaction(
 export async function getAllEntriesWithReactions(
   supabase: SupabaseClient,
 ): Promise<EntryWithReaction[]> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("entries")
     .select("*, reactions(*)")
     .order("created_at", { ascending: false });
+
+  console.log("[getAllEntriesWithReactions] raw", {
+    error,
+    count: data?.length,
+    sample: data?.[0],
+  });
 
   return (data ?? []).map((row) => {
     const r = row as Record<string, unknown>;

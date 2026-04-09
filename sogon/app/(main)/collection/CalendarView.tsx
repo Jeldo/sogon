@@ -26,8 +26,18 @@ export function CalendarView() {
   const grid = getCalendarGrid(year, month);
 
   const loadMonth = useCallback(async () => {
+    console.log("[CalendarView] loadMonth 호출", { year, month });
     const supabase = createClient();
+
+    // reactions 직접 쿼리 (nested join 우회 테스트)
+    const { data: reactionsRaw, error: reactionsError } = await supabase
+      .from("reactions")
+      .select("*")
+      .limit(5);
+    console.log("[CalendarView] reactions 직접 조회", { reactionsRaw, reactionsError });
+
     const entries = await getEntriesByMonth(supabase, year, month);
+    console.log("[CalendarView] entries 수신", entries.length, entries.map(e => ({ id: e.id, reaction: e.reaction })));
     setMonthEntries(entries);
   }, [year, month]);
 
