@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (!user) {
+    console.warn("[POST /api/reaction] 인증 실패 — Unauthorized");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -23,6 +24,7 @@ export async function POST(request: NextRequest) {
   };
 
   if (!entryId || !content || !tone || !FRIEND_TONES.includes(tone)) {
+    console.warn("[POST /api/reaction] 잘못된 요청", { entryId, tone, hasContent: !!content });
     return NextResponse.json(
       { error: "entryId, content and valid tone are required" },
       { status: 400 },
@@ -33,8 +35,15 @@ export async function POST(request: NextRequest) {
 
   try {
     await addReaction(supabase, entryId, reactionText, tone);
-  } catch {
+  } catch (error) {
     // Non-fatal: reaction text is still returned even if DB write fails
+    console.error("[POST /api/reaction] DB 저장 실패 (non-fatal)", {
+      entryId,
+      tone,
+      error: error instanceof Error
+        ? { message: error.message, name: error.name }
+        : error,
+    });
   }
 
   return NextResponse.json({ reaction: reactionText });
