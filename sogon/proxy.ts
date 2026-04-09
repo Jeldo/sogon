@@ -38,14 +38,32 @@ export async function proxy(request: NextRequest) {
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
 
-  if (!user && !isPublicPath(pathname)) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/login";
-    return NextResponse.redirect(loginUrl);
+  if (!user) {
+    if (!isPublicPath(pathname)) {
+      // 세션이 만료/무효 → stale 쿠키 제거 후 login 리다이렉트
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      const redirectResponse = NextResponse.redirect(loginUrl);
+      // supabaseResponse에 세팅된 쿠키 삭제 지시도 함께 전달
+      supabaseResponse.cookies.getAll().forEach(({ name }) => {
+        redirectResponse.cookies.delete(name);
+      });
+      return redirectResponse;
+    }
+
+    if (error) {
+      // 퍼블릭 경로지만 세션 오류 → stale 쿠키만 정리 (리다이렉트 없음)
+      const cleanResponse = NextResponse.next({ request });
+      supabaseResponse.cookies.getAll().forEach(({ name }) => {
+        cleanResponse.cookies.delete(name);
+      });
+      return cleanResponse;
+    }
   }
 
   return supabaseResponse;

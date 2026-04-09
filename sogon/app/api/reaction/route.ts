@@ -34,14 +34,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const admin = createAdminClient();
-    const { error } = await admin
+    const { data: saved, error } = await admin
       .from("reactions")
-      .insert({ entry_id: entryId, user_id: user.id, content: reactionText, tone });
+      .insert({ entry_id: entryId, user_id: user.id, content: reactionText, tone })
+      .select("id")
+      .single();
     if (error) throw error;
+    console.log("[POST /api/reaction] DB 저장 성공", { entryId, reactionId: saved?.id });
   } catch (error) {
-    console.error("[POST /api/reaction] DB 저장 실패 (non-fatal)", {
+    console.error("[POST /api/reaction] DB 저장 실패", {
       entryId,
       tone,
+      secretKeySet: !!process.env.SUPABASE_SECRET_DEFAULT_KEY,
       error: error instanceof Error
         ? { message: error.message, name: error.name }
         : error,
