@@ -23,11 +23,30 @@ export default function ReactionPage() {
         setTone(profile.friendTone);
       }
 
-      const data = await getEntryWithReaction(supabase, params.id);
+      let data = await getEntryWithReaction(supabase, params.id);
       if (!data) {
         router.replace("/record");
         return;
       }
+
+      // DB 저장 실패 시 sessionStorage에서 reaction 복구
+      if (!data.reaction) {
+        const pending = sessionStorage.getItem(`pending-reaction:${params.id}`);
+        if (pending) {
+          data = {
+            ...data,
+            reaction: {
+              id: "pending",
+              entryId: params.id,
+              content: pending,
+              tone: profile?.friendTone ?? "warm",
+              createdAt: new Date().toISOString(),
+            },
+          };
+          sessionStorage.removeItem(`pending-reaction:${params.id}`);
+        }
+      }
+
       setEntry(data);
     }
     load();

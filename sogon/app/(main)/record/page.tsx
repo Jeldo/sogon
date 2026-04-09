@@ -87,7 +87,7 @@ export default function RecordPage() {
     // 3. Request AI reaction (saves to DB server-side)
     const profile = await getProfile(supabase);
     try {
-      await fetch("/api/reaction", {
+      const res = await fetch("/api/reaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -96,6 +96,12 @@ export default function RecordPage() {
           tone: profile?.friendTone,
         }),
       });
+      if (res.ok) {
+        const { reaction } = (await res.json()) as { reaction: string };
+        if (reaction) {
+          sessionStorage.setItem(`pending-reaction:${entry.id}`, reaction);
+        }
+      }
     } catch {
       // Silently fail — reaction page handles missing reaction
     }
