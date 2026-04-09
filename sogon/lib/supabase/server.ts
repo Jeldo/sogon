@@ -26,11 +26,11 @@ export async function createClient() {
   );
 }
 
-/** Service-role client — bypasses RLS. Only use server-side after verifying the user. */
+/** Secret-key client — bypasses RLS. Only use server-side after verifying the user. */
 export function createAdminClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SECRET_DEFAULT_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
 }
