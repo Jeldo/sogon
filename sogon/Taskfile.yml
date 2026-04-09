@@ -1,0 +1,70 @@
+version: "3"
+
+tasks:
+  default:
+    desc: "사용 가능한 태스크 목록 출력"
+    cmds:
+      - task --list
+
+  setup:
+    desc: "최초 설치 — 의존성 설치 및 .env.local 생성"
+    cmds:
+      - |
+        if [ ! -f .env.local ]; then
+          cp .env.example .env.local
+          echo ".env.local 파일이 생성됐어. 실제 값을 채워줘!"
+        else
+          echo ".env.local 이미 존재함, 건너뜀."
+        fi
+      - pnpm install
+
+  dev:
+    desc: "개발 서버 실행 (localhost:3000)"
+    cmds:
+      - pnpm dev
+
+  build:
+    desc: "프로덕션 빌드"
+    cmds:
+      - pnpm build
+
+  start:
+    desc: "프로덕션 빌드 서버 실행"
+    deps: [build]
+    cmds:
+      - pnpm start
+
+  lint:
+    desc: "ESLint 실행"
+    cmds:
+      - pnpm lint
+
+  test:
+    desc: "Vitest 단위 테스트 실행"
+    cmds:
+      - pnpm vitest run
+
+  test:watch:
+    desc: "Vitest 워치 모드"
+    cmds:
+      - pnpm vitest
+
+  install:
+    desc: "패키지 설치"
+    cmds:
+      - pnpm install
+
+  update-check:
+    desc: "업데이트 가능한 패키지 목록 확인"
+    cmds:
+      - pnpm outdated
+
+  update:
+    desc: "모든 패키지를 package.json 범위 내 최신 버전으로 업데이트"
+    cmds:
+      - pnpm update
+
+  deploy:
+    desc: "프로덕션 배포 (Vercel)"
+    cmds:
+      - vercel --prod
