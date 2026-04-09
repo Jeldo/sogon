@@ -11,6 +11,7 @@ import {
   updateEntry,
   getEntriesByDate,
   getProfile,
+  addReaction,
 } from "@/lib/supabase/queries";
 import { compressImage } from "@/lib/image";
 import type { EntryWithReaction } from "@/lib/types";
@@ -84,26 +85,26 @@ export default function RecordPage() {
       }
     }
 
-    // 3. Request AI reaction (saves to DB server-side)
+    // 3. Request AI reaction then save to DB with client-side auth context
     const profile = await getProfile(supabase);
+    const tone = profile?.friendTone ?? "warm";
     try {
       const res = await fetch("/api/reaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          entryId: entry.id,
-          content: trimmed,
-          tone: profile?.friendTone,
-        }),
+        body: JSON.stringify({ content: trimmed, tone }),
       });
       if (res.ok) {
         const { reaction } = (await res.json()) as { reaction: string };
         if (reaction) {
+          // Cache for immediate display on reaction page
           sessionStorage.setItem(`pending-reaction:${entry.id}`, reaction);
+          // Save to DB using client-side Supabase (guaranteed auth context)
+          await addReaction(supabase, entry.id, reaction, tone);
         }
       }
     } catch {
-      // Silently fail — reaction page handles missing reaction
+      // Silently fail — reaction page falls back to sessionStorage
     }
 
     router.push(`/record/${entry.id}/reaction`);
