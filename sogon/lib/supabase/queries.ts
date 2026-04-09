@@ -161,16 +161,9 @@ export async function getEntriesByMonth(
     .lte("created_at", end)
     .order("created_at", { ascending: false });
 
-  console.log("[getEntriesByMonth] raw", {
-    error,
-    count: data?.length,
-    sample: data?.[0],
-  });
-
   return (data ?? []).map((row) => {
     const r = row as Record<string, unknown>;
-    const reactions = r.reactions as Record<string, unknown>[] | undefined;
-    const reaction = reactions?.[0] ? rowToReaction(reactions[0]) : null;
+    const reaction = r.reactions ? rowToReaction(r.reactions as Record<string, unknown>) : null;
     return { ...rowToEntry(r), reaction };
   });
 }
@@ -187,8 +180,7 @@ export async function getEntryWithReaction(
 
   if (!data) return null;
   const row = data as Record<string, unknown>;
-  const reactions = row.reactions as Record<string, unknown>[] | undefined;
-  const reaction = reactions?.[0] ? rowToReaction(reactions[0]) : null;
+  const reaction = row.reactions ? rowToReaction(row.reactions as Record<string, unknown>) : null;
   return { ...rowToEntry(row), reaction };
 }
 
@@ -200,16 +192,9 @@ export async function getAllEntriesWithReactions(
     .select("*, reactions(*)")
     .order("created_at", { ascending: false });
 
-  console.log("[getAllEntriesWithReactions] raw", {
-    error,
-    count: data?.length,
-    sample: data?.[0],
-  });
-
   return (data ?? []).map((row) => {
     const r = row as Record<string, unknown>;
-    const reactions = r.reactions as Record<string, unknown>[] | undefined;
-    const reaction = reactions?.[0] ? rowToReaction(reactions[0]) : null;
+    const reaction = r.reactions ? rowToReaction(r.reactions as Record<string, unknown>) : null;
     return { ...rowToEntry(r), reaction };
   });
 }
