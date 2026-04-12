@@ -75,7 +75,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
           if (e.target === overlayRef.current) onClose();
         }}
       >
-        <div className="w-full max-w-[480px] mx-4 bg-white rounded-[16px] p-7 shadow-lg animate-[reaction-appear_350ms_var(--ease-out)_forwards]">
+        <div className="w-full max-w-[480px] mx-4 bg-background rounded-[16px] p-7 shadow-lg animate-[reaction-appear_350ms_var(--ease-out)_forwards]">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-heading font-semibold text-foreground">
@@ -84,7 +84,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="w-7 h-7 bg-neutral-100 rounded-full flex items-center justify-center text-neutral-500 hover:bg-neutral-200 transition-colors duration-150"
+              className="w-7 h-7 bg-elevated rounded-full flex items-center justify-center text-text-secondary hover:bg-border transition-colors duration-150"
             >
               <X size={14} strokeWidth={2} />
             </button>
@@ -92,7 +92,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
 
           {/* Section: 비밀친구 */}
           <section className="mb-6">
-            <h3 className="text-xs font-medium text-neutral-500 tracking-wide mb-2.5">
+            <h3 className="text-xs font-medium text-text-secondary tracking-wide mb-2.5">
               비밀친구
             </h3>
             <div className="flex gap-2">
@@ -105,14 +105,14 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
                     onClick={() => handleToneChange(option.tone)}
                     className={`flex-1 rounded-[12px] py-3.5 px-2 text-center transition-all duration-150 ${
                       selected
-                        ? "border-2 border-primary-600 bg-primary-100"
-                        : "border border-neutral-200 hover:border-neutral-300"
+                        ? "border-2 border-primary-600 bg-primary-muted"
+                        : "border border-border hover:border-text-placeholder"
                     }`}
                   >
                     <div className="text-2xl mb-1">{option.emoji}</div>
                     <div
                       className={`text-[11px] font-medium ${
-                        selected ? "text-primary-700" : "text-neutral-500"
+                        selected ? "text-primary-700" : "text-text-secondary"
                       }`}
                     >
                       {option.name}
@@ -124,14 +124,14 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
           </section>
 
           {/* Divider */}
-          <div className="h-px bg-neutral-100 mb-6" />
+          <div className="h-px bg-elevated mb-6" />
 
           {/* Section: 테마 */}
           <section className="mb-6">
-            <h3 className="text-xs font-medium text-neutral-500 tracking-wide mb-2.5">
+            <h3 className="text-xs font-medium text-text-secondary tracking-wide mb-2.5">
               테마
             </h3>
-            <div className="flex bg-neutral-100 rounded-[10px] p-[3px]">
+            <div className="flex bg-elevated rounded-[10px] p-[3px]">
               {THEME_MODES.map((mode) => (
                 <button
                   key={mode}
@@ -139,8 +139,8 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
                   onClick={() => handleThemeChange(mode)}
                   className={`flex-1 text-center py-2 rounded-[8px] text-[13px] transition-all duration-150 ${
                     currentTheme === mode
-                      ? "bg-white text-foreground font-medium shadow-sm"
-                      : "text-neutral-500 hover:text-neutral-600"
+                      ? "bg-background text-foreground font-medium shadow-sm"
+                      : "text-text-secondary hover:text-text-primary"
                   }`}
                 >
                   {THEME_LABELS[mode].emoji} {THEME_LABELS[mode].label}
@@ -150,17 +150,17 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
           </section>
 
           {/* Divider */}
-          <div className="h-px bg-neutral-100 mb-6" />
+          <div className="h-px bg-elevated mb-6" />
 
           {/* Section: 데이터 */}
           <section>
-            <h3 className="text-xs font-medium text-neutral-500 tracking-wide mb-2.5">
+            <h3 className="text-xs font-medium text-text-secondary tracking-wide mb-2.5">
               데이터
             </h3>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground">데이터 초기화</p>
-                <p className="text-xs text-neutral-400 mt-0.5">
+                <p className="text-xs text-text-tertiary mt-0.5">
                   모든 기록과 리액션을 삭제합니다
                 </p>
               </div>

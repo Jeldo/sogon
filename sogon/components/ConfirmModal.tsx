@@ -42,21 +42,21 @@ export function ConfirmModal({
         if (e.target === overlayRef.current) onClose();
       }}
     >
-      <div className="w-full max-w-[340px] mx-4 bg-white rounded-[20px] p-7 shadow-lg text-center animate-[reaction-appear_350ms_var(--ease-out)_forwards]">
+      <div className="w-full max-w-[340px] mx-4 bg-background rounded-[20px] p-7 shadow-lg text-center animate-[reaction-appear_350ms_var(--ease-out)_forwards]">
         <div className="w-12 h-12 bg-[#fce4e4] rounded-full flex items-center justify-center mx-auto mb-4 text-[22px]">
           ⚠️
         </div>
         <h3 className="text-base font-body font-medium text-foreground mb-2">
           {title}
         </h3>
-        <p className="text-sm text-neutral-400 mb-6 leading-relaxed">
+        <p className="text-sm text-text-tertiary mb-6 leading-relaxed">
           {description}
         </p>
         <div className="flex gap-2.5">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-3 rounded-[10px] bg-neutral-100 text-sm font-medium text-neutral-600 transition-all duration-150 hover:bg-neutral-200 active:scale-[0.97]"
+            className="flex-1 py-3 rounded-[10px] bg-elevated text-sm font-medium text-text-primary transition-all duration-150 hover:bg-border active:scale-[0.97]"
           >
             {cancelLabel}
           </button>
