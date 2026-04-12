@@ -17,7 +17,7 @@ export function BottomNav({ onSettingsClick }: BottomNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 flex items-center justify-around h-14 z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border flex items-center justify-around h-14 z-50">
       {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
         const active = pathname.startsWith(href);
         return (
@@ -25,7 +25,7 @@ export function BottomNav({ onSettingsClick }: BottomNavProps) {
             key={href}
             href={href}
             className={`flex flex-col items-center gap-0.5 text-[10px] transition-colors duration-150 ${
-              active ? "text-primary-700" : "text-neutral-400"
+              active ? "text-primary-700" : "text-text-tertiary"
             }`}
           >
             <Icon size={20} strokeWidth={1.5} />
@@ -36,7 +36,7 @@ export function BottomNav({ onSettingsClick }: BottomNavProps) {
       <button
         type="button"
         onClick={onSettingsClick}
-        className="flex flex-col items-center gap-0.5 text-[10px] text-neutral-400 transition-colors duration-150"
+        className="flex flex-col items-center gap-0.5 text-[10px] text-text-tertiary transition-colors duration-150"
       >
         <Settings size={20} strokeWidth={1.5} />
         <span>설정</span>

@@ -19,10 +19,10 @@ export function Sidebar({ onSettingsClick }: SidebarProps) {
   return (
     <>
       {/* Desktop sidebar (>=1024px) */}
-      <aside className="hidden lg:flex flex-col w-[240px] flex-shrink-0 border-r border-neutral-200 bg-neutral-50 sticky top-0 h-dvh">
+      <aside className="hidden lg:flex flex-col w-[240px] flex-shrink-0 border-r border-border bg-surface sticky top-0 h-dvh">
         {/* Logo */}
         <div className="px-6 py-5">
-          <h1 className="text-xl font-heading text-neutral-600">소곤</h1>
+          <h1 className="text-xl font-heading text-text-primary">소곤</h1>
         </div>
 
         {/* Nav */}
@@ -35,8 +35,8 @@ export function Sidebar({ onSettingsClick }: SidebarProps) {
                 href={href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm transition-colors duration-150 ${
                   active
-                    ? "bg-primary-100 text-primary-700 border-l-[3px] border-primary-600"
-                    : "text-neutral-500 hover:bg-neutral-100"
+                    ? "bg-primary-muted text-primary-700 border-l-[3px] border-primary-600"
+                    : "text-text-secondary hover:bg-elevated"
                 }`}
               >
                 <Icon size={20} strokeWidth={1.5} />
@@ -51,7 +51,7 @@ export function Sidebar({ onSettingsClick }: SidebarProps) {
           <button
             type="button"
             onClick={onSettingsClick}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-text-secondary hover:bg-elevated transition-colors duration-150 w-full"
           >
             <Settings size={20} strokeWidth={1.5} />
             <span>설정</span>
@@ -60,10 +60,10 @@ export function Sidebar({ onSettingsClick }: SidebarProps) {
       </aside>
 
       {/* Tablet sidebar (768~1023px) */}
-      <aside className="hidden md:flex lg:hidden flex-col w-16 flex-shrink-0 border-r border-neutral-200 bg-neutral-50 sticky top-0 h-dvh items-center">
+      <aside className="hidden md:flex lg:hidden flex-col w-16 flex-shrink-0 border-r border-border bg-surface sticky top-0 h-dvh items-center">
         {/* Logo */}
         <div className="py-5">
-          <span className="text-lg font-heading text-neutral-600">소</span>
+          <span className="text-lg font-heading text-text-primary">소</span>
         </div>
 
         {/* Nav */}
@@ -76,8 +76,8 @@ export function Sidebar({ onSettingsClick }: SidebarProps) {
                 href={href}
                 className={`flex items-center justify-center w-10 h-10 rounded-[10px] transition-colors duration-150 ${
                   active
-                    ? "bg-primary-100 text-primary-700"
-                    : "text-neutral-500 hover:bg-neutral-100"
+                    ? "bg-primary-muted text-primary-700"
+                    : "text-text-secondary hover:bg-elevated"
                 }`}
               >
                 <Icon size={20} strokeWidth={1.5} />
@@ -91,7 +91,7 @@ export function Sidebar({ onSettingsClick }: SidebarProps) {
           <button
             type="button"
             onClick={onSettingsClick}
-            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 hover:bg-neutral-100 transition-colors duration-150"
+            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-text-secondary hover:bg-elevated transition-colors duration-150"
           >
             <Settings size={20} strokeWidth={1.5} />
           </button>
