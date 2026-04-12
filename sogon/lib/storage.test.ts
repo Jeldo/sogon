@@ -37,6 +37,10 @@ import {
   getReactions,
   addReaction,
   getEntryWithReaction,
+  getTheme,
+  setTheme,
+  updateFriendTone,
+  clearAllData,
 } from "./storage";
 
 beforeEach(() => {
@@ -140,5 +144,47 @@ describe("getEntryWithReaction", () => {
 
   it("returns null for non-existent entry", () => {
     expect(getEntryWithReaction("non-existent")).toBeNull();
+  });
+});
+
+describe("Theme", () => {
+  it("returns 'system' when no theme is set", () => {
+    expect(getTheme()).toBe("system");
+  });
+
+  it("saves and retrieves theme", () => {
+    setTheme("dark");
+    expect(getTheme()).toBe("dark");
+  });
+});
+
+describe("updateFriendTone", () => {
+  it("updates tone on existing profile", () => {
+    setDeviceProfile("warm");
+    updateFriendTone("cool");
+    const profile = getDeviceProfile();
+    expect(profile?.friendTone).toBe("cool");
+  });
+
+  it("preserves createdAt when updating tone", () => {
+    setDeviceProfile("warm");
+    const original = getDeviceProfile();
+    updateFriendTone("energetic");
+    const updated = getDeviceProfile();
+    expect(updated?.createdAt).toBe(original?.createdAt);
+  });
+});
+
+describe("clearAllData", () => {
+  it("clears entries and reactions but preserves profile", () => {
+    setDeviceProfile("warm");
+    addEntry("Test entry", null);
+    addReaction("test-uuid-2", "Nice!", "warm");
+
+    clearAllData();
+
+    expect(getDeviceProfile()).not.toBeNull();
+    expect(getEntries()).toEqual([]);
+    expect(getReactions()).toEqual([]);
   });
 });

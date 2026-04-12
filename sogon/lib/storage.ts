@@ -7,6 +7,7 @@ import type {
   EntryWithReaction,
   FriendTone,
   Reaction,
+  ThemeMode,
 } from "@/lib/types";
 import { isSameDay } from "@/lib/date-utils";
 
@@ -129,4 +130,32 @@ export function getAllEntriesWithReactions(): EntryWithReaction[] {
     ...entry,
     reaction: reactions.find((r) => r.entryId === entry.id) ?? null,
   }));
+}
+
+// Theme
+
+export function getTheme(): ThemeMode {
+  if (typeof window === "undefined") return "system";
+  const raw = localStorage.getItem(STORAGE_KEYS.THEME);
+  if (raw === "light" || raw === "dark" || raw === "system") return raw;
+  return "system";
+}
+
+export function setTheme(mode: ThemeMode): void {
+  localStorage.setItem(STORAGE_KEYS.THEME, mode);
+}
+
+// Profile updates
+
+export function updateFriendTone(tone: FriendTone): void {
+  const profile = getDeviceProfile();
+  if (!profile) return;
+  setItem(STORAGE_KEYS.PROFILE, { ...profile, friendTone: tone });
+}
+
+// Data management
+
+export function clearAllData(): void {
+  localStorage.removeItem(STORAGE_KEYS.ENTRIES);
+  localStorage.removeItem(STORAGE_KEYS.REACTIONS);
 }

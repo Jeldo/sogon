@@ -36,4 +36,5 @@ export const STORAGE_KEYS = {
   PROFILE: "sogon_profile",
   ENTRIES: "sogon_entries",
   REACTIONS: "sogon_reactions",
+  THEME: "sogon_theme",
 } as const;
