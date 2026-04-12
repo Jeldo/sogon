@@ -29,6 +29,18 @@
   --color-neutral-500: #7D8381;
   --color-neutral-600: #5C6260;
 
+  /* Semantic surface colors */
+  --color-surface: #FAFBFA;
+  --color-elevated: #F3F5F4;
+  --color-border: #E5E7E6;
+  --color-primary-muted: #EAF6E5;
+
+  /* Semantic text colors */
+  --color-text-primary: #1a1c1b;
+  --color-text-secondary: #7D8381;
+  --color-text-tertiary: #A8ADAA;
+  --color-text-placeholder: #D0D3D1;
+
   /* Font families */
   --font-body: var(--font-gowun-dodum);
   --font-heading: var(--font-gowun-batang);
@@ -76,13 +88,29 @@ body {
 
 /* Dark mode overrides — applied via .dark class on <html> */
 .dark {
-  --background: #1a1c1b;
+  --background: #1c1e1d;
   --foreground: #e5e7e6;
+  --color-surface: #242726;
+  --color-elevated: #2d302f;
+  --color-border: #3a3d3c;
+  --color-primary-muted: #2a3d25;
+  --color-text-primary: #e5e7e6;
+  --color-text-secondary: #8a8f8d;
+  --color-text-tertiary: #6b706e;
+  --color-text-placeholder: #4a4d4c;
 }
 
 @media (prefers-color-scheme: dark) {
   .system-theme {
-    --background: #1a1c1b;
+    --background: #1c1e1d;
     --foreground: #e5e7e6;
+    --color-surface: #242726;
+    --color-elevated: #2d302f;
+    --color-border: #3a3d3c;
+    --color-primary-muted: #2a3d25;
+    --color-text-primary: #e5e7e6;
+    --color-text-secondary: #8a8f8d;
+    --color-text-tertiary: #6b706e;
+    --color-text-placeholder: #4a4d4c;
   }
 }
