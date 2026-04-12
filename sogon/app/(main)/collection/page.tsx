@@ -18,13 +18,13 @@ export default function CollectionPage() {
         </h2>
 
         {/* View switcher (pill tabs) */}
-        <div className="flex bg-neutral-100 rounded-[10px] p-[3px]">
+        <div className="flex bg-elevated rounded-[10px] p-[3px]">
           <button
             onClick={() => setView("calendar")}
             className={`px-3 py-1.5 rounded-[8px] text-sm font-body transition-all duration-150 ${
               view === "calendar"
-                ? "bg-white text-foreground shadow-sm"
-                : "text-neutral-500"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-text-secondary"
             }`}
           >
             캘린더
@@ -33,8 +33,8 @@ export default function CollectionPage() {
             onClick={() => setView("timeline")}
             className={`px-3 py-1.5 rounded-[8px] text-sm font-body transition-all duration-150 ${
               view === "timeline"
-                ? "bg-white text-foreground shadow-sm"
-                : "text-neutral-500"
+                ? "bg-background text-foreground shadow-sm"
+                : "text-text-secondary"
             }`}
           >
             타임라인

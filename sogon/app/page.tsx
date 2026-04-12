@@ -34,7 +34,7 @@ export default function OnboardingPage() {
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-heading">소곤</h1>
-          <p className="text-neutral-500 text-base">비밀친구를 골라봐!</p>
+          <p className="text-text-secondary text-base">비밀친구를 골라봐!</p>
         </div>
 
         {/* Tone Cards */}

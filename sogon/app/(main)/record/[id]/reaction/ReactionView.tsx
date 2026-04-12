@@ -30,8 +30,8 @@ export function ReactionView({ entry, tone }: ReactionViewProps) {
     <div className="space-y-6">
       {/* My entry card */}
       <div>
-        <p className="text-xs text-neutral-400 mb-2">방금 나의 기록</p>
-        <div className="bg-white border border-neutral-200 rounded-[20px] p-5">
+        <p className="text-xs text-text-tertiary mb-2">방금 나의 기록</p>
+        <div className="bg-background border border-border rounded-[20px] p-5">
           {entry.imageDataUrl && (
             <div className="mb-3 rounded-[16px] overflow-hidden">
               <Image
@@ -54,14 +54,14 @@ export function ReactionView({ entry, tone }: ReactionViewProps) {
       {/* Typing indicator / Reaction */}
       <div>
         {showTyping && (
-          <div className="bg-neutral-100 rounded-[20px] p-5 inline-block">
+          <div className="bg-elevated rounded-[20px] p-5 inline-block">
             <TypingIndicator />
           </div>
         )}
 
         {showReaction && entry.reaction && (
           <div
-            className="bg-neutral-100 rounded-[20px] p-5"
+            className="bg-elevated rounded-[20px] p-5"
             style={{
               animation:
                 "reaction-appear 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
@@ -75,15 +75,15 @@ export function ReactionView({ entry, tone }: ReactionViewProps) {
                 비밀친구
               </span>
             </div>
-            <p className="text-xl font-handwriting text-neutral-600 leading-relaxed">
+            <p className="text-xl font-handwriting text-text-secondary leading-relaxed">
               {entry.reaction.content}
             </p>
           </div>
         )}
 
         {showReaction && !entry.reaction && (
-          <div className="bg-neutral-100 rounded-[20px] p-5">
-            <p className="text-xl font-handwriting text-neutral-600">
+          <div className="bg-elevated rounded-[20px] p-5">
+            <p className="text-xl font-handwriting text-text-secondary">
               {toneOption?.exampleReaction}
             </p>
           </div>

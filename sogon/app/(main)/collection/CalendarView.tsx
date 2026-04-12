@@ -72,12 +72,12 @@ export function CalendarView() {
   return (
     <div className="space-y-6">
       {/* Calendar */}
-      <div className="bg-white border border-neutral-200 rounded-[16px] p-5">
+      <div className="bg-background border border-border rounded-[16px] p-5">
         {/* Month header */}
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={prevMonth}
-            className="p-1.5 rounded-[6px] text-neutral-500 hover:bg-neutral-100 transition-colors"
+            className="p-1.5 rounded-[6px] text-text-secondary hover:bg-elevated transition-colors"
           >
             <ChevronLeft size={20} strokeWidth={1.5} />
           </button>
@@ -86,7 +86,7 @@ export function CalendarView() {
           </h3>
           <button
             onClick={nextMonth}
-            className="p-1.5 rounded-[6px] text-neutral-500 hover:bg-neutral-100 transition-colors"
+            className="p-1.5 rounded-[6px] text-text-secondary hover:bg-elevated transition-colors"
           >
             <ChevronRight size={20} strokeWidth={1.5} />
           </button>
@@ -97,7 +97,7 @@ export function CalendarView() {
           {WEEKDAY_LABELS.map((label) => (
             <div
               key={label}
-              className="text-center text-xs text-neutral-400 py-1"
+              className="text-center text-xs text-text-tertiary py-1"
             >
               {label}
             </div>
@@ -117,12 +117,12 @@ export function CalendarView() {
                 onClick={() => setSelectedDate(date)}
                 className={`relative flex flex-col items-center justify-center w-10 h-10 mx-auto rounded-full text-sm transition-colors duration-150 ${
                   !isCurrentMonth
-                    ? "text-neutral-300"
+                    ? "text-text-placeholder"
                     : selected
                       ? "bg-primary-600 text-white"
                       : today
                         ? "ring-2 ring-primary-300 text-foreground"
-                        : "text-foreground hover:bg-neutral-100"
+                        : "text-foreground hover:bg-elevated"
                 }`}
               >
                 {date.getDate()}
@@ -137,7 +137,7 @@ export function CalendarView() {
 
       {/* Selected date entries */}
       <div>
-        <h4 className="text-sm text-neutral-400 mb-3">
+        <h4 className="text-sm text-text-tertiary mb-3">
           {formatKoreanDate(selectedDate)}
         </h4>
         {selectedEntries.length > 0 ? (
@@ -151,7 +151,7 @@ export function CalendarView() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 text-neutral-400 text-sm">
+          <div className="text-center py-10 text-text-tertiary text-sm">
             <p>이 날은 기록이 없어. 오늘 하나 남겨볼까?</p>
             <Link
               href="/record"
