@@ -24,7 +24,7 @@ export default async function MainLayout({
   }
 
   return (
-    <div className="flex h-full min-h-dvh">
+    <div className="flex min-h-dvh">
       <Sidebar />
       <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
         {children}

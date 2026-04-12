@@ -23,7 +23,7 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop sidebar (>=1024px) */}
-      <aside className="hidden lg:flex flex-col w-[240px] flex-shrink-0 border-r border-neutral-200 bg-neutral-50 h-full">
+      <aside className="hidden lg:flex flex-col w-[240px] flex-shrink-0 border-r border-neutral-200 bg-neutral-50 sticky top-0 h-dvh">
         {/* Logo */}
         <div className="px-6 py-5">
           <h1 className="text-xl font-heading text-neutral-600">소곤</h1>
@@ -64,7 +64,7 @@ export function Sidebar() {
       </aside>
 
       {/* Tablet sidebar (768~1023px) */}
-      <aside className="hidden md:flex lg:hidden flex-col w-16 flex-shrink-0 border-r border-neutral-200 bg-neutral-50 h-full items-center">
+      <aside className="hidden md:flex lg:hidden flex-col w-16 flex-shrink-0 border-r border-neutral-200 bg-neutral-50 sticky top-0 h-dvh items-center">
         {/* Logo */}
         <div className="py-5">
           <span className="text-lg font-heading text-neutral-600">소</span>
