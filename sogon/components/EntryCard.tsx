@@ -32,7 +32,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-[20px] p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
+    <div className="bg-background border border-border rounded-[20px] p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
       {/* Image (above text) */}
       {entry.imageDataUrl && (
         <div className="mb-3 rounded-[16px] overflow-hidden">
@@ -54,7 +54,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
-            className="w-full min-h-[80px] rounded-[10px] border border-neutral-200 p-3 text-base font-body text-foreground resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)]"
+            className="w-full min-h-[80px] rounded-[10px] border border-border p-3 text-base font-body text-foreground resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)]"
           />
           <div className="flex gap-2 justify-end">
             <button
@@ -62,7 +62,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
                 setEditing(false);
                 setEditContent(entry.content);
               }}
-              className="p-1.5 rounded-[6px] text-neutral-400 hover:bg-neutral-100 transition-colors"
+              className="p-1.5 rounded-[6px] text-text-tertiary hover:bg-elevated transition-colors"
             >
               <X size={16} strokeWidth={1.5} />
             </button>
@@ -83,7 +83,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
 
       {/* Reaction */}
       {entry.reaction && !editing && (
-        <p className="mt-3 text-xl font-handwriting text-neutral-500">
+        <p className="mt-3 text-xl font-handwriting text-text-secondary">
           {entry.reaction.content}
         </p>
       )}
@@ -91,7 +91,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
       {/* Footer: timestamp + actions */}
       {!editing && (
         <div className="mt-2 flex items-center justify-between">
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-text-tertiary">
             {formatTime(new Date(entry.createdAt))}
           </p>
 
@@ -102,12 +102,12 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
                 setEditContent(entry.content);
                 setEditing(true);
               }}
-              className="p-1.5 rounded-[6px] text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 transition-colors"
+              className="p-1.5 rounded-[6px] text-text-tertiary hover:text-text-primary hover:bg-elevated transition-colors"
             >
               <Pencil size={14} strokeWidth={1.5} />
             </button>
             {confirmDelete ? (
-              <div className="flex items-center gap-1 text-xs text-neutral-500">
+              <div className="flex items-center gap-1 text-xs text-text-secondary">
                 <span>삭제?</span>
                 <button
                   onClick={handleDelete}
@@ -117,7 +117,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="p-1 rounded-[6px] text-neutral-400 hover:bg-neutral-100 transition-colors"
+                  className="p-1 rounded-[6px] text-text-tertiary hover:bg-elevated transition-colors"
                 >
                   <X size={14} strokeWidth={1.5} />
                 </button>

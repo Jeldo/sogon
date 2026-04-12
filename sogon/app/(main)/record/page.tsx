@@ -82,7 +82,7 @@ export default function RecordPage() {
         <h2 className="text-xl font-body font-semibold text-foreground">
           기록하기
         </h2>
-        <p className="text-sm text-neutral-500 mt-1">{today}</p>
+        <p className="text-sm text-text-secondary mt-1">{today}</p>
       </div>
 
       {/* Textarea */}
@@ -91,13 +91,13 @@ export default function RecordPage() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="오늘 뭐 했어?"
-          className="w-full min-h-[120px] rounded-[16px] border border-neutral-200 p-5 text-lg font-body text-foreground placeholder:text-neutral-300 resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)] transition-all duration-150"
+          className="w-full min-h-[120px] rounded-[16px] border border-border p-5 text-lg font-body text-foreground placeholder:text-text-placeholder resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)] transition-all duration-150"
         />
 
         {/* Image preview */}
         {imageDataUrl && (
           <div className="relative inline-block">
-            <div className="rounded-[16px] overflow-hidden border border-neutral-200">
+            <div className="rounded-[16px] overflow-hidden border border-border">
               <Image
                 src={imageDataUrl}
                 alt="첨부 미리보기"
@@ -131,7 +131,7 @@ export default function RecordPage() {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-9 h-9 rounded-[10px] bg-neutral-100 flex items-center justify-center text-neutral-500 hover:bg-neutral-200 active:scale-[0.97] transition-all duration-150"
+              className="w-9 h-9 rounded-[10px] bg-elevated flex items-center justify-center text-text-secondary hover:bg-border active:scale-[0.97] transition-all duration-150"
             >
               <ImagePlus size={18} strokeWidth={1.5} />
             </button>
@@ -151,8 +151,8 @@ export default function RecordPage() {
       {/* Today's entries */}
       {todayEntries.length > 0 && (
         <div className="mt-10">
-          <div className="border-t border-neutral-200 pt-6">
-            <h3 className="text-sm text-neutral-400 mb-4">오늘의 기록</h3>
+          <div className="border-t border-border pt-6">
+            <h3 className="text-sm text-text-tertiary mb-4">오늘의 기록</h3>
             <div className="space-y-4">
               {todayEntries.map((entry) => (
                 <EntryCard
