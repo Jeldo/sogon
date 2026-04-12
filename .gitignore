@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Build
+*.tsbuildinfo
+
+# Vercel
+.vercel
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/projects/
+
+# Superpowers
+.superpowers/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
