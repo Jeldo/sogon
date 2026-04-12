@@ -37,7 +37,15 @@ export default function RootLayout({
     <html
       lang="ko"
       className={`${gowunDodum.variable} ${gowunBatang.variable} ${nanumPen.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('sogon_theme');if(t==='dark')document.documentElement.classList.add('dark');else if(t!=='light')document.documentElement.classList.add('system-theme')})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-body">{children}</body>
     </html>
   );
