@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getDeviceProfile } from "@/lib/storage";
 import { Sidebar } from "@/components/Sidebar";
 import { BottomNav } from "@/components/BottomNav";
+import { SettingsModal } from "@/components/SettingsModal";
 
 export default function MainLayout({
   children,
@@ -13,6 +14,7 @@ export default function MainLayout({
 }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     const profile = getDeviceProfile();
@@ -27,11 +29,15 @@ export default function MainLayout({
 
   return (
     <div className="flex min-h-dvh">
-      <Sidebar />
+      <Sidebar onSettingsClick={() => setSettingsOpen(true)} />
       <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
         {children}
       </main>
-      <BottomNav />
+      <BottomNav onSettingsClick={() => setSettingsOpen(true)} />
+      <SettingsModal
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      />
     </div>
   );
 }

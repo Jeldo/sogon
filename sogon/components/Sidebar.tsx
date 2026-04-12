@@ -9,7 +9,11 @@ const NAV_ITEMS = [
   { href: "/collection", label: "모아보기", icon: BookOpen },
 ] as const;
 
-export function Sidebar() {
+type SidebarProps = {
+  onSettingsClick: () => void;
+};
+
+export function Sidebar({ onSettingsClick }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -46,8 +50,8 @@ export function Sidebar() {
         <div className="px-3 pb-4">
           <button
             type="button"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full cursor-default opacity-50"
-            disabled
+            onClick={onSettingsClick}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full"
           >
             <Settings size={20} strokeWidth={1.5} />
             <span>설정</span>
@@ -86,8 +90,8 @@ export function Sidebar() {
         <div className="pb-4">
           <button
             type="button"
-            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 opacity-50 cursor-default"
-            disabled
+            onClick={onSettingsClick}
+            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 hover:bg-neutral-100 transition-colors duration-150"
           >
             <Settings size={20} strokeWidth={1.5} />
           </button>

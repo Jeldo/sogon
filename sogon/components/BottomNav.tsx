@@ -9,7 +9,11 @@ const NAV_ITEMS = [
   { href: "/collection", label: "모아보기", icon: BookOpen },
 ] as const;
 
-export function BottomNav() {
+type BottomNavProps = {
+  onSettingsClick: () => void;
+};
+
+export function BottomNav({ onSettingsClick }: BottomNavProps) {
   const pathname = usePathname();
 
   return (
@@ -31,8 +35,8 @@ export function BottomNav() {
       })}
       <button
         type="button"
-        className="flex flex-col items-center gap-0.5 text-[10px] text-neutral-400 opacity-50 cursor-default"
-        disabled
+        onClick={onSettingsClick}
+        className="flex flex-col items-center gap-0.5 text-[10px] text-neutral-400 transition-colors duration-150"
       >
         <Settings size={20} strokeWidth={1.5} />
         <span>설정</span>
