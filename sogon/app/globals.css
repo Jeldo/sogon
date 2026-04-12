@@ -73,3 +73,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-body), sans-serif;
 }
+
+/* Dark mode overrides — applied via .dark class on <html> */
+.dark {
+  --background: #1a1c1b;
+  --foreground: #e5e7e6;
+}
+
+@media (prefers-color-scheme: dark) {
+  .system-theme {
+    --background: #1a1c1b;
+    --foreground: #e5e7e6;
+  }
+}
