@@ -5,13 +5,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Send, ImagePlus, X } from "lucide-react";
 import { formatKoreanDate } from "@/lib/date-utils";
-import { createClient } from "@/lib/supabase/client";
 import {
   addEntry,
-  updateEntry,
+  getDeviceProfile,
   getEntriesByDate,
-  getProfile,
-} from "@/lib/supabase/queries";
+  getReactions,
+} from "@/lib/storage";
 import { compressImage } from "@/lib/image";
 import type { EntryWithReaction } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
@@ -20,42 +19,31 @@ export default function RecordPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState("");
-  const [imageBlob, setImageBlob] = useState<Blob | null>(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [todayEntries, setTodayEntries] = useState<EntryWithReaction[]>([]);
   const [submitting, setSubmitting] = useState(false);
-
-  // Manage object URL lifecycle
-  useEffect(() => {
-    if (!imageBlob) {
-      setImagePreviewUrl(null);
-      return;
-    }
-    const url = URL.createObjectURL(imageBlob);
-    setImagePreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [imageBlob]);
 
   useEffect(() => {
     loadTodayEntries();
   }, []);
 
-  async function loadTodayEntries() {
-    const supabase = createClient();
-    const entries = await getEntriesByDate(supabase, new Date());
-    setTodayEntries(entries);
+  function loadTodayEntries() {
+    const entries = getEntriesByDate(new Date());
+    const reactions = getReactions();
+    const withReactions: EntryWithReaction[] = entries.map((entry) => ({
+      ...entry,
+      reaction: reactions.find((r) => r.entryId === entry.id) ?? null,
+    }));
+    setTodayEntries(withReactions);
   }
 
   async function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const blob = await compressImage(file);
-    setImageBlob(blob);
+    const dataUrl = await compressImage(file);
+    setImageDataUrl(dataUrl);
+    // Reset input so the same file can be re-selected
     e.target.value = "";
-  }
-
-  function handleRemoveImage() {
-    setImageBlob(null);
   }
 
   async function handleSubmit() {
@@ -63,48 +51,23 @@ export default function RecordPage() {
     if (!trimmed || submitting) return;
 
     setSubmitting(true);
-    const supabase = createClient();
+    const entry = addEntry(trimmed, imageDataUrl);
 
-    // 1. Create entry
-    const entry = await addEntry(supabase, trimmed, null);
-
-    // 2. Upload image if present
-    if (imageBlob) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const path = `${user.id}/${entry.id}.jpg`;
-        const { data: uploadData } = await supabase.storage
-          .from("diary-images")
-          .upload(path, imageBlob, { contentType: "image/jpeg" });
-        if (uploadData) {
-          await updateEntry(supabase, entry.id, { imagePath: uploadData.path });
-        }
-      }
-    }
-
-    // 3. Request AI reaction (server saves to DB atomically)
-    const profile = await getProfile(supabase);
+    // Call AI reaction API
+    const profile = getDeviceProfile();
     try {
       const res = await fetch("/api/reaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          entryId: entry.id,
-          content: trimmed,
-          tone: profile?.friendTone ?? "warm",
-        }),
+        body: JSON.stringify({ content: trimmed, tone: profile?.friendTone }),
       });
       if (res.ok) {
-        const { reaction } = (await res.json()) as { reaction: string };
-        if (reaction) {
-          // Cache for immediate display before DB read on reaction page
-          sessionStorage.setItem(`pending-reaction:${entry.id}`, reaction);
-        }
+        const { reaction } = await res.json();
+        const { addReaction } = await import("@/lib/storage");
+        addReaction(entry.id, reaction, profile!.friendTone);
       }
     } catch {
-      // Silently fail — reaction page falls back to sessionStorage
+      // Silently fail — reaction screen will handle missing reaction
     }
 
     router.push(`/record/${entry.id}/reaction`);
@@ -132,11 +95,11 @@ export default function RecordPage() {
         />
 
         {/* Image preview */}
-        {imagePreviewUrl && (
+        {imageDataUrl && (
           <div className="relative inline-block">
             <div className="rounded-[16px] overflow-hidden border border-neutral-200">
               <Image
-                src={imagePreviewUrl}
+                src={imageDataUrl}
                 alt="첨부 미리보기"
                 width={0}
                 height={0}
@@ -147,7 +110,7 @@ export default function RecordPage() {
             </div>
             <button
               type="button"
-              onClick={handleRemoveImage}
+              onClick={() => setImageDataUrl(null)}
               className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-neutral-600 text-white flex items-center justify-center hover:bg-neutral-700 transition-colors"
             >
               <X size={14} strokeWidth={2} />

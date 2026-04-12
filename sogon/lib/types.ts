@@ -4,7 +4,7 @@ export type FriendTone = (typeof FRIEND_TONES)[number];
 export type DiaryEntry = {
   id: string;
   content: string;
-  imagePath: string | null;
+  imageDataUrl: string | null;
   createdAt: string;
 };
 

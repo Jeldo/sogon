@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { getEntryWithReaction, getProfile } from "@/lib/supabase/queries";
+import { getEntryWithReaction, getDeviceProfile } from "@/lib/storage";
 import type { EntryWithReaction, FriendTone } from "@/lib/types";
 import { ReactionView } from "./ReactionView";
 
@@ -15,41 +14,17 @@ export default function ReactionPage() {
   const [tone, setTone] = useState<FriendTone>("warm");
 
   useEffect(() => {
-    async function load() {
-      const supabase = createClient();
-
-      const profile = await getProfile(supabase);
-      if (profile) {
-        setTone(profile.friendTone);
-      }
-
-      let data = await getEntryWithReaction(supabase, params.id);
-      if (!data) {
-        router.replace("/record");
-        return;
-      }
-
-      // DB 저장 실패 시 sessionStorage에서 reaction 복구
-      if (!data.reaction) {
-        const pending = sessionStorage.getItem(`pending-reaction:${params.id}`);
-        if (pending) {
-          data = {
-            ...data,
-            reaction: {
-              id: "pending",
-              entryId: params.id,
-              content: pending,
-              tone: profile?.friendTone ?? "warm",
-              createdAt: new Date().toISOString(),
-            },
-          };
-          sessionStorage.removeItem(`pending-reaction:${params.id}`);
-        }
-      }
-
-      setEntry(data);
+    const profile = getDeviceProfile();
+    if (profile) {
+      setTone(profile.friendTone);
     }
-    load();
+
+    const data = getEntryWithReaction(params.id);
+    if (!data) {
+      router.replace("/record");
+      return;
+    }
+    setEntry(data);
   }, [params.id, router]);
 
   if (!entry) return null;
