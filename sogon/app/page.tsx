@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TONE_OPTIONS } from "@/lib/constants";
-import { createClient } from "@/lib/supabase/client";
-import { getProfile, setProfile } from "@/lib/supabase/queries";
+import { getDeviceProfile, setDeviceProfile } from "@/lib/storage";
 import type { FriendTone } from "@/lib/types";
 import { ToneCard } from "./ToneCard";
 
@@ -15,29 +14,17 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     setMounted(true);
-    async function checkAuth() {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.replace("/login");
-        return;
-      }
-      const profile = await getProfile(supabase);
-      if (profile) {
-        router.replace("/record");
-      }
+    const profile = getDeviceProfile();
+    if (profile) {
+      router.replace("/record");
     }
-    checkAuth();
   }, [router]);
 
   if (!mounted) return null;
 
-  async function handleStart() {
+  function handleStart() {
     if (!selectedTone) return;
-    const supabase = createClient();
-    await setProfile(supabase, selectedTone);
+    setDeviceProfile(selectedTone);
     router.push("/record");
   }
 

@@ -1,27 +1,29 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { getProfile } from "@/lib/supabase/queries";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getDeviceProfile } from "@/lib/storage";
 import { Sidebar } from "@/components/Sidebar";
 import { BottomNav } from "@/components/BottomNav";
 
-export default async function MainLayout({
+export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const router = useRouter();
+  const [ready, setReady] = useState(false);
 
-  if (!user) {
-    redirect("/login");
-  }
+  useEffect(() => {
+    const profile = getDeviceProfile();
+    if (!profile) {
+      router.replace("/");
+      return;
+    }
+    setReady(true);
+  }, [router]);
 
-  const profile = await getProfile(supabase);
-  if (!profile) {
-    redirect("/");
-  }
+  if (!ready) return null;
 
   return (
     <div className="flex min-h-dvh">

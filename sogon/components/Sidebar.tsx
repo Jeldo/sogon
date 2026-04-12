@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { PenLine, BookOpen, LogOut } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { usePathname } from "next/navigation";
+import { PenLine, BookOpen, Settings } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/record", label: "기록하기", icon: PenLine },
@@ -12,13 +11,6 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-
-  async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.replace("/login");
-  }
 
   return (
     <>
@@ -50,15 +42,15 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Logout (bottom) */}
+        {/* Settings (bottom) */}
         <div className="px-3 pb-4">
           <button
             type="button"
-            onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm text-neutral-500 hover:bg-neutral-100 transition-colors duration-150 w-full cursor-default opacity-50"
+            disabled
           >
-            <LogOut size={20} strokeWidth={1.5} />
-            <span>로그아웃</span>
+            <Settings size={20} strokeWidth={1.5} />
+            <span>설정</span>
           </button>
         </div>
       </aside>
@@ -90,14 +82,14 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Logout */}
+        {/* Settings */}
         <div className="pb-4">
           <button
             type="button"
-            onClick={handleLogout}
-            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 hover:bg-neutral-100 transition-colors duration-150"
+            className="flex items-center justify-center w-10 h-10 rounded-[10px] text-neutral-500 opacity-50 cursor-default"
+            disabled
           >
-            <LogOut size={20} strokeWidth={1.5} />
+            <Settings size={20} strokeWidth={1.5} />
           </button>
         </div>
       </aside>
