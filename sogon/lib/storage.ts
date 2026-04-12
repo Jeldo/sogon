@@ -142,6 +142,7 @@ export function getTheme(): ThemeMode {
 }
 
 export function setTheme(mode: ThemeMode): void {
+  if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEYS.THEME, mode);
 }
 
