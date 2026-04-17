@@ -17,7 +17,7 @@
 | File | Action | Responsibility |
 |------|--------|----------------|
 | `.claude/rules/design-guide/DESIGN_GUIDE.md` | Modify | Add L0 Principles + L1 Foundation (8 categories + typography scale + font replacement) + "진행중 상태" tone row |
-| `sogon/public/fonts/PretendardVariable.woff2` | Create | Pretendard Variable font file (downloaded from orioncactus/pretendard repo) |
+| `sogon/public/fonts/PretendardVariable.subset.woff2` | Create | Pretendard Variable font file (downloaded from orioncactus/pretendard repo) |
 | `sogon/app/layout.tsx` | Modify | Replace Gowun/Nanum imports with Pretendard (next/font/local) + Gaegu (next/font/google) |
 | `sogon/public/logo.svg` | Modify | Replace Gowun Batang reference with Pretendard |
 | `sogon/app/globals.css` | Modify | Update font primitives + add L2 semantic tokens (shadcn naming, radius roles, motion bundles, typography role utilities) + dark overrides; deprecate old text-* names |
@@ -149,7 +149,7 @@ Scroll down past the Voice & Tone table and past `### 용어 규칙`. Before `##
 
 | 역할 | 폰트 | 로딩 방식 |
 |------|------|-----------|
-| Body / Heading | **Pretendard** (Variable 45-920) | `next/font/local` (`public/fonts/PretendardVariable.woff2`) |
+| Body / Heading | **Pretendard** (Variable 45-920, 한글 서브셋 ~350KB) | `next/font/local` (`public/fonts/PretendardVariable.subset.woff2`) |
 | Handwriting (비밀친구 리액션 전용) | **Gaegu** (300/400/700) | `next/font/google` |
 
 기존 Gowun Dodum / Gowun Batang / Nanum Pen Script 임포트는 전부 제거한다.
@@ -204,20 +204,24 @@ This task does three things in one commit since they're interdependent:
 
 **Files:**
 - Modify: `sogon/app/layout.tsx`
-- Create: `sogon/public/fonts/PretendardVariable.woff2`
+- Create: `sogon/public/fonts/PretendardVariable.subset.woff2`
 - Modify: `sogon/app/globals.css`
 - Modify: `sogon/public/logo.svg` (remove Gowun Batang reference)
 
-- [ ] **Step 1: Download Pretendard Variable woff2**
+- [ ] **Step 1: Download Pretendard Variable subset woff2 (Korean-subset)**
+
+소곤은 한국어 전용이므로 전체 Pretendard Variable(1.1MB) 대신 **한글 서브셋 버전(~350KB)**을 사용한다. 초기 로딩 시간 단축.
 
 From `sogon/` directory:
 ```bash
 mkdir -p public/fonts
-curl -L -o public/fonts/PretendardVariable.woff2 \
-  "https://github.com/orioncactus/pretendard/raw/main/packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2"
-ls -lh public/fonts/PretendardVariable.woff2
+curl -L -o public/fonts/PretendardVariable.subset.woff2 \
+  "https://github.com/orioncactus/pretendard/raw/main/packages/pretendard/dist/web/variable/woff2-subset/PretendardVariable.subset.woff2"
+ls -lh public/fonts/PretendardVariable.subset.woff2
 ```
-Expected: file size around 1.1 MB.
+Expected: file size around **300–400 KB** (한글 + 필수 라틴 글리프 서브셋).
+
+**주의**: 만약 위 경로에서 404가 나면 Pretendard 저장소 구조가 바뀐 것. 대안으로 static 서브셋 4종(Regular/Medium/SemiBold/Bold `*.subset.woff2`) 을 `dist/web/static/subsets/` 에서 받아 `next/font/local` 의 `src` 배열에 등재한다.
 
 - [ ] **Step 2: Update `layout.tsx` font imports**
 
@@ -230,7 +234,7 @@ import { Gaegu } from "next/font/google";
 import "./globals.css";
 
 const pretendard = localFont({
-  src: "../public/fonts/PretendardVariable.woff2",
+  src: "../public/fonts/PretendardVariable.subset.woff2",
   variable: "--font-pretendard",
   weight: "45 920",
   display: "swap",
@@ -470,7 +474,7 @@ Stop dev server.
 - [ ] **Step 10: Commit**
 
 ```bash
-git add sogon/public/fonts/PretendardVariable.woff2 sogon/app/layout.tsx sogon/app/globals.css sogon/public/logo.svg
+git add sogon/public/fonts/PretendardVariable.subset.woff2 sogon/app/layout.tsx sogon/app/globals.css sogon/public/logo.svg
 git commit -m "feat: replace fonts with Pretendard + Gaegu, add typography role tokens and L2 semantic tokens"
 ```
 
