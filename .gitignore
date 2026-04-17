@@ -26,6 +26,9 @@ Thumbs.db
 # Superpowers
 .superpowers/
 
+# Git worktrees
+.worktrees/
+
 # IDE
 .idea/
 .vscode/
