@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the foundation of 소곤's design system — codify L0 principles, restructure tokens into a 3-tier hierarchy (Primitive / Semantic / Component), implement 7 primitive components (Button, Input, Textarea, Card, Modal, Badge, ChatBubble), and migrate existing components to use them.
+**Goal:** Build the foundation of 소곤's design system — codify L0 principles, formalize L1 Foundation (incl. font replacement to Pretendard + Gaegu and a typography role scale), restructure tokens into a 3-tier hierarchy (Primitive / Semantic / Component), implement 7 primitive components (Button, Input, Textarea, Card, Modal, Badge, ChatBubble), and migrate existing components to use them while meeting the "소곤다움 체크리스트".
 
-**Architecture:** Pilot-first. Tokens are expanded in `globals.css`, with dark mode overrides localized to the Semantic layer. New primitives live in `components/ui/` and consume only Semantic tokens. Existing 소곤-specific widgets (`Sidebar`, `EntryCard`, `SettingsModal`, etc.) are refactored to compose the new primitives. All code uses Tailwind v4 + React 19 conventions (no `forwardRef`, no CVA, `ComponentProps<T>` extension, `ref` as prop).
+**Architecture:** Pilot-first. Fonts are replaced (Pretendard via `next/font/local` for body/heading; Gaegu via `next/font/google` for handwriting). Typography roles (`text-display / heading / body-lg / body / body-sm / caption / friend`) are Tailwind v4 `@utility` definitions composing font+size+line-height+weight+letter-spacing. L2 semantic tokens live in `globals.css` with dark mode overrides localized there. New primitives live in `components/ui/` and consume only Semantic tokens (no primitive sizes/radii). Existing 소곤-specific widgets (`Sidebar`, `EntryCard`, `SettingsModal`, etc.) are refactored to compose the new primitives. All code uses Tailwind v4 + React 19 conventions (no `forwardRef`, no CVA, `ComponentProps<T>` extension, `ref` as prop). Every primitive is built to pass the "소곤다움 체크리스트" in spec §9.
 
 **Tech Stack:** Next.js 16.2.2, React 19.2.4, TypeScript 6.0.2, Tailwind CSS v4, Vitest + React Testing Library, clsx.
 
@@ -16,8 +16,11 @@
 
 | File | Action | Responsibility |
 |------|--------|----------------|
-| `.claude/rules/design-guide/DESIGN_GUIDE.md` | Modify | Add L0 Principles section, add "진행중 상태" tone row |
-| `sogon/app/globals.css` | Modify | Add new L2 semantic tokens (shadcn naming, motion, radius roles) + dark overrides; deprecate old text-* names |
+| `.claude/rules/design-guide/DESIGN_GUIDE.md` | Modify | Add L0 Principles + L1 Foundation (8 categories + typography scale + font replacement) + "진행중 상태" tone row |
+| `sogon/public/fonts/PretendardVariable.woff2` | Create | Pretendard Variable font file (downloaded from orioncactus/pretendard repo) |
+| `sogon/app/layout.tsx` | Modify | Replace Gowun/Nanum imports with Pretendard (next/font/local) + Gaegu (next/font/google) |
+| `sogon/public/logo.svg` | Modify | Replace Gowun Batang reference with Pretendard |
+| `sogon/app/globals.css` | Modify | Update font primitives + add L2 semantic tokens (shadcn naming, radius roles, motion bundles, typography role utilities) + dark overrides; deprecate old text-* names |
 | `sogon/components/ui/Button.tsx` | Create | Primitive — 4 variants, 3 sizes, loading, icon slots |
 | `sogon/components/ui/Button.test.tsx` | Create | RTL unit tests |
 | `sogon/components/ui/Input.tsx` | Create | Primitive — text input with error, leading icon |
@@ -81,18 +84,16 @@ git commit -m "chore: add clsx for primitive class composition"
 
 ---
 
-## Task 2: Update DESIGN_GUIDE.md — L0 principles + progress tone row
+## Task 2: Update DESIGN_GUIDE.md — L0 principles + L1 Foundation + typography + tone row
 
-Adds the decision-rubric 3 principles and the 5th Voice & Tone category.
+Extends the guide with L0 decision principles, an explicit L1 Foundation section covering 8 categories, a typography role scale (Pretendard + Gaegu), and the 5th Voice & Tone category.
 
 **Files:**
 - Modify: `.claude/rules/design-guide/DESIGN_GUIDE.md`
 
 - [ ] **Step 1: Add L0 principles section at top of Brand Identity**
 
-Open `.claude/rules/design-guide/DESIGN_GUIDE.md`. Find the `### 브랜드 키워드` heading inside `## 1. Brand Identity`. Directly above it (still inside `## 1. Brand Identity`), insert a new `### 디자인 원칙 (L0 - 의사결정 북스타)` section.
-
-Add exactly this content:
+Open `.claude/rules/design-guide/DESIGN_GUIDE.md`. Find `### 브랜드 키워드` inside `## 1. Brand Identity`. Directly above it insert:
 
 ```markdown
 ### 디자인 원칙 (L0 — 의사결정 북스타)
@@ -115,37 +116,181 @@ UI 카피·마이크로카피·버튼 레이블이 "도구"가 아니라 "친구
 
 - [ ] **Step 2: Add "진행중 상태" row to Voice & Tone table**
 
-In the same file, find the `### Voice & Tone` section (currently a 4-row table). Add a 5th row:
-
-Current table ends with:
+Find the `### Voice & Tone` section. Current table ends with:
 ```
 | 성공 피드백 | 가볍고 따뜻한 확인 | "기록 완료!" |
 ```
-
 After that line, add:
 ```
 | 진행중 상태 | 원칙 ②(친구처럼) 강 발현, 시스템스럽지 않게 | "비밀친구에게 전하고 있어…" |
 ```
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 3: Add L1 Foundation section (new, placed after the Voice & Tone section)**
+
+Scroll down past the Voice & Tone table and past `### 용어 규칙`. Before `## 2. Spacing & Layout`, insert a new section:
+
+````markdown
+### L1 Foundation — 시각 언어의 기초 재료
+
+소곤의 L1 Foundation은 8개 카테고리로 구성된다.
+
+| # | 카테고리 | 이 가이드 내 위치 |
+|---|---------|-------------------|
+| 1 | 색 | `§3 Border Radius & Shadows` + `globals.css` 토큰 |
+| 2 | 타이포 | 본 절 (아래) + `#폰트` 단락 |
+| 3 | 간격 | `§2 Spacing & Layout` |
+| 4 | 레이아웃 그리드 | `§2 Spacing & Layout` |
+| 5 | 아이콘 | `§5 Iconography` |
+| 6 | 모션 | `§8 Motion & Animation` |
+| 7 | 일러스트 | 현재 out-of-scope (D+ 영역, 후속 스펙) |
+| 8 | 보이스앤톤 | `§1 Voice & Tone` |
+
+#### 폰트
+
+| 역할 | 폰트 | 로딩 방식 |
+|------|------|-----------|
+| Body / Heading | **Pretendard** (Variable 45-920) | `next/font/local` (`public/fonts/PretendardVariable.woff2`) |
+| Handwriting (비밀친구 리액션 전용) | **Gaegu** (300/400/700) | `next/font/google` |
+
+기존 Gowun Dodum / Gowun Batang / Nanum Pen Script 임포트는 전부 제거한다.
+
+#### 타이포 역할 스케일
+
+프리미티브 컴포넌트는 반드시 아래 역할 토큰만 사용한다 (`text-lg` 같은 primitive 크기 유틸리티 직접 참조 금지).
+
+| 역할 (Tailwind 유틸) | 크기 | 폰트·가중 | line-height | letter-spacing | 사용처 |
+|-------------------|-----|-----------|-------------|---------------|--------|
+| `text-display` | 28px | Pretendard 700 | 1.3 | -0.02em | 온보딩 큰 제목 |
+| `text-heading` | 20px | Pretendard 600 | 1.4 | -0.01em | 섹션 헤더, 캘린더 월 |
+| `text-body-lg` | 18px | Pretendard 400 | 1.65 | 0 | 기록 본문 (Textarea diary, Card body) |
+| `text-body` | 16px | Pretendard 400 | 1.6 | 0 | 기본 텍스트, 버튼 라벨 |
+| `text-body-sm` | 14px | Pretendard 400 | 1.55 | 0 | 보조 텍스트 |
+| `text-caption` | 12px | Pretendard 500 | 1.5 | 0.01em | 타임스탬프, 카운터, 배지 |
+| `text-friend` | 18px | Gaegu 400 | 1.55 | 0 | 비밀친구 리액션 전용 |
+
+#### 레이어 구분 (L0 vs L1)
+
+- **L0 원칙** (위 `### 디자인 원칙` 섹션) — 의사결정 북스타. 세 원칙 + 충돌 기준.
+- **L1 사용 규칙** (기존 `§9 디자인 원칙` 7개 항목) — "시각 언어의 사용 방식". 좁은 컬럼, 넉넉한 여백, 최소 그림자, 손글씨체로 친구 구분, 날카로운 모서리 없음, 느리고 부드러운 애니메이션, 컬러 미니멀리즘.
+
+`§9 디자인 원칙` 은 그대로 두되 제목을 `## 9. L1 사용 규칙 (Visual Execution Rules)` 로 교체한다 (다음 단계에서).
+````
+
+- [ ] **Step 4: Rename `§9 디자인 원칙` section heading**
+
+Find `## 9. 디자인 원칙` heading near the bottom of the file. Replace it with:
+```markdown
+## 9. L1 사용 규칙 (Visual Execution Rules)
+```
+
+Keep all sub-content under it unchanged.
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add .claude/rules/design-guide/DESIGN_GUIDE.md
-git commit -m "docs: add L0 principles section and progress tone row"
+git commit -m "docs: add L0 principles, L1 Foundation section, typography role scale, tone row"
 ```
 
 ---
 
-## Task 3: Expand globals.css with new L2 semantic tokens
+## Task 3: Replace fonts (Pretendard + Gaegu), expand `globals.css` with typography role tokens + L2 semantic tokens
 
-Adds new tokens under new names (`foreground`, `muted-foreground`, `accent`, `accent-hover`, etc.), new radius/motion tokens, danger/scrim. Old tokens (`--color-text-primary` etc.) remain temporarily for backwards compat — they'll be removed in Task 4 after mechanical rename.
+This task does three things in one commit since they're interdependent:
+
+1. Download Pretendard Variable woff2 and load it via `next/font/local`; add Gaegu via `next/font/google`; remove existing Gowun/Nanum imports.
+2. Update `globals.css` font variables to reference the new fonts.
+3. Add new L2 semantic tokens (colors, radius roles, motion bundles) AND typography role tokens (text-display/heading/body-lg/body/body-sm/caption/friend).
 
 **Files:**
+- Modify: `sogon/app/layout.tsx`
+- Create: `sogon/public/fonts/PretendardVariable.woff2`
 - Modify: `sogon/app/globals.css`
+- Modify: `sogon/public/logo.svg` (remove Gowun Batang reference)
 
-- [ ] **Step 1: Replace the entire `@theme { … }` block and add new tokens**
+- [ ] **Step 1: Download Pretendard Variable woff2**
 
-Open `sogon/app/globals.css`. Locate the second `@theme { … }` block (the one without `inline`) starting around line 55. Replace it with:
+From `sogon/` directory:
+```bash
+mkdir -p public/fonts
+curl -L -o public/fonts/PretendardVariable.woff2 \
+  "https://github.com/orioncactus/pretendard/raw/main/packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2"
+ls -lh public/fonts/PretendardVariable.woff2
+```
+Expected: file size around 1.1 MB.
+
+- [ ] **Step 2: Update `layout.tsx` font imports**
+
+Replace the entire contents of `sogon/app/layout.tsx` with:
+
+```tsx
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { Gaegu } from "next/font/google";
+import "./globals.css";
+
+const pretendard = localFont({
+  src: "../public/fonts/PretendardVariable.woff2",
+  variable: "--font-pretendard",
+  weight: "45 920",
+  display: "swap",
+});
+
+const gaegu = Gaegu({
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+  variable: "--font-gaegu",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "\uC18C\uACE4",
+  description: "\uD504\uB77C\uC774\uBE57\uD55C\uB370 \uBC18\uC751\uC774 \uC788\uB294 \uD558\uB8E8 \uAE30\uB85D \uACF5\uAC04",
+  verification: {
+    google: "ggKZ1AlVWDBwCfiFZ0cPmk_dOBSPmU8D4_KwrPz348o",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="ko"
+      className={`${pretendard.variable} ${gaegu.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('sogon_theme');if(t==='dark')document.documentElement.classList.add('dark');else if(t!=='light')document.documentElement.classList.add('system-theme')})();`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col font-body">{children}</body>
+    </html>
+  );
+}
+```
+
+- [ ] **Step 3: Replace `@theme inline { … }` block in `globals.css`**
+
+Open `sogon/app/globals.css`. Find the `@theme inline { … }` block. Replace only the "Font families" section (4 lines `--font-body`, `--font-heading`, `--font-handwriting`, and any related) with:
+
+```css
+  /* ============ L1 Primitive — Fonts ============ */
+  --font-body: var(--font-pretendard);
+  --font-heading: var(--font-pretendard);
+  --font-handwriting: var(--font-gaegu);
+```
+
+Leave all other lines in the block (color primitives, radius primitives, shadow primitives, ease primitives) unchanged.
+
+- [ ] **Step 4: Replace the second `@theme { … }` block (non-inline) with expanded tokens**
+
+Still in `globals.css`, find the second `@theme { … }` block (without `inline`, around line 55 before any edits). Replace it with:
 
 ```css
 @theme {
@@ -201,9 +346,64 @@ Open `sogon/app/globals.css`. Locate the second `@theme { … }` block (the one 
 }
 ```
 
-- [ ] **Step 2: Replace the `.dark` override block**
+- [ ] **Step 5: Add typography role tokens as Tailwind utility classes via `@utility`**
 
-Find the existing `.dark { … }` block (around line 92). Replace it with:
+Append the following to `globals.css` (below the `@keyframes` blocks, above the `body` rule):
+
+```css
+/* ============ L2 Semantic — Typography roles ============ */
+/* Tailwind v4 @utility lets us define role utilities that compose
+   font-family + size + line-height + weight + letter-spacing. */
+@utility text-display {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+@utility text-heading {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+@utility text-body-lg {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 400;
+}
+@utility text-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+@utility text-body-sm {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+@utility text-caption {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+@utility text-friend {
+  font-family: var(--font-handwriting);
+  font-size: 18px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+```
+
+- [ ] **Step 6: Replace the `.dark` override block**
+
+Find the existing `.dark { … }` block. Replace it with:
 
 ```css
 .dark {
@@ -236,23 +436,42 @@ Find the existing `.dark { … }` block (around line 92). Replace it with:
 }
 ```
 
-- [ ] **Step 3: Replace the `@media (prefers-color-scheme: dark) .system-theme` block**
+- [ ] **Step 7: Replace the `@media (prefers-color-scheme: dark) .system-theme` block**
 
-Find the `@media (prefers-color-scheme: dark) { .system-theme { … } }` block. Replace its body identically to the `.dark` block above (same overrides).
+Replace its body identically to the `.dark` block body above.
 
-- [ ] **Step 4: Run dev server and visually verify**
+- [ ] **Step 8: Update `public/logo.svg` to remove Gowun Batang**
+
+Open `sogon/public/logo.svg`. Find the `@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap');` and the `font-family="'Gowun Batang'"` attribute. Replace both to use Pretendard:
+
+```
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+```
+and the font-family attribute:
+```
+font-family="'Pretendard'"
+```
+
+(The CDN import works for standalone SVG rendering since SVG files aren't served by Next.)
+
+- [ ] **Step 9: Run dev server and visually verify**
 
 ```bash
 cd sogon && pnpm dev
 ```
+Open http://localhost:3000. Verify:
+- All text renders with Pretendard (no Gowun).
+- Friend-style text (if visible) renders with Gaegu.
+- Logo still renders correctly.
+- Dark mode toggle still works.
 
-Open http://localhost:3000 in a browser. Toggle dark mode in settings. Both light and dark should render without visible breakage (legacy tokens still exist for current components). Stop the dev server.
+Stop dev server.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
-git add sogon/app/globals.css
-git commit -m "feat: expand L2 semantic tokens with shadcn naming and motion/radius roles"
+git add sogon/public/fonts/PretendardVariable.woff2 sogon/app/layout.tsx sogon/app/globals.css sogon/public/logo.svg
+git commit -m "feat: replace fonts with Pretendard + Gaegu, add typography role tokens and L2 semantic tokens"
 ```
 
 ---
@@ -504,9 +723,9 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: "h-8 px-3 text-sm",
-  md: "h-10 px-5 text-sm",
-  lg: "h-12 px-6 text-base",
+  sm: "h-8 px-3 text-body-sm",
+  md: "h-10 px-5 text-body-sm",
+  lg: "h-12 px-6 text-body",
 };
 
 const ICON_SIZE_CLASSES: Record<ButtonSize, string> = {
@@ -536,11 +755,13 @@ export function Button({
       type={type}
       disabled={isDisabled}
       aria-busy={loading || undefined}
+      style={{ transition: "background-color var(--motion-hover), transform var(--motion-press)" }}
       className={clsx(
         "inline-flex items-center justify-center gap-2 rounded-control font-medium",
-        "transition-colors duration-150 ease-out",
+        "active:scale-[0.97]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
-        "disabled:opacity-40 disabled:cursor-not-allowed",
+        "disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
+        "motion-reduce:active:scale-100 motion-reduce:transition-none",
         VARIANT_CLASSES[variant],
         isIcon ? ICON_SIZE_CLASSES[size] : SIZE_CLASSES[size],
         className,
@@ -715,7 +936,7 @@ export function Input({
         />
       </div>
       {errorMessage ? (
-        <p id={descriptionId} className="text-xs text-danger">
+        <p id={descriptionId} className="text-caption text-danger">
           {errorMessage}
         </p>
       ) : null}
@@ -821,7 +1042,7 @@ export function Badge({
     <span
       {...rest}
       className={clsx(
-        "inline-flex items-center gap-1 rounded-pill px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1 rounded-pill px-2.5 py-0.5 text-caption",
         VARIANT_CLASSES[variant],
         className,
       )}
@@ -1086,8 +1307,8 @@ export type TextareaProps = Omit<ComponentProps<"textarea">, "size"> & {
 
 const SIZE_CLASSES: Record<TextareaSize, string> = {
   diary:
-    "rounded-field text-lg leading-relaxed p-5 min-h-[120px]",
-  compact: "rounded-control text-sm leading-relaxed p-3.5 min-h-[72px]",
+    "rounded-field text-body-lg p-5 min-h-[120px]",
+  compact: "rounded-control text-body-sm p-3.5 min-h-[72px]",
 };
 
 export function Textarea({
@@ -1152,14 +1373,14 @@ export function Textarea({
       />
       <div className="flex justify-between items-start gap-2 min-h-[1em]">
         {errorMessage ? (
-          <p id={describedBy} className="text-xs text-danger">
+          <p id={describedBy} className="text-caption text-danger">
             {errorMessage}
           </p>
         ) : (
           <span />
         )}
         {showCounter ? (
-          <span className="text-xs text-subtle-foreground tabular-nums shrink-0">
+          <span className="text-caption text-subtle-foreground tabular-nums shrink-0">
             {currentLength} / {maxLength}
           </span>
         ) : null}
@@ -1336,7 +1557,7 @@ export function Modal({
         aria-label={title}
         className={clsx(
           "fixed inset-0 flex items-end sm:items-center justify-center",
-          "animate-[reaction-appear_350ms_var(--ease-out)_forwards]",
+          "animate-[reaction-appear_350ms_var(--ease-out)_forwards] motion-reduce:animate-none",
         )}
       >
         <div
@@ -1400,13 +1621,13 @@ describe("ChatBubble", () => {
     expect(screen.getByText("오늘 공원에 갔어")).toBeInTheDocument();
   });
 
-  it("renders friend bubble with handwriting font class", () => {
+  it("renders friend bubble with text-friend role class (Gaegu handwriting)", () => {
     render(
       <ChatBubble author="friend" content="text" data-testid="b">
         잘 쉬었네
       </ChatBubble>,
     );
-    expect(screen.getByTestId("b").className).toMatch(/font-handwriting/);
+    expect(screen.getByTestId("b").className).toMatch(/text-friend/);
   });
 
   it("applies user tail radius (BR = radius-bubble-tail)", () => {
@@ -1511,10 +1732,11 @@ export function ChatBubble({
   const bubbleClasses = clsx(
     "inline-block max-w-[85%] shadow-sm",
     isUser
-      ? "bg-surface text-foreground border border-border rounded-bubble rounded-br-bubble-tail"
-      : "bg-elevated text-foreground rounded-bubble rounded-bl-bubble-tail font-handwriting text-xl leading-snug",
+      ? "bg-surface text-foreground border border-border rounded-bubble rounded-br-bubble-tail text-body"
+      : "bg-elevated text-foreground rounded-bubble rounded-bl-bubble-tail text-friend",
     isPhoto ? "p-0 overflow-hidden" : "px-5 py-3.5",
-    appearOnMount && "animate-[reaction-appear_500ms_var(--ease-spring)_both]",
+    appearOnMount &&
+      "animate-[reaction-appear_500ms_var(--ease-spring)_both] motion-reduce:animate-none",
     className,
   );
 
@@ -1534,7 +1756,7 @@ export function ChatBubble({
       {timestamp ? (
         <p
           className={clsx(
-            "text-[10px] text-subtle-foreground",
+            "text-caption text-subtle-foreground",
             isUser ? "text-right" : "text-left",
           )}
         >
@@ -1612,10 +1834,10 @@ export function ConfirmModal({
         <div className="w-12 h-12 bg-danger-muted rounded-pill flex items-center justify-center mx-auto mb-4 text-[22px]">
           ⚠️
         </div>
-        <h3 className="text-base font-body font-medium text-foreground mb-2">
+        <h3 className="text-body font-medium text-foreground mb-2">
           {title}
         </h3>
-        <p className="text-sm text-subtle-foreground mb-6 leading-relaxed">
+        <p className="text-body-sm text-subtle-foreground mb-6">
           {description}
         </p>
         <div className="flex gap-2.5">
@@ -1964,7 +2186,7 @@ cat sogon/components/BottomNav.tsx
 
 - [ ] **Step 2: Replace nav items**
 
-Same pattern as Task 16: wrap each `<Link>` around a ghost-variant `<Button>` with a `leadingIcon` prop (or rely on children if the icon should be stacked above the label). If the nav items in BottomNav use a vertical icon-on-top / label-below layout, add a custom `className` like `flex-col h-auto py-2 text-xs`.
+Same pattern as Task 16: wrap each `<Link>` around a ghost-variant `<Button>` with a `leadingIcon` prop (or rely on children if the icon should be stacked above the label). If the nav items in BottomNav use a vertical icon-on-top / label-below layout, add a custom `className` with the `text-caption` role utility (not raw `text-xs`).
 
 Example:
 ```tsx
@@ -1973,7 +2195,7 @@ Example:
     variant="ghost"
     size="md"
     className={clsx(
-      "flex-col h-auto py-2 px-3 text-xs gap-1",
+      "flex-col h-auto py-2 px-3 text-caption gap-1",
       isActive && "text-accent",
     )}
   >
@@ -2070,7 +2292,8 @@ git commit -m "chore: final polish after design-system l0-l3 migration"
 ## Success Criteria (from spec §성공 기준)
 
 1. ✅ `components/ui/` contains 7 primitives (Button, Input, Textarea, Card, Modal, Badge, ChatBubble) with passing unit tests.
-2. ✅ `globals.css` has new L2 semantic tokens with shadcn naming; `.dark` overrides only at Semantic layer; no page-level `dark:` manual branches remain.
-3. ✅ `Sidebar`, `BottomNav`, `EntryCard`, `SettingsModal`, `ConfirmModal`, record page all use primitives; visual/functional parity confirmed.
-4. ✅ `DESIGN_GUIDE.md` Voice & Tone has "진행중 상태" row.
-5. ✅ `DESIGN_GUIDE.md` has an L0 Principles section.
+2. ✅ `globals.css` has new L2 semantic tokens (shadcn naming + radius roles + motion bundles + typography role utilities); `.dark` overrides only at Semantic layer; no page-level `dark:` manual branches remain.
+3. ✅ Fonts replaced: Pretendard via `next/font/local` for body/heading, Gaegu via `next/font/google` for handwriting. All Gowun/Nanum imports removed. `logo.svg` updated.
+4. ✅ `Sidebar`, `BottomNav`, `EntryCard`, `SettingsModal`, `ConfirmModal`, record page all use primitives; visual/functional parity confirmed in both light and dark.
+5. ✅ `DESIGN_GUIDE.md` has: L0 Principles section + L1 Foundation 8-category table + typography role scale + Voice & Tone "진행중 상태" row + `§9` renamed to L1 사용 규칙.
+6. ✅ Every primitive passes spec §9 "소곤다움 체크리스트" (role tokens only, no primitive sizes/radii direct usage, `prefers-reduced-motion` fallbacks, `motion-reduce:` classes where animations run).

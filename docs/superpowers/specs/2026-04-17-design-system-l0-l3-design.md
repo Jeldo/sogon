@@ -1,7 +1,7 @@
 # 소곤 디자인 시스템 L0–L3 설계
 
 **작성일**: 2026-04-17
-**범위**: L0 원칙 · L2 토큰 3단 계층 · L3 코어 프리미티브 6개
+**범위**: L0 원칙 · L1 Foundation(폰트 교체·타이포 스케일 포함) · L2 토큰 3단 계층 · L3 코어 프리미티브 7개 · 소곤다움 체크리스트
 **범위 밖**: L4 Patterns · L5 Guidelines/리빙 카탈로그 · L6 Governance · 새 일러스트 · Toast/Tooltip/Dropdown/Calendar 세부
 
 ---
@@ -18,27 +18,79 @@
 
 ---
 
-## §1. L0 — 디자인 원칙 (의사결정 북스타)
+## §1. L0 Principles + L1 Foundation
+
+### §1-A. L0 — 디자인 원칙 (의사결정 북스타)
 
 의사결정이 애매할 때 돌아오는 3원칙. 각 원칙은 **충돌할 때 선택**을 명시하여 비교 가능한 북스타 역할을 한다.
 
-### 1. 속삭이듯 (Whisper, not announce)
+#### 1. 속삭이듯 (Whisper, not announce)
 기능을 "알리지" 말고 "내비친다". 큰 CTA·굵은 텍스트·밝은 accent보다 작고 부드러운 제스처를 먼저 고려. 토스트·배너·팝업보다 제자리 피드백을 우선.
 **충돌할 때**: 시끄러운 명료함 vs. 조용한 충분함 → 조용한 쪽.
 
-### 2. 친구처럼 (Companion, not tool)
+#### 2. 친구처럼 (Companion, not tool)
 UI 카피·마이크로카피·버튼 레이블이 "도구"가 아니라 "친구"의 목소리를 낸다. 시스템 메시지("Entry saved")보다 친밀한 표현("기록 완료!").
 **충돌할 때**: 생산성 앱스러움 vs. 관계스러움 → 관계스러움.
 
-### 3. 안전하게 (Safe to be vulnerable)
+#### 3. 안전하게 (Safe to be vulnerable)
 사용자가 약한 감정을 꺼낼 수 있어야 한다. 평가·수치(카운트, 스트릭)·비교·FOMO 유발 요소는 기본적으로 거부. 삭제·실수·오류도 죄책감 없이 복구 가능하게.
 **충돌할 때**: 게임화·성과 피드백 vs. 무조건적 수용 → 수용.
 
-### 기존 `DESIGN_GUIDE §9`의 위치 이동
-현행 7개 항목(좁은 컬럼, 넉넉한 여백, 최소 그림자, 손글씨체로 친구 구분, 날카로운 모서리 없음, 느리고 부드러운 애니메이션, 컬러 미니멀리즘)은 **L1 Foundation의 "사용 규칙"** 으로 재분류한다. 가이드 파일 구조 자체는 이 스펙 이행 과정에서 그대로 두되, L0와 L1을 명시적으로 구분한다.
+---
 
-### L1 Foundation Voice & Tone 확장
-현재 가이드는 4개 카테고리(UI 카피 / 에러 / 빈 상태 / 성공)만 정의. 이 스펙으로 **5번째 카테고리 추가**:
+### §1-B. L1 Foundation — 시각 언어의 기초 재료
+
+소곤의 L1 Foundation은 8개 카테고리로 구성된다. 대부분 `DESIGN_GUIDE.md`에 이미 정의돼 있으며, 아래 표는 각 카테고리의 권위있는 정의 위치와 본 스펙에서 추가·변경되는 부분을 명시한다.
+
+| # | 카테고리 | 권위 위치 | 이 스펙의 변경 |
+|---|---------|----------|----------------|
+| 1 | 색 | `DESIGN_GUIDE §3–§4` + `globals.css` | §2에서 L2 시맨틱 확장, shadcn 네이밍 |
+| 2 | 타이포 | `DESIGN_GUIDE §1` (폰트만) | **폰트 교체 + 역할 스케일 신설** (아래) |
+| 3 | 간격 | `DESIGN_GUIDE §2` (4px 스케일) | 변경 없음 |
+| 4 | 레이아웃 그리드 | `DESIGN_GUIDE §2` (720/840/240/64 + BP) | 변경 없음 |
+| 5 | 아이콘 | `DESIGN_GUIDE §5` (Lucide, 1.5px stroke) | 변경 없음 |
+| 6 | 모션 | `DESIGN_GUIDE §8` | §2에서 L2 시맨틱 모션 토큰화 |
+| 7 | 일러스트 | — | **의도적 out-of-scope** (D+) |
+| 8 | 보이스앤톤 | `DESIGN_GUIDE §1` Voice & Tone | 5번째 카테고리 "진행중 상태" 추가 (아래) |
+
+#### §1-B.1 L1 사용 규칙 (기존 `DESIGN_GUIDE §9` 재분류)
+
+현행 7개 항목 — 좁은 컬럼, 넉넉한 여백, 최소 그림자, 손글씨체로 친구 구분, 날카로운 모서리 없음, 느리고 부드러운 애니메이션, 컬러 미니멀리즘 — 은 L0 북스타가 아니라 **L1 Foundation의 "사용 규칙"** 으로 재분류한다. 가이드 파일 구조는 그대로 두되, L0(의사결정 원칙)와 L1(시각 언어 규칙)을 명시적으로 구분.
+
+#### §1-B.2 L1 폰트 교체 (신규)
+
+**현재** (`layout.tsx` + `globals.css`):
+- Body: Gowun Dodum
+- Heading: Gowun Batang
+- Handwriting: Nanum Pen Script
+
+**교체 후**:
+- Body / Heading: **Pretendard** (자체 호스팅, `next/font/local`, variable woff2)
+- Handwriting (비밀친구 리액션 전용): **Gaegu** (`next/font/google`, weights 300/400/700)
+
+근거:
+- Pretendard는 한글 본문·제목 모두에 가독성·가중 다양성 우수. 변동 가중치(100~900)로 역할 스케일 전체를 단일 폰트로 처리.
+- Gaegu는 따뜻하고 동글한 손글씨체로 원칙 ②(친구처럼)에 부합. 기존 Nanum Pen Script 대비 톤이 덜 구식.
+
+#### §1-B.3 L1 타이포 역할 스케일 (신규)
+
+Primitive 폰트 3종 위에 **역할(Semantic)** 을 덧씌워 컴포넌트가 직접 참조:
+
+| 역할 | 크기 | 폰트·가중 | line-height | letter-spacing | 사용처 |
+|------|-----|-----------|-------------|---------------|--------|
+| `display` | 28px | Pretendard 700 | 1.3 | -0.02em | 온보딩 큰 제목 |
+| `heading` | 20px | Pretendard 600 | 1.4 | -0.01em | 섹션 헤더, 캘린더 월 |
+| `body-lg` | 18px | Pretendard 400 | 1.65 | 0 | 기록 본문 (Textarea diary, Card body) |
+| `body` | 16px | Pretendard 400 | 1.6 | 0 | 기본 텍스트, 버튼 라벨 |
+| `body-sm` | 14px | Pretendard 400 | 1.55 | 0 | 보조 텍스트, small 버튼 |
+| `caption` | 12px | Pretendard 500 | 1.5 | 0.01em | 타임스탬프, 카운터, 배지 |
+| `friend` | 18px | Gaegu 400 | 1.55 | 0 | 비밀친구 리액션 전용 |
+
+L2 시맨틱 타이포 토큰으로 `globals.css`에 구현 (Tailwind 유틸리티 `text-display` / `text-heading` / `text-body-lg` / `text-body` / `text-body-sm` / `text-caption` / `text-friend` 로 생성). 프리미티브 코드는 반드시 이 역할 클래스만 사용, raw `text-lg` 등 primitive 크기 유틸리티 직접 사용 금지.
+
+#### §1-B.4 L1 Voice & Tone 확장 (신규 5번째 카테고리)
+
+현재 가이드는 4개 카테고리(UI 카피 / 에러 / 빈 상태 / 성공)만 정의. 5번째 추가:
 
 | 상황 | 톤 | 시그니처 카피 |
 |------|-----|--------------|
@@ -93,7 +145,7 @@ Tailwind v4의 `@theme`는 CSS 변수를 유틸리티로도 생성한다(`--colo
 **추가 L2 토큰**
 - **Radius 의미 매핑**: `--radius-control`(10, Button/Input/compact Textarea), `--radius-field`(16, Textarea diary), `--radius-card`(20, EntryCard), `--radius-bubble`(24, ChatBubble main), `--radius-bubble-tail`(6, ChatBubble tail corner), `--radius-pill`(9999)
 - **모션 묶음(duration+easing)**: `--motion-hover`, `--motion-press`, `--motion-page`, `--motion-reaction-appear`
-- **타이포 역할(선택적)**: 이 스펙에서는 유틸리티 조합으로 처리(예: `text-lg font-body leading-relaxed`). 명시적 역할 토큰은 후속 스펙에서 도입 고려.
+- **타이포 역할 토큰**: §1-B.3 스케일을 `--text-display / --text-heading / --text-body-lg / --text-body / --text-body-sm / --text-caption / --text-friend` 로 토큰화. 각 토큰은 font-size · line-height · font-weight · letter-spacing · font-family 를 함께 지정. 프리미티브는 반드시 역할 클래스(`text-body-lg` 등)만 사용, raw `text-lg` 직접 사용 금지.
 
 ### 다크모드 신규 Primitive 추가 필요
 `neutral-700: #3A3D3C`, `neutral-900: #1C1E1D` 등 다크 시맨틱을 지탱할 저채도 primitive 보강. (현재 `neutral-600`까지만 존재.)
@@ -153,8 +205,8 @@ components/
 ### Variant
 | size | 용도 | 특성 |
 |------|------|------|
-| `"diary"` (기본) | 기록 페이지 메인 입력 | 18px 글씨, 20px 패딩, min-height 120px, `--radius-field`(16) |
-| `"compact"` | 모달/덧붙임 | 15px 글씨, 14px 패딩, min-height 72px, `--radius-control`(10) |
+| `"diary"` (기본) | 기록 페이지 메인 입력 | `text-body-lg` (18px Pretendard), 20px 패딩, min-height 120px, `--radius-field`(16) |
+| `"compact"` | 모달/덧붙임 | `text-body-sm` (14px Pretendard), 14px 패딩, min-height 72px, `--radius-control`(10) |
 
 ### States (6)
 default · focus · filled · submitting · error · disabled
@@ -185,7 +237,7 @@ type TextareaProps = React.ComponentProps<"textarea"> & {
 - 에러: `"앗, 잠깐 문제가 생겼어. 다시 보내볼까?"` (기존 톤 예시 준수)
 
 ### 사용되는 토큰
-L2: `--color-surface`, `--color-foreground`, `--color-placeholder`, `--color-border`, `--color-border-focus`, `--color-danger`, `--radius-field`(diary) / `--radius-control`(compact), `--motion-hover`.
+L2: `--color-surface`, `--color-foreground`, `--color-placeholder`, `--color-border`, `--color-border-focus`, `--color-danger`, `--radius-field`(diary) / `--radius-control`(compact), `--motion-hover`, `text-body-lg`(diary) / `text-body-sm`(compact).
 
 ---
 
@@ -215,8 +267,8 @@ type ChatBubbleProps = {
 ### 버블 스타일
 | author | 정렬 | 배경 | radius(TL/TR/BR/BL) | 폰트 |
 |--------|------|------|---------------------|------|
-| user | 우측 | `--color-surface` + `border` | `bubble`/`bubble`/`bubble-tail`/`bubble` | body |
-| friend | 좌측 | `--color-elevated` | `bubble`/`bubble`/`bubble`/`bubble-tail` | `--font-handwriting`, 18px |
+| user | 우측 | `--color-surface` + `border` | `bubble`/`bubble`/`bubble-tail`/`bubble` | `text-body` |
+| friend | 좌측 | `--color-elevated` | `bubble`/`bubble`/`bubble`/`bubble-tail` | `text-friend` (Gaegu 18px) |
 
 (`bubble` = `--radius-bubble`(24), `bubble-tail` = `--radius-bubble-tail`(6))
 
@@ -286,7 +338,7 @@ Toast, Tooltip, Dropdown, Select, Calendar 세부 — 필요 시 후속 스펙.
 **원칙**: 프리미티브 추가는 기존 코드에 영향 0. 갈아끼우기는 위젯 단위로 한 번에 하나씩, 시각·기능 동등성 확인 후 다음.
 
 ### 순서
-1. `components/ui/` 디렉토리 신설 + 6개 프리미티브 작성 + 단위 테스트.
+1. `components/ui/` 디렉토리 신설 + 7개 프리미티브(Button, Input, Textarea, Card, Modal, Badge, ChatBubble) 작성 + 단위 테스트.
 2. `globals.css` L2 토큰 확장 + 네이밍 마이그레이션(`--color-text-primary` → `--color-foreground` 등). 기존 페이지·컴포넌트의 클래스 참조 일괄 치환.
 3. `SettingsModal` → `ui/Modal` 기반으로 재구성. (구조가 가장 단순)
 4. `ConfirmModal` → `ui/Modal`.
@@ -309,7 +361,46 @@ Toast, Tooltip, Dropdown, Select, Calendar 세부 — 필요 시 후속 스펙.
 
 ---
 
-## §9. 범위 밖 (명시)
+## §9. 소곤다움 체크리스트 (프리미티브 구현 시 필수 반영)
+
+L0 원칙·L1 사용 규칙·DESIGN_GUIDE §8(Motion) 의 미세 지침을 프리미티브 코드에 명시적으로 박아둔다. "소곤다운 디테일"이 실수로 누락되지 않도록 구현/리뷰 공통 체크리스트.
+
+### 모든 프리미티브 공통
+- [ ] **radius는 L2 시맨틱 토큰만 사용** — `rounded-control / rounded-field / rounded-card / rounded-bubble / rounded-bubble-tail / rounded-pill`. Primitive radius(`rounded-sm/md/lg/xl/2xl`) 직접 참조 금지.
+- [ ] **타이포는 L2 역할 토큰만 사용** — `text-display / heading / body-lg / body / body-sm / caption / friend`. Primitive size 유틸(`text-xs/sm/base/lg/xl`) 직접 참조 금지.
+- [ ] **모션은 L2 시맨틱 토큰 사용** — `transition:var(--motion-hover)` / `var(--motion-press)` / `var(--motion-reaction-appear)` 등.
+- [ ] **`prefers-reduced-motion` 폴백** — 애니메이션·transition 포함 컴포넌트는 `@media (prefers-reduced-motion: reduce)` 분기에서 transition/transform을 해제하고 `opacity` fade만 남김. 원칙 ①(속삭이듯) 적용.
+- [ ] **다크모드 분기 없음** — 컴포넌트 코드에 `dark:` 클래스 직접 작성 금지. 색은 반드시 L2 시맨틱 토큰을 거치고, 다크모드 스위칭은 `globals.css .dark` 오버라이드에 맡긴다.
+- [ ] **focus-visible ring** — 모든 포커스 가능 요소는 `--color-border-focus` 기반 링 적용.
+
+### Button 전용
+- [ ] **Active press** — `active:scale-[0.97]` (DESIGN_GUIDE §8 마이크로 인터랙션).
+- [ ] **Hover transition 속도** — `var(--motion-hover)` 사용 (150ms ease-out).
+- [ ] **Loading 상태** — 스피너 렌더 시 `aria-busy=true` + `disabled`.
+- [ ] **Primary 버튼의 "조용함"** — 기본 shadow는 `shadow-sm` 이하로 억제. 과한 그림자/애니는 원칙 ①(속삭이듯) 위배.
+
+### Input / Textarea 전용
+- [ ] **기본 placeholder 톤** — 소곤 V&T 가이드 준수. 시스템스럽지 않게 (예: `"오늘은 어떤 하루였어?"`).
+- [ ] **Error 메시지 톤** — "앗, 잠깐 문제가 생겼어. 다시 해볼까?" 패턴. 비난/명령형 금지.
+- [ ] **Textarea diary**: `text-body-lg` (Pretendard 18px) + `--radius-field` 사용.
+- [ ] **Textarea submitting 카피** — 상위 페이지가 설정 시 기본 "비밀친구에게 전하고 있어…" 권장.
+
+### ChatBubble 전용
+- [ ] **friend variant는 `text-friend` 역할 토큰** (Gaegu 18px) 강제. Primitive 폰트 직접 참조 금지.
+- [ ] **Tail 코너**: 반드시 `--radius-bubble-tail` 토큰 사용 (hard-coded 6px 금지).
+- [ ] **`reaction-appear` 애니메이션**: `var(--motion-reaction-appear)` 토큰 사용. `prefers-reduced-motion` 시 fade만.
+
+### Modal 전용
+- [ ] **`prefers-reduced-motion` 시 등장 애니메이션 생략** (opacity만).
+- [ ] **모바일 바텀시트 slide-up**도 reduced-motion 시 fade로 대체.
+- [ ] **Overlay 색**은 반드시 `--color-overlay-scrim` 사용.
+
+### Card 전용
+- [ ] **hover 부양 효과** (`interactive=true`) 는 `shadow-sm` → `shadow-md` 전환. scale/translate 사용 금지 (너무 요란함).
+
+---
+
+## §10. 범위 밖 (명시)
 
 이 스펙이 **의도적으로 포함하지 않는 것**:
 - L4 Patterns (온보딩, 로그인, 빈 상태, 에러 처리 패턴 문서화)
@@ -318,7 +409,6 @@ Toast, Tooltip, Dropdown, Select, Calendar 세부 — 필요 시 후속 스펙.
 - L6 Governance
 - 새 일러스트·비밀친구 비주얼 랭귀지(기존 D+ 범위)
 - Toast, Tooltip, Dropdown, Select, 자체 Calendar 컴포넌트
-- 타이포 스케일 공식 토큰화(이번에는 유틸리티 조합으로)
 
 이들은 본 스펙 완료 후 후속 스펙으로 나누어 진행한다.
 
@@ -328,8 +418,9 @@ Toast, Tooltip, Dropdown, Select, Calendar 세부 — 필요 시 후속 스펙.
 
 이 스펙의 구현이 끝났다는 것은:
 
-1. `components/ui/`에 6개 프리미티브(Button, Input, Textarea, Card, Modal, Badge) + ChatBubble 이 존재하고 각각 단위 테스트 통과.
-2. `globals.css` L2 시맨틱 토큰이 신규 네이밍으로 정리되어 있고, `.dark` 오버라이드만으로 다크모드가 작동(페이지 단위 `dark:` 수동 분기 제거).
-3. 기존 컴포넌트(`Sidebar`, `BottomNav`, `EntryCard`, `SettingsModal`, `ConfirmModal`) 가 프리미티브를 사용하도록 리팩토링되었고 시각·기능 회귀 없음.
-4. `DESIGN_GUIDE.md` Voice & Tone 표에 "진행중 상태" 카테고리가 추가되어 있음.
-5. L0 3원칙이 별도 섹션으로 명시되어 있음.
+1. `components/ui/` 에 7개 프리미티브(Button, Input, Textarea, Card, Modal, Badge, ChatBubble) 가 존재하고 각각 단위 테스트 통과.
+2. `globals.css` L2 시맨틱 토큰이 신규 네이밍·타이포 역할 스케일·모션 묶음까지 정리되어 있고, `.dark` 오버라이드만으로 다크모드가 작동(페이지 단위 `dark:` 수동 분기 제거).
+3. 폰트 교체 완료: Body/Heading은 Pretendard(자체 호스팅), Handwriting은 Gaegu(Google Fonts). 기존 Gowun/Nanum 임포트 전부 제거.
+4. 기존 컴포넌트(`Sidebar`, `BottomNav`, `EntryCard`, `SettingsModal`, `ConfirmModal`) 가 프리미티브를 사용하도록 리팩토링되었고 시각·기능 회귀 없음.
+5. `DESIGN_GUIDE.md` 에: L0 원칙 섹션 + L1 Foundation 8 카테고리 enumerate + 타이포 역할 스케일 표 + "진행중 상태" 톤 행 모두 반영.
+6. 모든 프리미티브가 §9 "소곤다움 체크리스트" 를 통과 (구현 + 리뷰 체크).
