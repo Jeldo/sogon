@@ -29,18 +29,6 @@
   --color-neutral-500: #7D8381;
   --color-neutral-600: #5C6260;
 
-  /* Semantic surface colors */
-  --color-surface: #FAFBFA;
-  --color-elevated: #F3F5F4;
-  --color-border: #E5E7E6;
-  --color-primary-muted: #EAF6E5;
-
-  /* Semantic text colors */
-  --color-text-primary: #1a1c1b;
-  --color-text-secondary: #7D8381;
-  --color-text-tertiary: #A8ADAA;
-  --color-text-placeholder: #D0D3D1;
-
   /* Font families */
   --font-body: var(--font-gowun-dodum);
   --font-heading: var(--font-gowun-batang);
@@ -62,6 +50,20 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@theme {
+  /* Semantic surface colors — dynamic, overridden by .dark */
+  --color-surface: #FAFBFA;
+  --color-elevated: #F3F5F4;
+  --color-border: #E5E7E6;
+  --color-primary-muted: #EAF6E5;
+
+  /* Semantic text colors */
+  --color-text-primary: #1a1c1b;
+  --color-text-secondary: #7D8381;
+  --color-text-tertiary: #A8ADAA;
+  --color-text-placeholder: #D0D3D1;
 }
 
 @keyframes typing-pulse {
