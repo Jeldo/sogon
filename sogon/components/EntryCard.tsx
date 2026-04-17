@@ -5,7 +5,9 @@ import Image from "next/image";
 import { Pencil, Trash2, Check, X } from "lucide-react";
 import { formatTime } from "@/lib/date-utils";
 import { updateEntry, deleteEntry } from "@/lib/storage";
-import type { EntryWithReaction } from "@/lib/types";
+import { MOOD_META } from "@/lib/mood";
+import type { EntryWithReaction, Mood } from "@/lib/types";
+import { MoodPicker } from "@/components/MoodPicker";
 
 type EntryCardProps = {
   entry: EntryWithReaction;
@@ -15,12 +17,13 @@ type EntryCardProps = {
 export function EntryCard({ entry, onUpdate }: EntryCardProps) {
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState(entry.content);
+  const [editMood, setEditMood] = useState<Mood | null>(entry.mood);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   function handleSaveEdit() {
     const trimmed = editContent.trim();
     if (!trimmed) return;
-    updateEntry(entry.id, { content: trimmed });
+    updateEntry(entry.id, { content: trimmed, mood: editMood });
     setEditing(false);
     onUpdate?.();
   }
@@ -32,7 +35,17 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
   }
 
   return (
-    <div className="bg-background border border-border rounded-[20px] p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
+    <div className="relative bg-background border border-border rounded-[20px] p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
+      {/* Mood badge */}
+      {entry.mood && !editing && (
+        <div
+          aria-label={MOOD_META[entry.mood].label}
+          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-primary-100 border border-primary-200 shadow-sm flex items-center justify-center text-lg leading-none select-none"
+        >
+          {MOOD_META[entry.mood].emoji}
+        </div>
+      )}
+
       {/* Image (above text) */}
       {entry.imageDataUrl && (
         <div className="mb-3 rounded-[16px] overflow-hidden">
@@ -50,17 +63,19 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
 
       {/* Entry text or edit mode */}
       {editing ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             className="w-full min-h-[80px] rounded-[10px] border border-border p-3 text-base font-body text-foreground resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)]"
           />
+          <MoodPicker value={editMood} onChange={setEditMood} />
           <div className="flex gap-2 justify-end">
             <button
               onClick={() => {
                 setEditing(false);
                 setEditContent(entry.content);
+                setEditMood(entry.mood);
               }}
               className="p-1.5 rounded-[6px] text-text-tertiary hover:bg-elevated transition-colors"
             >
@@ -76,7 +91,9 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
           </div>
         </div>
       ) : (
-        <p className="text-lg font-body text-foreground leading-relaxed">
+        <p
+          className={`text-lg font-body text-foreground leading-relaxed ${entry.mood ? "pr-12" : ""}`}
+        >
           {entry.content}
         </p>
       )}
@@ -100,6 +117,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
             <button
               onClick={() => {
                 setEditContent(entry.content);
+                setEditMood(entry.mood);
                 setEditing(true);
               }}
               className="p-1.5 rounded-[6px] text-text-tertiary hover:text-text-primary hover:bg-elevated transition-colors"

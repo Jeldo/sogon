@@ -12,14 +12,16 @@ import {
   getReactions,
 } from "@/lib/storage";
 import { compressImage } from "@/lib/image";
-import type { EntryWithReaction } from "@/lib/types";
+import type { EntryWithReaction, Mood } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
+import { MoodPicker } from "@/components/MoodPicker";
 
 export default function RecordPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState("");
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
+  const [mood, setMood] = useState<Mood | null>(null);
   const [todayEntries, setTodayEntries] = useState<EntryWithReaction[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -51,7 +53,7 @@ export default function RecordPage() {
     if (!trimmed || submitting) return;
 
     setSubmitting(true);
-    const entry = addEntry(trimmed, imageDataUrl);
+    const entry = addEntry(trimmed, imageDataUrl, mood);
 
     // Call AI reaction API
     const profile = getDeviceProfile();
@@ -117,6 +119,9 @@ export default function RecordPage() {
             </button>
           </div>
         )}
+
+        {/* Mood picker */}
+        <MoodPicker value={mood} onChange={setMood} />
 
         {/* Action bar */}
         <div className="flex items-center justify-between">

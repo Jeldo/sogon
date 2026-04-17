@@ -5,7 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { getCalendarGrid, isSameDay, isToday, formatKoreanDate } from "@/lib/date-utils";
 import { getEntriesByMonth, getReactions } from "@/lib/storage";
-import type { EntryWithReaction } from "@/lib/types";
+import { getRepresentativeMood, MOOD_META } from "@/lib/mood";
+import type { EntryWithReaction, Mood } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
 
 const WEEKDAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"] as const;
@@ -25,13 +26,20 @@ export function CalendarView() {
     [year, month, refreshKey],
   );
 
-  const datesWithEntries = useMemo(() => {
-    const set = new Set<string>();
+  const dateMoods = useMemo(() => {
+    const grouped = new Map<string, typeof monthEntries>();
     monthEntries.forEach((e) => {
       const d = new Date(e.createdAt);
-      set.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
+      const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      const bucket = grouped.get(key);
+      if (bucket) bucket.push(e);
+      else grouped.set(key, [e]);
     });
-    return set;
+    const result = new Map<string, Mood | null>();
+    grouped.forEach((entries, key) => {
+      result.set(key, getRepresentativeMood(entries));
+    });
+    return result;
   }, [monthEntries]);
 
   const selectedEntries: EntryWithReaction[] = useMemo(() => {
@@ -63,10 +71,16 @@ export function CalendarView() {
     }
   }
 
+  function dateKey(date: Date): string {
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  }
+
   function hasEntry(date: Date): boolean {
-    return datesWithEntries.has(
-      `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
-    );
+    return dateMoods.has(dateKey(date));
+  }
+
+  function moodFor(date: Date): Mood | null {
+    return dateMoods.get(dateKey(date)) ?? null;
   }
 
   return (
@@ -109,12 +123,20 @@ export function CalendarView() {
           {grid.map(({ date, isCurrentMonth }, i) => {
             const selected = isSameDay(date, selectedDate);
             const today = isToday(date);
-            const hasEntryDot = isCurrentMonth && hasEntry(date);
+            const mood = isCurrentMonth ? moodFor(date) : null;
+            const hasEntryDot =
+              isCurrentMonth && !mood && hasEntry(date);
+            const showEmoji = Boolean(mood) && !selected;
 
             return (
               <button
                 key={i}
                 onClick={() => setSelectedDate(date)}
+                aria-label={
+                  mood
+                    ? `${date.getDate()}일 — ${MOOD_META[mood].label}`
+                    : `${date.getDate()}일`
+                }
                 className={`relative flex flex-col items-center justify-center w-10 h-10 mx-auto rounded-full text-sm transition-colors duration-150 ${
                   !isCurrentMonth
                     ? "text-text-placeholder"
@@ -125,7 +147,13 @@ export function CalendarView() {
                         : "text-foreground hover:bg-elevated"
                 }`}
               >
-                {date.getDate()}
+                {showEmoji ? (
+                  <span className="text-[22px] leading-none">
+                    {MOOD_META[mood!].emoji}
+                  </span>
+                ) : (
+                  date.getDate()
+                )}
                 {hasEntryDot && !selected && (
                   <span className="absolute bottom-1 w-1 h-1 rounded-full bg-primary-400" />
                 )}

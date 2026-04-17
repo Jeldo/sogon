@@ -6,6 +6,7 @@ import type {
   DiaryEntry,
   EntryWithReaction,
   FriendTone,
+  Mood,
   Reaction,
   ThemeMode,
 } from "@/lib/types";
@@ -39,15 +40,21 @@ export function setDeviceProfile(tone: FriendTone): void {
 // Entries
 
 export function getEntries(): DiaryEntry[] {
-  return getItem<DiaryEntry[]>(STORAGE_KEYS.ENTRIES) ?? [];
+  const raw = getItem<DiaryEntry[]>(STORAGE_KEYS.ENTRIES) ?? [];
+  return raw.map((e) => ({ ...e, mood: e.mood ?? null }));
 }
 
-export function addEntry(content: string, imageDataUrl: string | null): DiaryEntry {
+export function addEntry(
+  content: string,
+  imageDataUrl: string | null,
+  mood: Mood | null = null,
+): DiaryEntry {
   const entries = getEntries();
   const entry: DiaryEntry = {
     id: crypto.randomUUID(),
     content,
     imageDataUrl,
+    mood,
     createdAt: new Date().toISOString(),
   };
   entries.unshift(entry);
@@ -57,7 +64,7 @@ export function addEntry(content: string, imageDataUrl: string | null): DiaryEnt
 
 export function updateEntry(
   id: string,
-  updates: Partial<Pick<DiaryEntry, "content" | "imageDataUrl">>,
+  updates: Partial<Pick<DiaryEntry, "content" | "imageDataUrl" | "mood">>,
 ): DiaryEntry | null {
   const entries = getEntries();
   const index = entries.findIndex((e) => e.id === id);
