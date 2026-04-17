@@ -195,6 +195,20 @@ components/
   SettingsModal.tsx     ← 기존: ui/Modal 위에 재구성
 ```
 
+### Atomic Design 어휘 매핑 (참고)
+
+본 시스템은 L0–L6 프레임을 기본 뼈대로 삼되, 업계 공통어인 Atomic Design 용어와의 대응을 명시해 외부 커뮤니케이션 시 활용한다. **디렉토리 구조를 atom/molecule/organism으로 쪼개지 않음** — 어휘만 매핑.
+
+| Atomic 단위 | 본 시스템 대응 | 예시 |
+|-------------|---------------|------|
+| **Atoms** | L3 단일 프리미티브 | Button, Input, Badge |
+| **Molecules** | L3 복합 프리미티브 (슬롯 조합) | Card, Modal, Textarea(+counter+error), ChatBubble(avatar+버블) |
+| **Organisms** | `components/` 루트의 소곤 전용 위젯 | Sidebar, BottomNav, EntryCard, SettingsModal, ConfirmModal |
+| **Templates** | `app/(main)/*/layout.tsx` | (main) 레이아웃 |
+| **Pages** | `app/**/page.tsx` | record, collection, onboarding |
+
+Atomic Design은 **컴포넌트 조립 어휘**만 다루므로 L0 원칙·L1 Foundation·L2 토큰·L5 가이드라인·L6 거버넌스는 본 시스템의 고유 영역으로 남는다.
+
 ---
 
 ## §4. Textarea 파일럿 (시그니처 1)
