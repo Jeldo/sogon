@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import type { EntryWithReaction, FriendTone } from "@/lib/types";
 import { TONE_OPTIONS } from "@/lib/constants";
-import { TypingIndicator } from "@/components/TypingIndicator";
+import { TypingDots } from "@/components/ui/TypingDots";
+import { Avatar } from "@/components/ui/Avatar";
+import { MOOD_META } from "@/lib/mood";
 
 type ReactionViewProps = {
   entry: EntryWithReaction;
@@ -16,79 +18,84 @@ export function ReactionView({ entry, tone }: ReactionViewProps) {
   const [showTyping, setShowTyping] = useState(true);
 
   const toneOption = TONE_OPTIONS.find((t) => t.tone === tone);
+  const mood = entry.mood ? MOOD_META[entry.mood] : null;
 
   useEffect(() => {
     const typingTimer = setTimeout(() => {
       setShowTyping(false);
       setShowReaction(true);
     }, 1500);
-
     return () => clearTimeout(typingTimer);
   }, []);
 
+  const reactionText =
+    entry.reaction?.content ?? toneOption?.exampleReaction ?? "";
+
   return (
-    <div className="space-y-6">
-      {/* My entry card */}
-      <div>
-        <p className="text-xs text-text-tertiary mb-2">방금 나의 기록</p>
-        <div className="bg-background border border-border rounded-[20px] p-5">
+    <div className="flex flex-col gap-3">
+      {/* Date label */}
+      <div className="t-label text-center mb-2">· 오늘 ·</div>
+
+      {/* User message bubble (right-aligned) */}
+      <div className="flex justify-end">
+        <div
+          className="max-w-[80%] bg-[var(--surface-3)] text-[var(--text)] px-[18px] py-3 rounded-[22px_22px_6px_22px]"
+          style={{ fontSize: 15, lineHeight: 1.55 }}
+        >
           {entry.imageDataUrl && (
-            <div className="mb-3 rounded-[16px] overflow-hidden">
+            <div className="mb-3 -mx-3 -mt-1 rounded-[var(--r-sm)] overflow-hidden">
               <Image
                 src={entry.imageDataUrl}
                 alt="첨부 이미지"
                 width={0}
                 height={0}
-                sizes="100vw"
+                sizes="400px"
                 className="w-full h-auto"
                 unoptimized
               />
             </div>
           )}
-          <p className="text-lg font-body text-foreground leading-relaxed">
-            {entry.content}
-          </p>
+          <p>{entry.content}</p>
+          {mood && (
+            <div
+              aria-label={mood.label}
+              className="mt-2 inline-flex items-center gap-1.5"
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{
+                  background: mood.color,
+                  boxShadow: `0 0 8px ${mood.color}`,
+                }}
+              />
+              <span className="t-small">{mood.label}</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Typing indicator / Reaction */}
-      <div>
-        {showTyping && (
-          <div className="bg-elevated rounded-[20px] p-5 inline-block">
-            <TypingIndicator />
-          </div>
-        )}
+      {/* Friend typing / reaction bubble */}
+      {showTyping && (
+        <div className="flex items-end gap-2.5">
+          <Avatar tone={tone} size={32} />
+          <TypingDots />
+        </div>
+      )}
 
-        {showReaction && entry.reaction && (
+      {showReaction && reactionText && (
+        <div className="flex items-end gap-2.5">
+          <Avatar tone={tone} size={32} />
           <div
-            className="bg-elevated rounded-[20px] p-5"
+            className="max-w-[80%] t-friend px-1.5 py-2 rounded-[22px_22px_22px_6px]"
             style={{
               animation:
-                "reaction-appear 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+                "hand-write-in var(--dur-enter) var(--ease-spring) both",
             }}
           >
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-base">
-                {toneOption?.emoji}
-              </span>
-              <span className="text-xs text-primary-600 font-body">
-                비밀친구
-              </span>
-            </div>
-            <p className="text-xl font-handwriting text-text-secondary leading-relaxed">
-              {entry.reaction.content}
-            </p>
+            {reactionText}
           </div>
-        )}
-
-        {showReaction && !entry.reaction && (
-          <div className="bg-elevated rounded-[20px] p-5">
-            <p className="text-xl font-handwriting text-text-secondary">
-              {toneOption?.exampleReaction}
-            </p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

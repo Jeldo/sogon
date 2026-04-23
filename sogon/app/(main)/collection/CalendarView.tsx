@@ -3,11 +3,17 @@
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { getCalendarGrid, isSameDay, isToday, formatKoreanDate } from "@/lib/date-utils";
+import {
+  getCalendarGrid,
+  isSameDay,
+  isToday,
+  formatKoreanDate,
+} from "@/lib/date-utils";
 import { getEntriesByMonth, getReactions } from "@/lib/storage";
 import { getRepresentativeMood, MOOD_META } from "@/lib/mood";
 import type { EntryWithReaction, Mood } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
+import { Button } from "@/components/ui/Button";
 
 const WEEKDAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"] as const;
 
@@ -84,35 +90,47 @@ export function CalendarView() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       {/* Calendar */}
-      <div className="bg-background border border-border rounded-[16px] p-5">
+      <div
+        className="rounded-[var(--r-md)] p-5"
+        style={{
+          background: "var(--surface)",
+          boxShadow: "var(--shadow-card)",
+        }}
+      >
         {/* Month header */}
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={prevMonth}
-            className="p-1.5 rounded-[6px] text-text-secondary hover:bg-elevated transition-colors"
+            aria-label="이전 달"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--text-dim)] hover:bg-[var(--surface-3)] hover:text-[var(--text)] transition-colors"
           >
-            <ChevronLeft size={20} strokeWidth={1.5} />
+            <ChevronLeft size={18} strokeWidth={1.8} />
           </button>
-          <h3 className="text-xl font-heading text-foreground">
+          <h2
+            className="font-bold"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: 20,
+              color: "var(--text)",
+            }}
+          >
             {year}년 {month + 1}월
-          </h3>
+          </h2>
           <button
             onClick={nextMonth}
-            className="p-1.5 rounded-[6px] text-text-secondary hover:bg-elevated transition-colors"
+            aria-label="다음 달"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--text-dim)] hover:bg-[var(--surface-3)] hover:text-[var(--text)] transition-colors"
           >
-            <ChevronRight size={20} strokeWidth={1.5} />
+            <ChevronRight size={18} strokeWidth={1.8} />
           </button>
         </div>
 
         {/* Weekday headers */}
         <div className="grid grid-cols-7 mb-2">
           {WEEKDAY_LABELS.map((label) => (
-            <div
-              key={label}
-              className="text-center text-xs text-text-tertiary py-1"
-            >
+            <div key={label} className="t-small text-center py-1">
               {label}
             </div>
           ))}
@@ -137,15 +155,23 @@ export function CalendarView() {
                     ? `${date.getDate()}일 — ${MOOD_META[mood].label}`
                     : `${date.getDate()}일`
                 }
-                className={`relative flex flex-col items-center justify-center w-10 h-10 mx-auto rounded-full text-sm transition-colors duration-150 ${
-                  !isCurrentMonth
-                    ? "text-text-placeholder"
+                className="relative flex flex-col items-center justify-center w-10 h-10 mx-auto rounded-full text-[14px] transition-all duration-150"
+                style={{
+                  color: !isCurrentMonth
+                    ? "var(--text-muted)"
                     : selected
-                      ? "bg-primary-600 text-white"
-                      : today
-                        ? "ring-2 ring-primary-300 text-foreground"
-                        : "text-foreground hover:bg-elevated"
-                }`}
+                      ? "var(--accent-ink)"
+                      : "var(--text)",
+                  background: selected
+                    ? "var(--accent)"
+                    : "transparent",
+                  boxShadow:
+                    !selected && today
+                      ? "inset 0 0 0 1px var(--ink-5)"
+                      : undefined,
+                  opacity: !isCurrentMonth ? 0.4 : 1,
+                  fontWeight: selected ? 700 : 400,
+                }}
               >
                 {showEmoji ? (
                   <span className="text-[22px] leading-none">
@@ -155,7 +181,10 @@ export function CalendarView() {
                   date.getDate()
                 )}
                 {hasEntryDot && !selected && (
-                  <span className="absolute bottom-1 w-1 h-1 rounded-full bg-primary-400" />
+                  <span
+                    className="absolute bottom-1 w-1 h-1 rounded-full"
+                    style={{ background: "var(--accent)" }}
+                  />
                 )}
               </button>
             );
@@ -165,11 +194,9 @@ export function CalendarView() {
 
       {/* Selected date entries */}
       <div>
-        <h4 className="text-sm text-text-tertiary mb-3">
-          {formatKoreanDate(selectedDate)}
-        </h4>
+        <h3 className="t-label mb-3">{formatKoreanDate(selectedDate)}</h3>
         {selectedEntries.length > 0 ? (
-          <div className="space-y-4">
+          <div className="flex flex-col gap-3.5">
             {selectedEntries.map((entry) => (
               <EntryCard
                 key={entry.id}
@@ -179,13 +206,12 @@ export function CalendarView() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 text-text-tertiary text-sm">
-            <p>이 날은 기록이 없어. 오늘 하나 남겨볼까?</p>
-            <Link
-              href="/record"
-              className="inline-block mt-3 text-primary-600 hover:text-primary-700 transition-colors"
-            >
-              기록하기
+          <div className="text-center py-10 flex flex-col items-center gap-3">
+            <p className="t-caption">이 날은 기록이 없어. 오늘 하나 남겨볼까?</p>
+            <Link href="/record" className="inline-flex">
+              <Button variant="outline" size="sm">
+                기록하기
+              </Button>
             </Link>
           </div>
         )}

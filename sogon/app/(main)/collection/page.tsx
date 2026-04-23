@@ -10,34 +10,40 @@ export default function CollectionPage() {
   const [view, setView] = useState<ViewMode>("calendar");
 
   return (
-    <div className="max-w-[840px] mx-auto px-6 py-8">
+    <div className="max-w-[840px] mx-auto px-6 py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-body font-semibold text-foreground">
-          모아보기
-        </h2>
+      <div className="flex items-baseline justify-between mb-6 gap-4">
+        <div>
+          <div className="t-label">collection</div>
+          <h1 className="t-display mt-1.5">모아보기</h1>
+        </div>
 
-        {/* View switcher (pill tabs) */}
-        <div className="flex bg-elevated rounded-[10px] p-[3px]">
+        {/* View switcher */}
+        <div
+          className="flex rounded-[var(--r-pill)] p-1 flex-shrink-0"
+          style={{ background: "var(--surface-2)" }}
+        >
           <button
             onClick={() => setView("calendar")}
-            className={`px-3 py-1.5 rounded-[8px] text-sm font-body transition-all duration-150 ${
-              view === "calendar"
-                ? "bg-background text-foreground shadow-sm"
-                : "text-text-secondary"
-            }`}
+            className="px-4 py-1.5 rounded-[var(--r-pill)] text-[12px] font-bold uppercase tracking-[0.1em] transition-all duration-150"
+            style={{
+              background: view === "calendar" ? "var(--surface-3)" : "transparent",
+              color:
+                view === "calendar" ? "var(--text)" : "var(--text-dim)",
+            }}
           >
-            캘린더
+            calendar
           </button>
           <button
             onClick={() => setView("timeline")}
-            className={`px-3 py-1.5 rounded-[8px] text-sm font-body transition-all duration-150 ${
-              view === "timeline"
-                ? "bg-background text-foreground shadow-sm"
-                : "text-text-secondary"
-            }`}
+            className="px-4 py-1.5 rounded-[var(--r-pill)] text-[12px] font-bold uppercase tracking-[0.1em] transition-all duration-150"
+            style={{
+              background: view === "timeline" ? "var(--surface-3)" : "transparent",
+              color:
+                view === "timeline" ? "var(--text)" : "var(--text-dim)",
+            }}
           >
-            타임라인
+            timeline
           </button>
         </div>
       </div>

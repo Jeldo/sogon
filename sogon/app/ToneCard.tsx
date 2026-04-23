@@ -23,38 +23,48 @@ export function ToneCard({
     <button
       type="button"
       onClick={onSelect}
-      className={`w-full flex items-center gap-4 p-4 rounded-[16px] border-2 bg-background text-left transition-all duration-200 hover:scale-[1.02] ${
-        selected
-          ? "border-primary-500 shadow-[0_0_0_3px_rgba(110,189,90,0.15)]"
-          : "border-border"
-      }`}
+      aria-pressed={selected}
+      className="w-full flex items-center gap-4 p-4 rounded-[var(--r-md)] bg-[var(--surface-2)] text-left border-0 cursor-pointer transition-all duration-200 ease-[var(--ease-out)] active:scale-[0.99]"
+      style={{
+        boxShadow: selected
+          ? "inset 0 0 0 2px var(--accent), var(--glow-amber)"
+          : "none",
+        opacity: selected ? 1 : 0.7,
+      }}
     >
-      {/* Check icon (left) */}
-      <div
-        className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-150 ${
-          selected
-            ? "bg-primary-600 border-primary-600"
-            : "border-text-placeholder bg-background"
-        }`}
-      >
-        {selected && <Check size={12} strokeWidth={3} className="text-white" />}
-      </div>
-
-      {/* Emoji */}
-      <div
-        className="flex-shrink-0 w-10 h-10 rounded-[12px] flex items-center justify-center text-xl"
-        style={{ backgroundColor: bgColor }}
+      {/* Emoji badge (tone-colored circle) */}
+      <span
+        className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center text-[22px] leading-none"
+        style={{ background: bgColor, color: "var(--accent-ink)" }}
       >
         {emoji}
-      </div>
+      </span>
 
       {/* Text */}
-      <div className="min-w-0">
-        <p className="text-base font-body text-text-primary">{name}</p>
-        <p className="text-sm font-handwriting text-text-tertiary truncate">
+      <span className="flex-1 min-w-0">
+        <span className="block t-body-bold truncate">{name}</span>
+        <span
+          className="block mt-0.5 truncate"
+          style={{
+            fontFamily: "var(--font-hand)",
+            fontSize: 20,
+            lineHeight: 1.25,
+            color: selected ? "var(--accent-hi)" : "var(--text-dim)",
+          }}
+        >
           &ldquo;{exampleReaction}&rdquo;
-        </p>
-      </div>
+        </span>
+      </span>
+
+      {/* Check badge (shown when selected) */}
+      {selected && (
+        <span
+          className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center"
+          style={{ background: "var(--accent)", color: "var(--accent-ink)" }}
+        >
+          <Check size={14} strokeWidth={2.4} />
+        </span>
+      )}
     </button>
   );
 }

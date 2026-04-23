@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/pretendard':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@google/genai':
         specifier: ^1.48.0
         version: 1.48.0
@@ -265,6 +268,9 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@fontsource/pretendard@5.2.5':
+    resolution: {integrity: sha512-UAj3l+Exfx6Sq5hySbhTQhNzkZnhzBxQdHySmjo2lifXyXpMAHv7GD7hAQTLgZfBd1WixJJkmynfJbOp+TAckg==}
 
   '@google/genai@1.48.0':
     resolution: {integrity: sha512-plonYK4ML2PrxsRD9SeqmFt76eREWkQdPCglOA6aYDzL1AAbE+7PUnT54SvpWGfws13L0AZEqGSpL7+1IPnTxQ==}
@@ -2936,6 +2942,8 @@ snapshots:
       levn: 0.4.1
 
   '@exodus/bytes@1.15.0': {}
+
+  '@fontsource/pretendard@5.2.5': {}
 
   '@google/genai@1.48.0':
     dependencies:

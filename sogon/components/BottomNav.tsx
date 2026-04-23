@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { PenLine, BookOpen, Settings } from "lucide-react";
 
 const NAV_ITEMS = [
-  { href: "/record", label: "기록하기", icon: PenLine },
+  { href: "/record", label: "기록", icon: PenLine },
   { href: "/collection", label: "모아보기", icon: BookOpen },
 ] as const;
 
@@ -17,7 +17,7 @@ export function BottomNav({ onSettingsClick }: BottomNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border flex items-center justify-around h-14 z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--ink-0)] flex items-center justify-around h-14 z-50 px-2.5">
       {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
         const active = pathname.startsWith(href);
         return (
@@ -25,10 +25,12 @@ export function BottomNav({ onSettingsClick }: BottomNavProps) {
             key={href}
             href={href}
             className={`flex flex-col items-center gap-0.5 text-[10px] transition-colors duration-150 ${
-              active ? "text-primary-700" : "text-text-tertiary"
+              active
+                ? "text-[var(--text)] font-bold"
+                : "text-[var(--text-muted)]"
             }`}
           >
-            <Icon size={20} strokeWidth={1.5} />
+            <Icon size={22} strokeWidth={1.8} />
             <span>{label}</span>
           </Link>
         );
@@ -36,9 +38,9 @@ export function BottomNav({ onSettingsClick }: BottomNavProps) {
       <button
         type="button"
         onClick={onSettingsClick}
-        className="flex flex-col items-center gap-0.5 text-[10px] text-text-tertiary transition-colors duration-150"
+        className="flex flex-col items-center gap-0.5 text-[10px] text-[var(--text-muted)] hover:text-[var(--text-dim)] transition-colors duration-150"
       >
-        <Settings size={20} strokeWidth={1.5} />
+        <Settings size={22} strokeWidth={1.8} />
         <span>설정</span>
       </button>
     </nav>
