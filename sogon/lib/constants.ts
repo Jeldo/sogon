@@ -12,23 +12,23 @@ export const TONE_OPTIONS = [
   {
     tone: "warm",
     emoji: "\u{1F917}",
-    bgColor: "#fde8e8",
-    name: "\uB530\uB73B\uD55C \uCE5C\uAD6C",
-    exampleReaction: "\uADF8\uB7AC\uAD6C\uB098, \uACE0\uC0DD\uD588\uB2E4 \uC624\uB298\uB3C4",
+    bgColor: "var(--tone-warm)",
+    name: "따뜻한 친구",
+    exampleReaction: "그러구나, 오늘도 고생 많았다",
   },
   {
     tone: "cool",
     emoji: "\u{1F60E}",
-    bgColor: "#e0f0ff",
-    name: "\uCFE8\uD55C \uCE5C\uAD6C",
-    exampleReaction: "\uC624 \uAD1C\uCC2E\uC740\uB370? \uC798\uD588\uB124",
+    bgColor: "var(--tone-cool)",
+    name: "쿨한 친구",
+    exampleReaction: "오 괜찮은데? 잘했네",
   },
   {
     tone: "energetic",
     emoji: "\u{1F389}",
-    bgColor: "#fff8e0",
-    name: "\uD150\uC158 \uB192\uC740 \uCE5C\uAD6C",
-    exampleReaction: "\uD5D0 \uB300\uBC15!! \uC644\uC804 \uC88B\uB2E4!!",
+    bgColor: "var(--tone-energetic)",
+    name: "텐션 높은 친구",
+    exampleReaction: "헐 대박!! 완전 좋다!!",
   },
 ] as const satisfies readonly ToneOption[];
 
@@ -36,5 +36,4 @@ export const STORAGE_KEYS = {
   PROFILE: "sogon_profile",
   ENTRIES: "sogon_entries",
   REACTIONS: "sogon_reactions",
-  THEME: "sogon_theme",
 } as const;

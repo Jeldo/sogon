@@ -28,7 +28,7 @@ export default function MainLayout({
   if (!ready) return null;
 
   return (
-    <div className="flex min-h-dvh">
+    <div className="flex min-h-dvh bg-[var(--bg)]">
       <Sidebar onSettingsClick={() => setSettingsOpen(true)} />
       <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
         {children}

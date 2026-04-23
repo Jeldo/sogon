@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Send, ImagePlus, X } from "lucide-react";
-import { formatKoreanDate } from "@/lib/date-utils";
+import { formatKoreanDate, formatTime } from "@/lib/date-utils";
 import {
   addEntry,
   getDeviceProfile,
@@ -15,6 +15,8 @@ import { compressImage } from "@/lib/image";
 import type { EntryWithReaction, Mood } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
 import { MoodPicker } from "@/components/MoodPicker";
+import { Button } from "@/components/ui/Button";
+import { IconButton } from "@/components/ui/IconButton";
 
 export default function RecordPage() {
   const router = useRouter();
@@ -24,8 +26,11 @@ export default function RecordPage() {
   const [mood, setMood] = useState<Mood | null>(null);
   const [todayEntries, setTodayEntries] = useState<EntryWithReaction[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
+    setNow(new Date());
     loadTodayEntries();
   }, []);
 
@@ -44,7 +49,6 @@ export default function RecordPage() {
     if (!file) return;
     const dataUrl = await compressImage(file);
     setImageDataUrl(dataUrl);
-    // Reset input so the same file can be re-selected
     e.target.value = "";
   }
 
@@ -55,7 +59,6 @@ export default function RecordPage() {
     setSubmitting(true);
     const entry = addEntry(trimmed, imageDataUrl, mood);
 
-    // Call AI reaction API
     const profile = getDeviceProfile();
     try {
       const res = await fetch("/api/reaction", {
@@ -75,31 +78,40 @@ export default function RecordPage() {
     router.push(`/record/${entry.id}/reaction`);
   }
 
-  const today = formatKoreanDate(new Date());
-
   return (
-    <div className="max-w-[720px] mx-auto px-6 py-8">
+    <div className="max-w-[720px] mx-auto px-6 py-10 flex flex-col gap-5">
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-xl font-body font-semibold text-foreground">
-          기록하기
-        </h2>
-        <p className="text-sm text-text-secondary mt-1">{today}</p>
+      <div>
+        <div className="t-label">today</div>
+        <h1 className="t-display mt-1.5">오늘 뭐 했어?</h1>
+        <p className="t-caption mt-1">
+          {now
+            ? `${formatKoreanDate(now)} · ${formatTime(now)}`
+            : " "}
+        </p>
       </div>
 
-      {/* Textarea */}
-      <div className="space-y-3">
+      {/* Composer */}
+      <div className="flex flex-col gap-4">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="오늘 뭐 했어?"
-          className="w-full min-h-[120px] rounded-[16px] border border-border p-5 text-lg font-body text-foreground placeholder:text-text-placeholder resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)] transition-all duration-150"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder="떠오르는 대로 써도 괜찮아."
+          className="w-full min-h-[140px] rounded-[var(--r-md)] bg-[var(--surface-2)] p-5 text-[17px] leading-[1.6] text-[var(--text)] placeholder:text-[var(--text-muted)] resize-none outline-none border-0 transition-shadow"
+          style={{
+            boxShadow: focused
+              ? "var(--shadow-inset), 0 0 0 2px var(--accent), var(--glow-amber)"
+              : "var(--shadow-inset)",
+            fontFamily: "var(--font-ui)",
+          }}
         />
 
         {/* Image preview */}
         {imageDataUrl && (
           <div className="relative inline-block">
-            <div className="rounded-[16px] overflow-hidden border border-border">
+            <div className="rounded-[var(--r-md)] overflow-hidden">
               <Image
                 src={imageDataUrl}
                 alt="첨부 미리보기"
@@ -113,7 +125,8 @@ export default function RecordPage() {
             <button
               type="button"
               onClick={() => setImageDataUrl(null)}
-              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-neutral-600 text-white flex items-center justify-center hover:bg-neutral-700 transition-colors"
+              aria-label="첨부 제거"
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[var(--surface-3)] text-[var(--text)] flex items-center justify-center hover:bg-[var(--ink-5)] transition-colors"
             >
               <X size={14} strokeWidth={2} />
             </button>
@@ -124,49 +137,46 @@ export default function RecordPage() {
         <MoodPicker value={mood} onChange={setMood} />
 
         {/* Action bar */}
-        <div className="flex items-center justify-between">
-          <div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageSelect}
-              className="hidden"
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="w-9 h-9 rounded-[10px] bg-elevated flex items-center justify-center text-text-secondary hover:bg-border active:scale-[0.97] transition-all duration-150"
-            >
-              <ImagePlus size={18} strokeWidth={1.5} />
-            </button>
-          </div>
-
-          <button
+        <div className="flex items-center gap-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageSelect}
+            className="hidden"
+          />
+          <IconButton
+            circle
+            aria-label="사진 첨부"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <ImagePlus size={18} strokeWidth={1.8} />
+          </IconButton>
+          <div className="flex-1" />
+          <Button
+            variant="primary"
+            size="lg"
             onClick={handleSubmit}
             disabled={!content.trim() || submitting}
-            className="flex items-center gap-2 py-2.5 px-5 rounded-[10px] text-sm font-body bg-primary-600 text-white hover:bg-primary-700 active:scale-[0.97] shadow-sm transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary-600 disabled:active:scale-100"
+            trailing={<Send size={14} strokeWidth={2} />}
           >
-            <Send size={16} strokeWidth={1.5} />
-            <span>기록하기</span>
-          </button>
+            기록하기
+          </Button>
         </div>
       </div>
 
       {/* Today's entries */}
       {todayEntries.length > 0 && (
-        <div className="mt-10">
-          <div className="border-t border-border pt-6">
-            <h3 className="text-sm text-text-tertiary mb-4">오늘의 기록</h3>
-            <div className="space-y-4">
-              {todayEntries.map((entry) => (
-                <EntryCard
-                  key={entry.id}
-                  entry={entry}
-                  onUpdate={loadTodayEntries}
-                />
-              ))}
-            </div>
+        <div className="mt-8 pt-6" style={{ borderTop: "1px solid var(--border-soft)" }}>
+          <h2 className="t-label mb-4">today&rsquo;s entries</h2>
+          <div className="flex flex-col gap-3.5">
+            {todayEntries.map((entry) => (
+              <EntryCard
+                key={entry.id}
+                entry={entry}
+                onUpdate={loadTodayEntries}
+              />
+            ))}
           </div>
         </div>
       )}

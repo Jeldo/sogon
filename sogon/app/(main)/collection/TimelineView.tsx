@@ -6,6 +6,7 @@ import { formatKoreanDate } from "@/lib/date-utils";
 import { getAllEntriesWithReactions } from "@/lib/storage";
 import type { EntryWithReaction } from "@/lib/types";
 import { EntryCard } from "@/components/EntryCard";
+import { Button } from "@/components/ui/Button";
 
 type DateGroup = {
   dateLabel: string;
@@ -39,24 +40,23 @@ export function TimelineView() {
 
   if (entries.length === 0) {
     return (
-      <div className="text-center py-16 text-neutral-400 text-sm">
-        <p>아직 기록이 없어. 첫 기록을 남겨봐!</p>
-        <Link
-          href="/record"
-          className="inline-block mt-3 py-2 px-4 rounded-[10px] bg-primary-600 text-white text-sm hover:bg-primary-700 transition-colors"
-        >
-          기록하기
+      <div className="text-center py-16 flex flex-col items-center gap-3">
+        <p className="t-caption">아직 기록이 없어. 첫 기록을 남겨봐!</p>
+        <Link href="/record" className="inline-flex">
+          <Button variant="primary" size="md">
+            기록하기
+          </Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8">
       {groups.map((group) => (
         <div key={group.dateLabel}>
-          <h4 className="text-sm text-neutral-400 mb-3">{group.dateLabel}</h4>
-          <div className="space-y-4">
+          <h3 className="t-label mb-3">{group.dateLabel}</h3>
+          <div className="flex flex-col gap-3.5">
             {group.entries.map((entry, i) => (
               <AnimatedCard key={entry.id} delay={i * 50}>
                 <EntryCard
@@ -102,7 +102,7 @@ function AnimatedCard({
   return (
     <div
       ref={ref}
-      className="transition-all duration-[350ms]"
+      className="transition-all duration-[350ms] ease-[var(--ease-out)]"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(12px)",

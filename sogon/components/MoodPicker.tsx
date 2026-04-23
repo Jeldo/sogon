@@ -17,18 +17,21 @@ export function MoodPicker({ value, onChange }: MoodPickerProps) {
     <div
       role="group"
       aria-label="오늘 기분"
-      className="flex items-center gap-4 py-1"
+      className="flex items-center gap-3.5 py-1"
     >
-      <span className="hidden md:inline text-xs text-text-tertiary font-body select-none">
-        오늘 기분
+      <span className="t-label hidden sm:inline">
+        mood
         {value === null && (
-          <span className="ml-1 text-text-placeholder">(선택)</span>
+          <span className="ml-1 normal-case tracking-normal text-[var(--text-muted)] font-normal text-[11px]">
+            (선택)
+          </span>
         )}
       </span>
-      <div className="flex gap-2">
+      <div className="flex gap-2.5">
         {MOODS.map((mood) => {
           const isSelected = value === mood;
           const isDimmed = value !== null && !isSelected;
+          const moodColor = MOOD_META[mood].color;
           return (
             <button
               key={mood}
@@ -36,13 +39,17 @@ export function MoodPicker({ value, onChange }: MoodPickerProps) {
               aria-pressed={isSelected}
               aria-label={MOOD_META[mood].label}
               onClick={() => handleToggle(mood)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-xl leading-none transition-all duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 ${
-                isSelected
-                  ? "bg-primary-100 ring-2 ring-primary-300 opacity-100 scale-105"
-                  : isDimmed
-                    ? "opacity-40 hover:opacity-70 hover:bg-neutral-100"
-                    : "opacity-70 hover:opacity-100 hover:bg-neutral-100"
-              }`}
+              style={{
+                background: isSelected
+                  ? "var(--surface-3)"
+                  : "var(--surface-2)",
+                opacity: isDimmed ? 0.4 : 1,
+                transform: isSelected ? "scale(1.08)" : "scale(1)",
+                boxShadow: isSelected
+                  ? `inset 0 0 0 1px ${moodColor}, 0 0 18px color-mix(in srgb, ${moodColor} 40%, transparent)`
+                  : "none",
+              }}
+              className="w-[42px] h-[42px] rounded-full flex items-center justify-center text-xl leading-none border-0 cursor-pointer transition-all duration-200 ease-[var(--ease-spring)] focus:outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--accent),var(--glow-amber)]"
             >
               {MOOD_META[mood].emoji}
             </button>

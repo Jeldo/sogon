@@ -6,6 +6,7 @@ import { TONE_OPTIONS } from "@/lib/constants";
 import { getDeviceProfile, setDeviceProfile } from "@/lib/storage";
 import type { FriendTone } from "@/lib/types";
 import { ToneCard } from "./ToneCard";
+import { Button } from "@/components/ui/Button";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -30,15 +31,23 @@ export default function OnboardingPage() {
 
   return (
     <div className="flex flex-1 items-center justify-center px-6 py-12">
-      <div className="w-full max-w-[560px] space-y-8">
+      <div className="w-full max-w-[560px] flex flex-col gap-7">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-heading">소곤</h1>
-          <p className="text-text-secondary text-base">비밀친구를 골라봐!</p>
+        <div>
+          <div
+            className="t-label"
+            style={{ color: "var(--accent-lo)" }}
+          >
+            step 1 of 1
+          </div>
+          <h1 className="t-display mt-2.5">비밀친구를 골라줘</h1>
+          <p className="t-caption mt-1">
+            기록에 반응해줄 친구의 말투야. 언제든 바꿀 수 있어.
+          </p>
         </div>
 
         {/* Tone Cards */}
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           {TONE_OPTIONS.map((option) => (
             <ToneCard
               key={option.tone}
@@ -53,13 +62,16 @@ export default function OnboardingPage() {
         </div>
 
         {/* Start Button */}
-        <button
-          onClick={handleStart}
-          disabled={!selectedTone}
-          className="w-full py-3 px-6 rounded-[10px] text-base font-body transition-all duration-150 bg-primary-600 text-white hover:bg-primary-700 active:scale-[0.97] shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary-600 disabled:active:scale-100"
-        >
-          시작하기
-        </button>
+        <div className="flex justify-end">
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={handleStart}
+            disabled={!selectedTone}
+          >
+            continue
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -37,8 +37,6 @@ import {
   getReactions,
   addReaction,
   getEntryWithReaction,
-  getTheme,
-  setTheme,
   updateFriendTone,
   clearAllData,
 } from "./storage";
@@ -144,17 +142,6 @@ describe("getEntryWithReaction", () => {
 
   it("returns null for non-existent entry", () => {
     expect(getEntryWithReaction("non-existent")).toBeNull();
-  });
-});
-
-describe("Theme", () => {
-  it("returns 'system' when no theme is set", () => {
-    expect(getTheme()).toBe("system");
-  });
-
-  it("saves and retrieves theme", () => {
-    setTheme("dark");
-    expect(getTheme()).toBe("dark");
   });
 });
 

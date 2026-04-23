@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import { Gowun_Dodum, Gowun_Batang, Nanum_Pen_Script } from "next/font/google";
+import { Gowun_Batang, Nanum_Pen_Script } from "next/font/google";
+import "@fontsource/pretendard/400.css";
+import "@fontsource/pretendard/700.css";
 import "./globals.css";
-
-const gowunDodum = Gowun_Dodum({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-gowun-dodum",
-});
 
 const gowunBatang = Gowun_Batang({
   weight: "400",
@@ -21,8 +17,8 @@ const nanumPen = Nanum_Pen_Script({
 });
 
 export const metadata: Metadata = {
-  title: "\uC18C\uACE4",
-  description: "\uD504\uB77C\uC774\uBE57\uD55C\uB370 \uBC18\uC751\uC774 \uC788\uB294 \uD558\uB8E8 \uAE30\uB85D \uACF5\uAC04",
+  title: "소곤",
+  description: "프라이빗한데 반응이 있는 하루 기록 공간",
   verification: {
     google: "ggKZ1AlVWDBwCfiFZ0cPmk_dOBSPmU8D4_KwrPz348o",
   },
@@ -36,17 +32,9 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${gowunDodum.variable} ${gowunBatang.variable} ${nanumPen.variable} h-full antialiased`}
-      suppressHydrationWarning
+      className={`${gowunBatang.variable} ${nanumPen.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('sogon_theme');if(t==='dark')document.documentElement.classList.add('dark');else if(t!=='light')document.documentElement.classList.add('system-theme')})();`,
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col font-body">{children}</body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

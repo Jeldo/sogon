@@ -19,6 +19,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
   const [editContent, setEditContent] = useState(entry.content);
   const [editMood, setEditMood] = useState<Mood | null>(entry.mood);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [hover, setHover] = useState(false);
 
   function handleSaveEdit() {
     const trimmed = editContent.trim();
@@ -34,21 +35,38 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
     onUpdate?.();
   }
 
+  const mood = entry.mood ? MOOD_META[entry.mood] : null;
+
   return (
-    <div className="relative bg-background border border-border rounded-[20px] p-5 shadow-sm hover:shadow-md transition-shadow duration-200 group">
-      {/* Mood badge */}
-      {entry.mood && !editing && (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      className="group relative bg-[var(--surface)] rounded-[var(--r-sm)] p-5 transition-all duration-200 ease-[var(--ease-out)]"
+      style={{
+        boxShadow: hover ? "var(--shadow-pop)" : "var(--shadow-card)",
+        transform: hover ? "translateY(-2px)" : "none",
+      }}
+    >
+      {/* Mood badge (top right) */}
+      {mood && !editing && (
         <div
-          aria-label={MOOD_META[entry.mood].label}
-          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-primary-100 border border-primary-200 shadow-sm flex items-center justify-center text-lg leading-none select-none"
+          aria-label={mood.label}
+          className="absolute top-[18px] right-[18px] z-10 flex items-center gap-1.5 select-none"
         >
-          {MOOD_META[entry.mood].emoji}
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{
+              background: mood.color,
+              boxShadow: `0 0 10px ${mood.color}`,
+            }}
+          />
+          <span className="t-small">{mood.label}</span>
         </div>
       )}
 
       {/* Image (above text) */}
       {entry.imageDataUrl && (
-        <div className="mb-3 rounded-[16px] overflow-hidden">
+        <div className="mb-3 rounded-[var(--r-sm)] overflow-hidden">
           <Image
             src={entry.imageDataUrl}
             alt="첨부 이미지"
@@ -67,7 +85,7 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
-            className="w-full min-h-[80px] rounded-[10px] border border-border p-3 text-base font-body text-foreground resize-none focus:outline-none focus:border-primary-500 focus:shadow-[0_0_0_3px_rgba(110,189,90,0.15)]"
+            className="w-full min-h-[80px] rounded-[var(--r-sm)] bg-[var(--surface-2)] p-3 text-[15px] text-[var(--text)] resize-none outline-none shadow-[var(--shadow-inset)] focus:shadow-[var(--shadow-inset),0_0_0_2px_var(--accent),var(--glow-amber)] transition-shadow"
           />
           <MoodPicker value={editMood} onChange={setEditMood} />
           <div className="flex gap-2 justify-end">
@@ -77,42 +95,37 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
                 setEditContent(entry.content);
                 setEditMood(entry.mood);
               }}
-              className="p-1.5 rounded-[6px] text-text-tertiary hover:bg-elevated transition-colors"
+              aria-label="취소"
+              className="w-8 h-8 rounded-full text-[var(--text-muted)] hover:bg-[var(--surface-3)] hover:text-[var(--text)] transition-colors flex items-center justify-center"
             >
-              <X size={16} strokeWidth={1.5} />
+              <X size={14} strokeWidth={1.8} />
             </button>
             <button
               onClick={handleSaveEdit}
               disabled={!editContent.trim()}
-              className="p-1.5 rounded-[6px] text-primary-600 hover:bg-primary-50 transition-colors disabled:opacity-40"
+              aria-label="저장"
+              className="w-8 h-8 rounded-full text-[var(--accent)] hover:bg-[var(--surface-3)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <Check size={16} strokeWidth={1.5} />
+              <Check size={14} strokeWidth={2} />
             </button>
           </div>
         </div>
       ) : (
-        <p
-          className={`text-lg font-body text-foreground leading-relaxed ${entry.mood ? "pr-12" : ""}`}
-        >
+        <p className={`t-body-lg ${entry.mood ? "pr-[90px]" : ""}`}>
           {entry.content}
         </p>
       )}
 
-      {/* Reaction */}
+      {/* Friend reaction — handwriting amber glow */}
       {entry.reaction && !editing && (
-        <p className="mt-3 text-xl font-handwriting text-text-secondary">
-          {entry.reaction.content}
-        </p>
+        <p className="t-friend mt-3">{entry.reaction.content}</p>
       )}
 
       {/* Footer: timestamp + actions */}
       {!editing && (
-        <div className="mt-2 flex items-center justify-between">
-          <p className="text-xs text-text-tertiary">
-            {formatTime(new Date(entry.createdAt))}
-          </p>
+        <div className="mt-3.5 flex items-center justify-between">
+          <span className="t-small">{formatTime(new Date(entry.createdAt))}</span>
 
-          {/* Edit/Delete buttons - visible on hover */}
           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
             <button
               onClick={() => {
@@ -120,32 +133,36 @@ export function EntryCard({ entry, onUpdate }: EntryCardProps) {
                 setEditMood(entry.mood);
                 setEditing(true);
               }}
-              className="p-1.5 rounded-[6px] text-text-tertiary hover:text-text-primary hover:bg-elevated transition-colors"
+              aria-label="편집"
+              className="w-7 h-7 rounded-full text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-3)] transition-colors flex items-center justify-center"
             >
-              <Pencil size={14} strokeWidth={1.5} />
+              <Pencil size={14} strokeWidth={1.8} />
             </button>
             {confirmDelete ? (
-              <div className="flex items-center gap-1 text-xs text-text-secondary">
+              <div className="flex items-center gap-1 text-[11px] text-[var(--text-dim)]">
                 <span>삭제?</span>
                 <button
                   onClick={handleDelete}
-                  className="p-1 rounded-[6px] text-red-500 hover:bg-red-50 transition-colors"
+                  aria-label="삭제 확인"
+                  className="w-6 h-6 rounded-full text-[var(--negative)] hover:bg-[var(--surface-3)] transition-colors flex items-center justify-center"
                 >
-                  <Check size={14} strokeWidth={1.5} />
+                  <Check size={14} strokeWidth={2} />
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="p-1 rounded-[6px] text-text-tertiary hover:bg-elevated transition-colors"
+                  aria-label="삭제 취소"
+                  className="w-6 h-6 rounded-full text-[var(--text-muted)] hover:bg-[var(--surface-3)] transition-colors flex items-center justify-center"
                 >
-                  <X size={14} strokeWidth={1.5} />
+                  <X size={14} strokeWidth={2} />
                 </button>
               </div>
             ) : (
               <button
                 onClick={() => setConfirmDelete(true)}
-                className="p-1.5 rounded-[6px] text-neutral-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                aria-label="삭제"
+                className="w-7 h-7 rounded-full text-[var(--text-muted)] hover:text-[var(--negative)] hover:bg-[var(--surface-3)] transition-colors flex items-center justify-center"
               >
-                <Trash2 size={14} strokeWidth={1.5} />
+                <Trash2 size={14} strokeWidth={1.8} />
               </button>
             )}
           </div>

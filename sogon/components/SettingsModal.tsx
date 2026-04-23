@@ -5,37 +5,27 @@ import { X } from "lucide-react";
 import { TONE_OPTIONS } from "@/lib/constants";
 import {
   getDeviceProfile,
-  getTheme,
-  setTheme,
   updateFriendTone,
   clearAllData,
 } from "@/lib/storage";
-import type { FriendTone, ThemeMode } from "@/lib/types";
-import { THEME_MODES } from "@/lib/types";
+import type { FriendTone } from "@/lib/types";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { Button } from "@/components/ui/Button";
 
 type SettingsModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
-const THEME_LABELS: Record<ThemeMode, { emoji: string; label: string }> = {
-  light: { emoji: "☀️", label: "라이트" },
-  dark: { emoji: "🌙", label: "다크" },
-  system: { emoji: "💻", label: "시스템" },
-};
-
 export function SettingsModal({ open, onClose }: SettingsModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [currentTone, setCurrentTone] = useState<FriendTone>("warm");
-  const [currentTheme, setCurrentTheme] = useState<ThemeMode>("system");
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     const profile = getDeviceProfile();
     if (profile) setCurrentTone(profile.friendTone);
-    setCurrentTheme(getTheme());
   }, [open]);
 
   useEffect(() => {
@@ -52,12 +42,6 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
     updateFriendTone(tone);
   }
 
-  function handleThemeChange(mode: ThemeMode) {
-    setCurrentTheme(mode);
-    setTheme(mode);
-    applyTheme(mode);
-  }
-
   function handleReset() {
     clearAllData();
     setConfirmOpen(false);
@@ -70,31 +54,36 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
     <>
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+        className="fixed inset-0 z-50 flex items-center justify-center"
+        style={{ background: "var(--scrim)" }}
         onClick={(e) => {
           if (e.target === overlayRef.current) onClose();
         }}
       >
-        <div className="w-full max-w-[480px] mx-4 bg-background rounded-[16px] p-7 shadow-lg animate-[reaction-appear_350ms_var(--ease-out)_forwards]">
+        <div
+          className="w-full max-w-[440px] mx-4 bg-[var(--surface-2)] rounded-[var(--r-lg)] p-7"
+          style={{
+            boxShadow: "var(--shadow-modal)",
+            animation:
+              "hand-write-in var(--dur-enter) var(--ease-spring) forwards",
+          }}
+        >
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-heading font-semibold text-foreground">
-              설정
-            </h2>
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="t-heading">설정</h2>
             <button
               type="button"
               onClick={onClose}
-              className="w-7 h-7 bg-elevated rounded-full flex items-center justify-center text-text-secondary hover:bg-border transition-colors duration-150"
+              aria-label="닫기"
+              className="w-8 h-8 rounded-full bg-[var(--surface-3)] flex items-center justify-center text-[var(--text-dim)] hover:bg-[var(--ink-5)] hover:text-[var(--text)] transition-colors duration-150"
             >
-              <X size={14} strokeWidth={2} />
+              <X size={14} strokeWidth={2.2} />
             </button>
           </div>
 
           {/* Section: 비밀친구 */}
           <section className="mb-6">
-            <h3 className="text-xs font-medium text-text-secondary tracking-wide mb-2.5">
-              비밀친구
-            </h3>
+            <h3 className="t-label mb-2.5">비밀친구</h3>
             <div className="flex gap-2">
               {TONE_OPTIONS.map((option) => {
                 const selected = currentTone === option.tone;
@@ -103,17 +92,27 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
                     key={option.tone}
                     type="button"
                     onClick={() => handleToneChange(option.tone)}
-                    className={`flex-1 rounded-[12px] py-3.5 px-2 text-center transition-all duration-150 ${
-                      selected
-                        ? "border-2 border-primary-600 bg-primary-muted"
-                        : "border border-border hover:border-text-placeholder"
-                    }`}
+                    className="flex-1 rounded-[var(--r-sm)] bg-[var(--surface-3)] py-3.5 px-2 text-center transition-all duration-150"
+                    style={{
+                      boxShadow: selected
+                        ? "inset 0 0 0 2px var(--accent)"
+                        : "none",
+                    }}
                   >
-                    <div className="text-2xl mb-1">{option.emoji}</div>
                     <div
-                      className={`text-[11px] font-medium ${
-                        selected ? "text-primary-700" : "text-text-secondary"
-                      }`}
+                      className="text-[22px] leading-none"
+                      style={{ opacity: selected ? 1 : 0.7 }}
+                    >
+                      {option.emoji}
+                    </div>
+                    <div
+                      className="mt-1 text-[11px]"
+                      style={{
+                        color: selected
+                          ? "var(--text)"
+                          : "var(--text-dim)",
+                        fontWeight: selected ? 700 : 400,
+                      }}
                     >
                       {option.name}
                     </div>
@@ -124,55 +123,42 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
           </section>
 
           {/* Divider */}
-          <div className="h-px bg-elevated mb-6" />
-
-          {/* Section: 테마 */}
-          <section className="mb-6">
-            <h3 className="text-xs font-medium text-text-secondary tracking-wide mb-2.5">
-              테마
-            </h3>
-            <div className="flex bg-elevated rounded-[10px] p-[3px]">
-              {THEME_MODES.map((mode) => (
-                <button
-                  key={mode}
-                  type="button"
-                  onClick={() => handleThemeChange(mode)}
-                  className={`flex-1 text-center py-2 rounded-[8px] text-[13px] transition-all duration-150 ${
-                    currentTheme === mode
-                      ? "bg-background text-foreground font-medium shadow-sm"
-                      : "text-text-secondary hover:text-text-primary"
-                  }`}
-                >
-                  {THEME_LABELS[mode].emoji} {THEME_LABELS[mode].label}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* Divider */}
-          <div className="h-px bg-elevated mb-6" />
+          <div
+            className="h-px mb-6"
+            style={{ background: "var(--border-soft)" }}
+          />
 
           {/* Section: 데이터 */}
-          <section>
-            <h3 className="text-xs font-medium text-text-secondary tracking-wide mb-2.5">
-              데이터
-            </h3>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-foreground">데이터 초기화</p>
-                <p className="text-xs text-text-tertiary mt-0.5">
+          <section className="mb-6">
+            <h3 className="t-label mb-2.5">데이터</h3>
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="t-body">데이터 초기화</p>
+                <p className="t-small mt-0.5">
                   모든 기록과 리액션을 삭제합니다
                 </p>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="danger"
+                size="sm"
                 onClick={() => setConfirmOpen(true)}
-                className="border border-[#e57373] text-[#e57373] rounded-[10px] px-4 py-1.5 text-xs font-medium transition-all duration-150 hover:bg-[#e57373] hover:text-white active:scale-[0.97]"
               >
-                초기화
-              </button>
+                reset
+              </Button>
             </div>
           </section>
+
+          {/* Footer */}
+          <div className="flex gap-2.5">
+            <Button
+              variant="outline"
+              size="md"
+              className="flex-1"
+              onClick={onClose}
+            >
+              close
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -186,14 +172,4 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
       />
     </>
   );
-}
-
-function applyTheme(mode: ThemeMode) {
-  const root = document.documentElement;
-  root.classList.remove("dark", "system-theme");
-  if (mode === "dark") {
-    root.classList.add("dark");
-  } else if (mode === "system") {
-    root.classList.add("system-theme");
-  }
 }
